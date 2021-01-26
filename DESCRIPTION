@@ -1,16 +1,27 @@
 Package: tidyndr
-Title: What the Package Does (One Line, Title Case)
+Title: Analysis of the Nigeria National Data Repository (NDR)
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Stephen",
+           family = "Balogun",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to
-    pick a license
+           email = "stephentaiyebalogun@gmail.com",
+           comment = c(ORCID = "https://orcid.org/0000-0002-9928-3703"))
+Description: The goal of the 'tidyndr' is to simplify routine analysis of the 
+  Nigeria National Data Repository (NDR) using the PEPFAR Monitoring, 
+  Evaluation, and Reporting (MER) indictors. It is designed to import in to R 
+  patient-level line-list downloaded as 'csv' file from the front-end of the NDR.
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
+Depends: R (>= 3.6)
+Imports: 
+    lubridate,
+    janitor,
+    vroom,
+    rlang
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
