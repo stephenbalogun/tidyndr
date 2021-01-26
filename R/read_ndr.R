@@ -3,15 +3,26 @@
 #' Import your NDR patient-level line-list downloaded as ".csv" format
 #' from the NDR front-end into R in a nicely formatted table.
 #'
-#' @param path
-#' @param suppress
-#' @param cols
-#' @param ...
+#' @param path path to the csv file on computer.
+#' @param suppress Either TRUE or FALSE, The default, FALSE, instructs
+#' `read_ndr()` to print warnings when using older versions of the ndr file.
+#'
+#' @param cols sets the column types so that the columns are assigned the
+#' appropriate class. You can supply this argument following the instructions
+#' in `?vroom::cols` documentation.
+#' @param ... passes other arguments supplied to the `vroom::vroom()` used
+#' behind the hood.
 #'
 #' @return
 #' @export
 #'
 #' @examples
+#' file_path <- "C:/Users/stephenbalogun/Documents/My R/tidyndr/ndr_example.csv"
+#'
+#' read_ndr(file_path)
+#'
+#' # If you do not want the suppress message to be printed when using an old ndr csv file, use
+#' read_ndr(file_path, suppress = TRUE)
 read_ndr <- function(path,
                      suppress = FALSE,
                      cols = vroom::cols_only(
@@ -74,14 +85,16 @@ read_ndr <- function(path,
 
   if (suppress == FALSE) {
 
-    vroom::vroom(path, col_types = cols, ...) %>%
-      janitor::clean_names()
+    janitor::clean_names(
+      vroom::vroom(path, col_types = cols, ...)
+      )
 
   } else {
 
     suppressWarnings(
-      vroom::vroom(path, col_types = cols, ...) %>%
-        janitor::clean_names()
+      janitor::clean_names(
+      vroom::vroom(path, col_types = cols, ...)
+      )
     )
 
   }

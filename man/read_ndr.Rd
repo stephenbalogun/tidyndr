@@ -44,7 +44,17 @@ read_ndr(
 )
 }
 \arguments{
-\item{...}{}
+\item{path}{path to the csv file on computer.}
+
+\item{suppress}{Either TRUE or FALSE, The default, FALSE, instructs
+\code{read_ndr()} to print warnings when using older versions of the ndr file.}
+
+\item{cols}{sets the column types so that the columns are assigned the
+appropriate class. You can supply this argument following the instructions
+in \code{?vroom::cols} documentation.}
+
+\item{...}{passes other arguments supplied to the \code{vroom::vroom()} used
+behind the hood.}
 }
 \value{
 
@@ -52,4 +62,12 @@ read_ndr(
 \description{
 Import your NDR patient-level line-list downloaded as ".csv" format
 from the NDR front-end into R in a nicely formatted table.
+}
+\examples{
+file_path <- "C:/Users/stephenbalogun/Documents/My R/tidyndr/ndr_example.csv"
+
+read_ndr(file_path)
+
+# If you do not want the suppress message to be printed when using an old ndr csv file, use
+read_ndr(file_path, suppress = TRUE)
 }
