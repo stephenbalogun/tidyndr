@@ -36,9 +36,9 @@ tx_new <- function(data,
                    site = unique(data$facility)) {
 
   fy_start <- lubridate::as_date(
-    ifelse(month(Sys.Date()) < 10,
+    ifelse(lubridate::month(Sys.Date()) < 10,
            update(Sys.Date(),
-                  year = year(Sys.Date()) - 1,
+                  year = lubridate::year(Sys.Date()) - 1,
                   month = 10,
                   day = 1),
            update(Sys.Date(),
@@ -57,12 +57,10 @@ tx_new <- function(data,
   stopifnot('please check that your date format is "yyyy-mm-dd"' =
               !is.na(lubridate::as_date(to)))
 
-    filter(
-      data,
-      between(art_start_date,
+    filter(data,
+      dplyr::between(art_start_date,
               lubridate::as_date(from),
               lubridate::as_date(to)),
       state %in% region,
-      facility %in% site
-    )
+      facility %in% site)
 }

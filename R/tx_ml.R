@@ -28,9 +28,9 @@ tx_ml <- function(data,
                   site = unique(data$facility)) {
 
   fy_start <- lubridate::as_date(
-    ifelse(month(Sys.Date()) < 10,
+    ifelse(lubridate::month(Sys.Date()) < 10,
            update(Sys.Date(),
-                  year = year(Sys.Date()) - 1,
+                  year = lubridate::year(Sys.Date()) - 1,
                   month = 10,
                   day = 1),
            update(Sys.Date(),
