@@ -25,42 +25,60 @@
 #'
 #' ## Determine the TX_NEW for Quarter 1 of FY21 for State 2
 #' ndr_example %>%
-#' tx_new(from = "2020-10-01",
-#' to = "2020-12-31",
-#' region = "State 2")
-#'
+#'   tx_new(
+#'     from = "2020-10-01",
+#'     to = "2020-12-31",
+#'     region = "State 2"
+#'   )
 tx_new <- function(data,
                    from = fy_start,
                    to = Sys.Date(),
                    region = unique(data$state),
                    site = unique(data$facility)) {
-
   fy_start <- lubridate::as_date(
     ifelse(lubridate::month(Sys.Date()) < 10,
-           update(Sys.Date(),
-                  year = lubridate::year(Sys.Date()) - 1,
-                  month = 10,
-                  day = 1),
-           update(Sys.Date(),
-                  month = 10,
-                  day = 1))
+      stats::update(Sys.Date(),
+        year = lubridate::year(Sys.Date()) - 1,
+        month = 10,
+        day = 1
+      ),
+      stats::update(Sys.Date(),
+        month = 10,
+        day = 1
+      )
+    )
   )
 
-  stopifnot("please check that region is contained in the dataset list of states" =
-              any(region %in% unique(data$state)))
+  stopifnot(
+    "please check that region is contained in the dataset list of states" =
+      any(region %in% unique(data$state))
+  )
 
-  stopifnot("please check that site is contained in the dataset list of facilities" =
-              any(site %in% unique(data$facility)))
+  stopifnot(
+    "please check that site is contained in the dataset list of facilities" =
+      any(site %in% unique(data$facility))
+  )
 
-  stopifnot('please check that your date format is "yyyy-mm-dd"' =
-              !is.na(lubridate::as_date(from)))
-  stopifnot('please check that your date format is "yyyy-mm-dd"' =
-              !is.na(lubridate::as_date(to)))
+  stopifnot(
+    'please check that your date format is "yyyy-mm-dd"' =
+      !is.na(lubridate::as_date(from))
+  )
+  stopifnot(
+    'please check that your date format is "yyyy-mm-dd"' =
+      !is.na(lubridate::as_date(to))
+  )
 
-    filter(data,
-      dplyr::between(art_start_date,
-              lubridate::as_date(from),
-              lubridate::as_date(to)),
-      state %in% region,
-      facility %in% site)
+  filter(
+    data,
+    dplyr::between(
+      art_start_date,
+      lubridate::as_date(from),
+      lubridate::as_date(to)
+    ),
+    state %in% region,
+    facility %in% site
+  )
 }
+
+
+utils::globalVariables("art_start_date")

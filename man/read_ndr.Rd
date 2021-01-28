@@ -64,10 +64,10 @@ Import your NDR patient-level line-list downloaded as ".csv" format
 from the NDR front-end into R in a nicely formatted table.
 }
 \examples{
-file_path <- "C:/Users/stephenbalogun/Documents/My R/tidyndr/ndr_example.csv"
 
+# Read using a link to the NDR csv file located on the internet
+file_path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
 read_ndr(file_path)
-
 # If you do not want the suppress message to be printed when using an old ndr csv file, use
 read_ndr(file_path, suppress = TRUE)
 }

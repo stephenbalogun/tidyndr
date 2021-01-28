@@ -22,23 +22,35 @@ tx_rtt <- function(old_data,
                    new_data,
                    region = unique(new_data$state),
                    site = unique(new_data$facility)) {
+  stopifnot(
+    "please check that region is contained in the dataset list of states" =
+      any(region %in% unique(new_data$state))
+  )
 
-  stopifnot("please check that region is contained in the dataset list of states" =
-              any(region %in% unique(new_data$state)))
+  stopifnot(
+    "please check that site is contained in the dataset list of facilities" =
+      any(site %in% unique(new_data$facility))
+  )
 
-  stopifnot("please check that site is contained in the dataset list of facilities" =
-              any(site %in% unique(new_data$facility)))
+  stopifnot(
+    "old_data is more recent than new_data" =
+      max(old_data$art_start_date, na.rm = TRUE) <=
+        max(new_data$art_start_date, na.rm = TRUE)
+  )
 
-  stopifnot("old_data is more recent than new_data" =
-              max(old_data$art_start_date, na.rm = TRUE) <=
-              max(new_data$art_start_date, na.rm = TRUE))
-
-  losses <- dplyr::filter(old_data,
-                          current_status_28_days == "Inactive")
+  losses <- dplyr::filter(
+    old_data,
+    current_status_28_days == "Inactive"
+  )
 
   new_data %>%
-    dplyr::filter(current_status_28_days == "Active",
-           patient_identifier %in% losses$patient_identifier,
-           state %in% region,
-           facility %in% site)
+    dplyr::filter(
+      current_status_28_days == "Active",
+      patient_identifier %in% losses$patient_identifier,
+      state %in% region,
+      facility %in% site
+    )
 }
+
+
+utils::globalVariables("patient_identifier")

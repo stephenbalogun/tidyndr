@@ -17,10 +17,10 @@
 #' @export
 #'
 #' @examples
-#' file_path <- "C:/Users/stephenbalogun/Documents/My R/tidyndr/ndr_example.csv"
 #'
+#' # Read using a link to the NDR csv file located on the internet
+#' file_path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
 #' read_ndr(file_path)
-#'
 #' # If you do not want the suppress message to be printed when using an old ndr csv file, use
 #' read_ndr(file_path, suppress = TRUE)
 read_ndr <- function(path,
@@ -75,28 +75,24 @@ read_ndr <- function(path,
                        `Patient Transferred In` = vroom::col_logical(),
                        `Transferred In Date` = vroom::col_date(format = "%d-%b-%y")
                      ), ...) {
-
   stopifnot(
     "suppress argument is neither 'TRUE' nor 'FALSE'" = rlang::is_logical(suppress)
   )
 
-  stopifnot("attempted file is not a '.csv' format" =
-              stringr::str_detect(path, ".csv$"))
+  stopifnot(
+    "attempted file is not a '.csv' format" =
+      stringr::str_detect(path, ".csv$")
+  )
 
   if (suppress == FALSE) {
-
     janitor::clean_names(
       vroom::vroom(path, col_types = cols, ...)
-      )
-
+    )
   } else {
-
     suppressWarnings(
       janitor::clean_names(
-      vroom::vroom(path, col_types = cols, ...)
+        vroom::vroom(path, col_types = cols, ...)
       )
     )
-
   }
-
 }

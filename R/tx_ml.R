@@ -26,39 +26,56 @@ tx_ml <- function(data,
                   to = Sys.Date(),
                   region = unique(data$state),
                   site = unique(data$facility)) {
-
   fy_start <- lubridate::as_date(
     ifelse(lubridate::month(Sys.Date()) < 10,
-           update(Sys.Date(),
-                  year = lubridate::year(Sys.Date()) - 1,
-                  month = 10,
-                  day = 1),
-           update(Sys.Date(),
-                  month = 10,
-                  day = 1))
+      stats::update(Sys.Date(),
+        year = lubridate::year(Sys.Date()) - 1,
+        month = 10,
+        day = 1
+      ),
+      stats::update(Sys.Date(),
+        month = 10,
+        day = 1
+      )
+    )
   )
 
-  stopifnot("please check that region is contained in the dataset list of states" =
-              any(region %in% unique(data$state)))
+  stopifnot(
+    "please check that region is contained in the dataset list of states" =
+      any(region %in% unique(data$state))
+  )
 
-  stopifnot("please check that site is contained in the dataset list of facilities" =
-              any(site %in% unique(data$facility)))
+  stopifnot(
+    "please check that site is contained in the dataset list of facilities" =
+      any(site %in% unique(data$facility))
+  )
 
-  stopifnot('please check that your date format is "yyyy-mm-dd"' =
-              !is.na(lubridate::as_date(from)))
-  stopifnot('please check that your date format is "yyyy-mm-dd"' =
-              !is.na(lubridate::as_date(to)))
+  stopifnot(
+    'please check that your date format is "yyyy-mm-dd"' =
+      !is.na(lubridate::as_date(from))
+  )
+  stopifnot(
+    'please check that your date format is "yyyy-mm-dd"' =
+      !is.na(lubridate::as_date(to))
+  )
 
-    dplyr::mutate(data,
-           date_lost = last_drug_pickup_date +
-             lubridate::days(days_of_arv_refill) +
-             lubridate::days(28)) %>%
+  dplyr::mutate(data,
+    date_lost = last_drug_pickup_date +
+      lubridate::days(days_of_arv_refill) +
+      lubridate::days(28)
+  ) %>%
     dplyr::filter(
       # current_status_28_days == "Inactive",
-      dplyr::between(date_lost,
-                     lubridate::as_date(from),
-                     lubridate::as_date(to)),
+      dplyr::between(
+        date_lost,
+        lubridate::as_date(from),
+        lubridate::as_date(to)
+      ),
       state %in% region,
-      facility %in% site)
+      facility %in% site
+    )
 }
 
+
+
+utils::globalVariables("date_lost")

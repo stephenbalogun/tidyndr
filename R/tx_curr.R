@@ -15,28 +15,35 @@
 #' ndr_example <- read_ndr(file_path)
 #'
 #' ndr_example %>%
-#' tx_curr()
+#'   tx_curr()
 #'
 #' # generate the TX_CURR for two states (e.g. "State 1" and "State 2" in the ndr_example file)
 #' ndr_example %>%
-#' tx_curr(region = c("State 1", "State 2"))
+#'   tx_curr(region = c("State 1", "State 2"))
 #'
 #' # determine the active clients in two facilities ("Facility 1", and "Facility 2) in "State 1"
 #' ndr_example %>%
-#' tx_curr(region = "State 1",
-#' site = c("Facility 1", "Facility 2"))
+#'   tx_curr(
+#'     region = "State 1",
+#'     site = c("Facility 1", "Facility 2")
+#'   )
 tx_curr <- function(data,
                     region = unique(data$state),
                     site = unique(data$facility)) {
+  stopifnot(
+    "please check that region is contained in the dataset list of states" =
+      any(region %in% unique(data$state))
+  )
 
-  stopifnot("please check that region is contained in the dataset list of states" =
-              any(region %in% unique(data$state)))
+  stopifnot(
+    "please check that site is contained in the dataset list of facilities" =
+      any(site %in% unique(data$facility))
+  )
 
-  stopifnot("please check that site is contained in the dataset list of facilities" =
-              any(site %in% unique(data$facility)))
-
-    filter(data,
-           current_status_28_days == "Active",
-           state %in% region,
-           facility %in% site)
+  filter(
+    data,
+    current_status_28_days == "Active",
+    state %in% region,
+    facility %in% site
+  )
 }

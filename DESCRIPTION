@@ -19,6 +19,8 @@ RoxygenNote: 7.1.1
 Depends: R (>= 4.0)
 Imports: 
     vroom,
+    stats,
+    utils,
     dplyr,
     lubridate,
     janitor,

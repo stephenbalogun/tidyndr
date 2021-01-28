@@ -21,26 +21,36 @@
 #'
 #' # Determine clients who are going to be eligible for VL by the end of Q2 of FY21
 #' ndr_example %>%
-#' tx_vl_eligible(reference = "2021-03-31")
-#'
+#'   tx_vl_eligible(reference = "2021-03-31")
 tx_vl_eligible <- function(data,
                            reference = Sys.Date(),
                            region = unique(data$state),
                            site = unique(data$facility)) {
+  stopifnot(
+    "please check that region is contained in the dataset list of states" =
+      any(region %in% unique(data$state))
+  )
 
-  stopifnot("please check that region is contained in the dataset list of states" =
-              any(region %in% unique(data$state)))
+  stopifnot(
+    "please check that site is contained in the dataset list of facilities" =
+      any(site %in% unique(data$facility))
+  )
 
-  stopifnot("please check that site is contained in the dataset list of facilities" =
-              any(site %in% unique(data$facility)))
+  stopifnot(
+    'please check that your reference date format is "yyyy-mm-dd"' =
+      !is.na(lubridate::as_date(reference))
+  )
 
-  stopifnot('please check that your reference date format is "yyyy-mm-dd"' =
-              !is.na(lubridate::as_date(reference)))
-
-  dplyr::filter(data,
-                current_status_28_days == "Active",
-                lubridate::as_date(reference) - art_start_date >=
-                  lubridate::period(6, "months"),
-           state %in% region,
-           facility %in% site)
+  dplyr::filter(
+    data,
+    current_status_28_days == "Active",
+    lubridate::as_date(reference) - art_start_date >=
+      lubridate::period(6, "months"),
+    state %in% region,
+    facility %in% site
+  )
 }
+
+
+
+utils::globalVariables("art_start_date")

@@ -24,32 +24,48 @@
 #'
 #' # Determine clients who are virally suppressed for two state at the end of Q1
 #' ndr_example %>%
-#' tx_pvls_den(reference = "2020-12-31",
-#' region = c("State 1", "State 2"))
+#'   tx_pvls_den(
+#'     reference = "2020-12-31",
+#'     region = c("State 1", "State 2")
+#'   )
 tx_regimen <- function(data,
-                       regimen = c("AZT-3TC-RAL",
-                                   "ABC-3TC-LPV/r",
-                                   "AZT-3TC-LPV/r",
-                                   "ABC-3TC-DTG",
-                                   "TDF-3TC-DTG"),
+                       regimen = c(
+                         "AZT-3TC-RAL",
+                         "ABC-3TC-LPV/r",
+                         "AZT-3TC-LPV/r",
+                         "ABC-3TC-DTG",
+                         "TDF-3TC-DTG"
+                       ),
                        age_range = c(0, Inf),
                        region = unique(data$state),
                        site = unique(data$facility)) {
+  stopifnot(
+    'please enter the "age_range" argument as "c(min_age, max_age)"' =
+      all(purrr::is_double(age_range, n = 2))
+  )
 
-  stopifnot('please enter the "age_range" argument as "c(min_age, max_age)"' =
-              all(purrr::is_double(age_range, n = 2)))
+  stopifnot(
+    "please check that region is contained in the dataset list of states" =
+      any(region %in% unique(data$state))
+  )
 
-  stopifnot("please check that region is contained in the dataset list of states" =
-              any(region %in% unique(data$state)))
+  stopifnot(
+    "please check that site is contained in the dataset list of facilities" =
+      any(site %in% unique(data$facility))
+  )
 
-  stopifnot("please check that site is contained in the dataset list of facilities" =
-              any(site %in% unique(data$facility)))
 
-
-    dplyr::filter(data,
-           current_status_28_days == "Active",
-           last_regimen %in% regimen,
-           dplyr::between(current_age, age_range[1], age_range[2]),
-           state %in% region,
-           facility %in% site)
+  dplyr::filter(
+    data,
+    current_status_28_days == "Active",
+    last_regimen %in% regimen,
+    dplyr::between(current_age, age_range[1], age_range[2]),
+    state %in% region,
+    facility %in% site
+  )
 }
+
+
+
+utils::globalVariables(c("last_regimen",
+                         "current_age"))

@@ -39,13 +39,15 @@ Subset rows of clients who have clinic appointment/medication pick-up within a p
 file_path <- "C:/Users/stephenbalogun/Documents/My R/tidyndr/ndr_example.csv"
 ndr_example <- read_ndr(file_path)
 tx_appointment(ndr_example,
-from = "2021-01-01",
-to = "2021-03-30")
+  from = "2021-01-01",
+  to = "2021-03-30"
+)
 
 # Determine clients with medication refill in January 2021 for a particular facility
 tx_appointment(ndr_example,
-from = "2021-01-01",
-to = "2021-01-31",
-region = "State 1",
-site = "Facility 1")
+  from = "2021-01-01",
+  to = "2021-01-31",
+  region = "State 1",
+  site = "Facility 1"
+)
 }

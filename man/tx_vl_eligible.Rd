@@ -39,6 +39,5 @@ tx_vl_eligible(ndr_example)
 
 # Determine clients who are going to be eligible for VL by the end of Q2 of FY21
 ndr_example \%>\%
-tx_vl_eligible(reference = "2021-03-31")
-
+  tx_vl_eligible(reference = "2021-03-31")
 }

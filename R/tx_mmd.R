@@ -27,17 +27,26 @@ tx_mmd <- function(data,
   )
 
 
-  stopifnot("please check that region is contained in the dataset list of states" =
-              any(region %in% unique(data$state)))
+  stopifnot(
+    "please check that region is contained in the dataset list of states" =
+      any(region %in% unique(data$state))
+  )
 
-  stopifnot("please check that site is contained in the dataset list of facilities" =
-              any(site %in% unique(data$facility)))
+  stopifnot(
+    "please check that site is contained in the dataset list of facilities" =
+      any(site %in% unique(data$facility))
+  )
 
   data %>%
     dplyr::mutate(months_dispensed = round(days_of_arv_refill / 30, 0)) %>%
-    dplyr::filter(current_status_28_days == "Active",
-           months_dispensed %in% month,
-           state %in% region,
-           facility %in% site)
-
+    dplyr::filter(
+      current_status_28_days == "Active",
+      months_dispensed %in% month,
+      state %in% region,
+      facility %in% site
+    )
 }
+
+
+utils::globalVariables("months_dispensed")
+

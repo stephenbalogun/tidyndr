@@ -40,7 +40,8 @@ tx_pvls_den(ndr_example)
 
 # Determine clients who are virally suppressed for two state at the end of Q1
 ndr_example \%>\%
-tx_pvls_den(reference = "2020-12-31",
-region = c("State 1", "State 2"))
-
+  tx_pvls_den(
+    reference = "2020-12-31",
+    region = c("State 1", "State 2")
+  )
 }

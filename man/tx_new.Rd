@@ -45,8 +45,9 @@ tx_new(ndr_example, region = "State 1")
 
 ## Determine the TX_NEW for Quarter 1 of FY21 for State 2
 ndr_example \%>\%
-tx_new(from = "2020-10-01",
-to = "2020-12-31",
-region = "State 2")
-
+  tx_new(
+    from = "2020-10-01",
+    to = "2020-12-31",
+    region = "State 2"
+  )
 }

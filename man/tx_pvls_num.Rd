@@ -43,10 +43,12 @@ tx_pvls_num(ndr_example)
 
 # Determine clients who are virally suppressed for a state at the end of Q1
 ndr_example \%>\%
-tx_pvls_num(reference = "2020-12-31",
-region = "State 1")
+  tx_pvls_num(
+    reference = "2020-12-31",
+    region = "State 1"
+  )
 
 # Determine clients with viral load result less than 400
 ndr_example \%>\%
-tx_pvls_num(n = 400)
+  tx_pvls_num(n = 400)
 }

@@ -56,8 +56,9 @@ test_that("read_ndr() reads-in NDR '.csv' patient-level line-list", {
     names(read_ndr(file_path)),
     names(
       suppressWarnings(
-    vroom::vroom(file_path, col_types = cols) %>%
-      janitor::clean_names())
+        vroom::vroom(file_path, col_types = cols) %>%
+          janitor::clean_names()
+      )
     )
   )
 })

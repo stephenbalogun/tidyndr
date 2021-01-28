@@ -23,35 +23,48 @@
 #'
 #' # Determine clients who are virally suppressed for two state at the end of Q1
 #' ndr_example %>%
-#' tx_pvls_den(reference = "2020-12-31",
-#' region = c("State 1", "State 2"))
-#'
-
+#'   tx_pvls_den(
+#'     reference = "2020-12-31",
+#'     region = c("State 1", "State 2")
+#'   )
 tx_pvls_den <- function(data,
                         reference = Sys.Date(),
                         region = unique(data$state),
                         site = unique(data$facility)) {
+  stopifnot(
+    "please check that region is contained in the dataset list of states" =
+      any(region %in% unique(data$state))
+  )
 
-  stopifnot("please check that region is contained in the dataset list of states" =
-              any(region %in% unique(data$state)))
+  stopifnot(
+    "please check that site is contained in the dataset list of facilities" =
+      any(site %in% unique(data$facility))
+  )
 
-  stopifnot("please check that site is contained in the dataset list of facilities" =
-              any(site %in% unique(data$facility)))
+  stopifnot(
+    'please check that your reference date format is "yyyy-mm-dd"' =
+      !is.na(lubridate::as_date(reference))
+  )
 
-  stopifnot('please check that your reference date format is "yyyy-mm-dd"' =
-              !is.na(lubridate::as_date(reference)))
-
-    filter(data,
-           current_status_28_days == "Active",
-           lubridate::as_date(reference) - art_start_date >=
-             lubridate::period(6, "months"),
-           ifelse(current_age < 20,
-                  date_of_current_viral_load >
-                    lubridate::as_date(reference) -
-                    lubridate::period(month = 6),
-                  date_of_current_viral_load >
-                    lubridate::as_date(reference) -
-                    lubridate::period(year = 1)),
-           state %in% region,
-           facility %in% site)
+  filter(
+    data,
+    current_status_28_days == "Active",
+    lubridate::as_date(reference) - art_start_date >=
+      lubridate::period(6, "months"),
+    ifelse(current_age < 20,
+      date_of_current_viral_load >
+        lubridate::as_date(reference) -
+          lubridate::period(month = 6),
+      date_of_current_viral_load >
+        lubridate::as_date(reference) -
+          lubridate::period(year = 1)
+    ),
+    state %in% region,
+    facility %in% site
+  )
 }
+
+
+utils::globalVariables(c("art_start_date",
+                         "current_age",
+                         "date_of_current_viral_load"))

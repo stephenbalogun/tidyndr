@@ -19,15 +19,17 @@
 #' file_path <- "C:/Users/stephenbalogun/Documents/My R/tidyndr/ndr_example.csv"
 #' ndr_example <- read_ndr(file_path)
 #' tx_appointment(ndr_example,
-#' from = "2021-01-01",
-#' to = "2021-03-30")
+#'   from = "2021-01-01",
+#'   to = "2021-03-30"
+#' )
 #'
 #' # Determine clients with medication refill in January 2021 for a particular facility
 #' tx_appointment(ndr_example,
-#' from = "2021-01-01",
-#' to = "2021-01-31",
-#' region = "State 1",
-#' site = "Facility 1")
+#'   from = "2021-01-01",
+#'   to = "2021-01-31",
+#'   region = "State 1",
+#'   site = "Facility 1"
+#' )
 tx_appointment <- function(data,
                            from = fy_start,
                            to = Sys.Date(),
@@ -36,34 +38,57 @@ tx_appointment <- function(data,
 
   fy_start <- lubridate::as_date(
     ifelse(lubridate::month(Sys.Date()) < 10,
-           update(Sys.Date(),
-                  year = lubridate::year(Sys.Date()) - 1,
-                  month = 10,
-                  day = 1),
-           update(Sys.Date(),
-                  month = 10,
-                  day = 1))
+      stats::update(Sys.Date(),
+        year = lubridate::year(Sys.Date()) - 1,
+        month = 10,
+        day = 1
+      ),
+      stats::update(Sys.Date(),
+        month = 10,
+        day = 1
+      )
+    )
   )
 
-  stopifnot("please check that region is contained in the dataset list of states" =
-              any(region %in% unique(data$state)))
+  stopifnot(
+    "please check that region is contained in the dataset list of states" =
+      any(region %in% unique(data$state))
+  )
 
-  stopifnot("please check that site is contained in the dataset list of facilities" =
-              any(site %in% unique(data$facility)))
+  stopifnot(
+    "please check that site is contained in the dataset list of facilities" =
+      any(site %in% unique(data$facility))
+  )
 
-  stopifnot('please check that your date format is "yyyy-mm-dd"' =
-              !is.na(lubridate::as_date(from)))
-  stopifnot('please check that your date format is "yyyy-mm-dd"' =
-              !is.na(lubridate::as_date(to)))
+  stopifnot(
+    'please check that your date format is "yyyy-mm-dd"' =
+      !is.na(lubridate::as_date(from))
+  )
+  stopifnot(
+    'please check that your date format is "yyyy-mm-dd"' =
+      !is.na(lubridate::as_date(to))
+  )
 
 
   data %>%
     dplyr::mutate(appointment_date = last_drug_pickup_date +
-             lubridate::days(days_of_arv_refill)) %>%
-    dplyr::filter(current_status_28_days == "Active",
-           dplyr::between(appointment_date,
-                          lubridate::as_date(from),
-                          lubridate::as_date(to)),
-           state %in% region,
-           facility %in% site)
+      lubridate::days(days_of_arv_refill)) %>%
+    dplyr::filter(
+      current_status_28_days == "Active",
+      dplyr::between(
+        appointment_date,
+        lubridate::as_date(from),
+        lubridate::as_date(to)
+      ),
+      state %in% region,
+      facility %in% site
+    )
 }
+
+
+utils::globalVariables(c("last_drug_pickup_date",
+                         "days_of_arv_refill",
+                         "current_status_28_days",
+                         "appointment_date",
+                         "state",
+                         "facility"))
