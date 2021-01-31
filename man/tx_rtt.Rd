@@ -2,38 +2,40 @@
 % Please edit documentation in R/tx_rtt.R
 \name{tx_rtt}
 \alias{tx_rtt}
-\title{Subset rows of clients who were previously inactive but now active}
+\title{Subset Rows of Previously Inactive Clients Who are Now Active}
 \usage{
-tx_rtt(
-  old_data,
-  new_data,
-  region = unique(new_data$state),
-  site = unique(new_data$facility)
-)
+tx_rtt(old_data, new_data, state = region, facility = site)
 }
 \arguments{
-\item{old_data}{the initial dataframe containing the list of clients who have been previously inactive.}
+\item{old_data}{The initial dataframe containing the list of clients who
+have been previously inactive.}
 
-\item{new_data}{the current datafame where changes in current treatment status will be checked.}
+\item{new_data}{The current datafame where changes in current treatment
+status will be checked.}
 
-\item{region}{a character vector specifying the "State" of interest.
-The default utilizes all the states in the dataframe.}
+\item{state}{The name(s) of the State(s) of interest. The default utilizes all
+the states in the dataframe. If specifying more than one state, combine the
+states using the \code{c()} e.g. \code{c("State 1", "State 2")}.}
 
-\item{site}{a character vector of at least length 1. Default is to utilize all
-the facilities contained in the dataframe.}
+\item{facility}{The name(s) of the facilit(ies) of interest. Default is to utilize
+all the facilities contained in the dataframe. If specifying more than one
+facility, combine the facilities using the \code{c()} e.g.
+\code{c("Facility 1", "Facility 2")}.}
 }
 \value{
 
 }
 \description{
-Subset rows of clients who were previously inactive but now active
+Generates the line-list of clients who were inactive in the data supplied to
+the \code{old_data} argument but have now become active in the data supplied
+to the \code{new_data} argument.
 }
 \examples{
-file_path <- "C:/Users/stephenbalogun/Documents/My R/tidyndr/ndr_example.csv"
+file_path <- system.file("extdata", "ndr_example.csv", package = "tidyndr")
 ndr_old <- read_ndr(file_path)
-ndr_new <- read_ndr(file_path)
+ndr_new <- ndr_example
 tx_rtt(ndr_old, ndr_new)
 
 # Determine RTT for a particular state
-tx_rtt(ndr_old, ndr_new, region = "State 1")
+tx_rtt(ndr_old, ndr_new, state = "State 1")
 }

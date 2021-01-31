@@ -4,36 +4,36 @@
 \alias{tx_mmd}
 \title{Subset active clients based on months of ARV Dispensed}
 \usage{
-tx_mmd(
-  data,
-  month = c(3, 4, 5, 6),
-  region = unique(data$state),
-  site = unique(data$facility)
-)
+tx_mmd(data, month = months_dispensed, state = region, facility = site)
 }
 \arguments{
-\item{data}{an ndr dataframe imported using the \code{read_ndr()}.}
+\item{data}{An ndr dataframe imported using the \code{read_ndr()}.}
 
-\item{month}{the number(s) of month of interest of ARV dispensed (rounded to the nearest who number).
-The default is to subset active clients who had 3 - 6 months of ARV dispensed.}
+\item{month}{The number(s) of month of interest of ARV dispensed
+(rounded to the nearest who number). The default is to subset active
+clients who had 3 - 6 months of ARV dispensed.}
 
-\item{region}{a character vector specifying the "State" of interest.
-The default utilizes all the states in the dataframe.}
+\item{state}{The name(s) of the State(s) of interest. The default utilizes all
+the states in the dataframe. If specifying more than one state, combine the
+states using the \code{c()} e.g. \code{c("State 1", "State 2")}.}
 
-\item{site}{a character vector of at least length 1. Default is to utilize all
-the facilities contained in the dataframe.}
+\item{facility}{The name(s) of the facilit(ies) of interest. Default is to utilize
+all the facilities contained in the dataframe. If specifying more than one
+facility, combine the facilities using the \code{c()} e.g.
+\code{c("Facility 1", "Facility 2")}.}
 }
 \value{
 
 }
 \description{
-Subset active clients based on months of ARV Dispensed
+Generates list of clients who had 3 - 6 months of ARV dispensed during the
+medication refill. You can specify the number of month(s) of ARV dispensed
+by changing the \code{month} argument.
 }
 \examples{
-file_path <- "C:/Users/stephenbalogun/Documents/My R/tidyndr/ndr_example.csv"
-ndr_example <- read_ndr(file_path)
 tx_mmd(ndr_example)
 
 # subset active clients who had 2 or 4 months of ARV dispensed at last encounter
-tx_mmd(ndr_example, month = c(2, 4))
+tx_mmd(ndr_example,
+month = c(2, 4))
 }

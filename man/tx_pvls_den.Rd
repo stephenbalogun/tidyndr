@@ -2,46 +2,39 @@
 % Please edit documentation in R/tx_pvls_den.R
 \name{tx_pvls_den}
 \alias{tx_pvls_den}
-\title{Subset clients who have a documented viral load result within the last 1 year}
+\title{Subset clients who have a documented viral load result}
 \usage{
-tx_pvls_den(
-  data,
-  reference = Sys.Date(),
-  region = unique(data$state),
-  site = unique(data$facility)
-)
+tx_pvls_den(data, reference = ref_date, state = region, facility = site)
 }
 \arguments{
-\item{data}{an ndr dataframe imported using the `read_ndr()}
+\item{data}{An ndr dataframe imported using the `read_ndr().}
 
-\item{reference}{date, provided in ISO8601 format ("yyyy-mm-dd"), used to
+\item{reference}{Date provided in ISO8601 format ("yyyy-mm-dd"). Used to
 determine clients who are eligible for viral load and should have a
-documented result. The default is the date of analysis (today).
-Repeat viral load is calculated for adults of age 20 years annually and every
-6 months for clients of 19 years and below.}
+documented result. The default is the date of analysis.}
 
-\item{region}{a character vector specifying the "State" of interest.
-The default utilizes all the states in the dataframe.}
+\item{state}{The name(s) of the State(s) of interest. The default utilizes all
+the states in the dataframe. If specifying more than one state, combine the
+states using the \code{c()} e.g. \code{c("State 1", "State 2")}.}
 
-\item{site}{a character vector of at least length 1. Default is to utilize all
-the facilities contained in the dataframe.}
+\item{facility}{The name(s) of the facilit(ies) of interest. Default is to utilize
+all the facilities contained in the dataframe. If specifying more than one
+facility, combine the facilities using the \code{c()} e.g.
+\code{c("Facility 1", "Facility 2")}.}
 }
 \value{
 
 }
 \description{
-Subset clients who have a documented viral load result within the last 1 year
+Generate the line-list of clients whose date of last viral load result is not
+more than one year (for adults 20 years and above) and 6 months (for
+paediatrics and adolescents) from the specified reference date.
 }
 \examples{
-file_path <- "C:/Users/stephenbalogun/Documents/My R/tidyndr/ndr_example.csv"
-ndr_example <- read_ndr(file_path)
-
 tx_pvls_den(ndr_example)
 
 # Determine clients who are virally suppressed for two state at the end of Q1
-ndr_example \%>\%
-  tx_pvls_den(
+  tx_pvls_den(ndr_example,
     reference = "2020-12-31",
-    region = c("State 1", "State 2")
-  )
+    state = c("State 1", "State 2"))
 }

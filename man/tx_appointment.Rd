@@ -2,42 +2,47 @@
 % Please edit documentation in R/tx_appointment.R
 \name{tx_appointment}
 \alias{tx_appointment}
-\title{Subset rows of clients who have clinic appointment/medication pick-up within a particular period}
+\title{Subset rows of clients who have clinic appointment/medication pick-up within
+a particular period}
 \usage{
 tx_appointment(
   data,
   from = fy_start,
-  to = Sys.Date(),
-  region = unique(data$state),
-  site = unique(data$facility)
+  to = end_date,
+  state = region,
+  facility = site
 )
 }
 \arguments{
-\item{data}{an ndr dataframe imported using the `read_ndr()}
+\item{data}{An ndr dataframe imported using the `read_ndr().}
 
-\item{from}{the start date for clients with clinic appointments in
-ISO8601 format (i.e. "yyyy-mm-dd"). The default is to start at the
-beginning of the current Fiscal Year (i.e. 1st of October).}
+\item{from}{The start date for clients with clinic appointments in ISO8601
+format (i.e. "yyyy-mm-dd"). The default is to start at the beginning of the
+current Fiscal Year (i.e. 1st of October).}
 
-\item{to}{the end date for the appointment period of interest written
-in ISO8601 format (i.e. "yyyy-mm-dd"). The default is today.}
+\item{to}{The end date for the appointment period of interest written in
+ISO8601 format (i.e. "yyyy-mm-dd"). The default is today.}
 
-\item{region}{a character vector specifying the "State" of interest.
-The default utilizes all the states in the dataframe.}
+\item{state}{The name(s) of the State(s) of interest. The default utilizes all
+the states in the dataframe. If specifying more than one state, combine the
+states using the \code{c()} e.g. \code{c("State 1", "State 2")}.}
 
-\item{site}{a character vector of at least length 1. Default is to utilize all
-the facilities contained in the dataframe.}
+\item{facility}{The name(s) of the facilit(ies) of interest. Default is to utilize
+all the facilities contained in the dataframe. If specifying more than one
+facility, combine the facilities using the \code{c()} e.g.
+\code{c("Facility 1", "Facility 2")}.}
 }
 \value{
 
 }
 \description{
-Subset rows of clients who have clinic appointment/medication pick-up within a particular period
+\code{tx_appointment} generates the line-list of clients who have clinic
+appointment/medication refill for the specified state(s) and/or facilit(ies).
+The default is to generate the appointment list for all the
+states/facilities.
 }
 \examples{
-# Determine clients who have medication refill in Q2 of Fy21
-file_path <- "C:/Users/stephenbalogun/Documents/My R/tidyndr/ndr_example.csv"
-ndr_example <- read_ndr(file_path)
+# Determine clients who have medication refill in Q2 of FY21
 tx_appointment(ndr_example,
   from = "2021-01-01",
   to = "2021-03-30"
@@ -47,7 +52,7 @@ tx_appointment(ndr_example,
 tx_appointment(ndr_example,
   from = "2021-01-01",
   to = "2021-01-31",
-  region = "State 1",
-  site = "Facility 1"
+  state = "State 1",
+  facility = "Facility 1"
 )
 }

@@ -8,28 +8,31 @@ Authors@R:
            email = "stephentaiyebalogun@gmail.com",
            comment = c(ORCID = "0000-0002-9928-3703"))
 Description: The goal of the 'tidyndr' is to simplify routine analysis of the 
-  Nigeria National Data Repository (NDR) using the PEPFAR Monitoring, 
-  Evaluation, and Reporting (MER) indictors. It is designed to import in to R 
-  patient-level line-list downloaded as 'csv' file from the front-end of the NDR.
+        Nigeria National Data Repository (NDR) using the PEPFAR Monitoring, 
+        Evaluation, and Reporting (MER) indictors. It is designed to import in to R 
+        patient-level line-list downloaded as 'csv' file from the front-end of the NDR.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
-Depends: R (>= 4.0)
+Depends: R (>= 3.6)
 Imports: 
-    vroom,
+    dplyr (>= 1.0.3),
+    janitor (>= 2.1.0),
+    lubridate (>= 1.7.9.2),
+    magrittr (>= 2.0.1),
+    purrr (>= 0.3.4),
+    rlang (>= 0.4.10),
     stats,
+    stringr (>= 1.4.0),
     utils,
-    dplyr,
-    lubridate,
-    janitor,
-    rlang,
-    purrr,
-    magrittr,
-    stringr
+    vroom (>= 1.3.2)
 Suggests: 
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown
 Config/testthat/edition: 3
 URL: https://github.com/stephenbalogun/tidyndr
 BugReports: https://github.com/stephenbalogun/tidyndr/issues
+VignetteBuilder: knitr

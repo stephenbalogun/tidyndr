@@ -4,39 +4,39 @@
 \alias{tx_ml}
 \title{Subset clients who became inactive (IIT) within a given period}
 \usage{
-tx_ml(
-  data,
-  from = fy_start,
-  to = Sys.Date(),
-  region = unique(data$state),
-  site = unique(data$facility)
-)
+tx_ml(data, from = fy_start, to = end_date, state = region, facility = site)
 }
 \arguments{
-\item{data}{an ndr dataframe imported using the `read_ndr()}
+\item{data}{An ndr dataframe imported using the `read_ndr().}
 
-\item{from}{reference date to start the determination of the "TX_ML"
-in ISO8601 format (i.e. "yyyy-mm-dd"). The default is to start at the
-beginning of the current Fiscal Year (i.e. 1st of October).}
+\item{from}{The start date for clients with clinic appointments in ISO8601
+format (i.e. "yyyy-mm-dd"). The default is to start at the beginning of the
+current Fiscal Year (i.e. 1st of October).}
 
-\item{to}{last reference date for the "TX_ML" determination written in
+\item{to}{The end date for the appointment period of interest written in
 ISO8601 format (i.e. "yyyy-mm-dd"). The default is today.}
 
-\item{region}{a character vector specifying the "State" of interest.
-The default utilizes all the states in the dataframe.}
+\item{state}{The name(s) of the State(s) of interest. The default utilizes all
+the states in the dataframe. If specifying more than one state, combine the
+states using the \code{c()} e.g. \code{c("State 1", "State 2")}.}
 
-\item{site}{a character vector of at least length 1. Default is to utilize all
-the facilities contained in the dataframe.}
+\item{facility}{The name(s) of the facilit(ies) of interest. Default is to utilize
+all the facilities contained in the dataframe. If specifying more than one
+facility, combine the facilities using the \code{c()} e.g.
+\code{c("Facility 1", "Facility 2")}.}
 }
 \value{
 
 }
 \description{
-Subset clients who became inactive (IIT) within a given period
+\code{tx_ml} Generates clients who have become inactive over a specified
+period of time. The default is to generate all clients who became inactive
+in the current Fiscal Year. You can specify the period of interest
+(using the \code{from} and \code{to} arguments). Used together
+with \code{tx_ml_outcomes()}, generates inactive clients with a particular
+outcome of interest.
 }
 \examples{
-file_path <- "C:/Users/stephenbalogun/Documents/My R/tidyndr/ndr_example.csv"
-ndr_example <- read_ndr(file_path)
 tx_ml(ndr_example)
 
 # Find clients who were inactive at the end of Q1 of FY21

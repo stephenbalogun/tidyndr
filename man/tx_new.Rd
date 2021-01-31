@@ -4,50 +4,47 @@
 \alias{tx_new}
 \title{Subset clients starting ART within a particular period.}
 \usage{
-tx_new(
-  data,
-  from = fy_start,
-  to = Sys.Date(),
-  region = unique(data$state),
-  site = unique(data$facility)
-)
+tx_new(data, from = fy_start, to = end_date, state = region, facility = site)
 }
 \arguments{
-\item{data}{an ndr dataframe imported using the \code{read_ndr()}.}
+\item{data}{An ndr dataframe imported using the `read_ndr().}
 
-\item{from}{reference date to start the determination of the "TX_NEW"
-in ISO8601 format (i.e. "yyyy-mm-dd"). The default is to start at the
-beginning of the current Fiscal Year (i.e. 1st of October).}
+\item{from}{The start date for clients with clinic appointments in ISO8601
+format (i.e. "yyyy-mm-dd"). The default is to start at the beginning of the
+current Fiscal Year (i.e. 1st of October).}
 
-\item{to}{last reference date for the "TX_NEW" determination written in
+\item{to}{The end date for the appointment period of interest written in
 ISO8601 format (i.e. "yyyy-mm-dd"). The default is today.}
 
-\item{region}{a character vector specifying the "State" of interest.
-The default utilizes all the states in the dataframe.}
+\item{state}{The name(s) of the State(s) of interest. The default utilizes all
+the states in the dataframe. If specifying more than one state, combine the
+states using the \code{c()} e.g. \code{c("State 1", "State 2")}.}
 
-\item{site}{a character vector of at least length 1. Default is to utilize all
-the facilities contained in the dataframe.}
+\item{facility}{The name(s) of the facilit(ies) of interest. Default is to utilize
+all the facilities contained in the dataframe. If specifying more than one
+facility, combine the facilities using the \code{c()} e.g.
+\code{c("Facility 1", "Facility 2")}.}
 }
 \value{
 
 }
 \description{
-Subset clients starting ART within a particular period.
+Generates the line-list of clients who commenced ARV within the specified
+period of interest. The default is to generate the list for all clients who
+commenced ARV in the current Fiscal Year. You can change the period of
+interest using the \code{from} and \code{to} arguments; and the state or
+facility of interest with the \code{state} and \code{facility} arguments.
+For multiple states or facilities, use the \code{c()} to combine the names.
 }
 \examples{
-file_path <- "C:/Users/stephenbalogun/Documents/My R/tidyndr/ndr_example.csv"
-ndr_example <- read_ndr(file_path)
-
 tx_new(ndr_example)
 
 # generate the TX_NEW for a specific state (State 1)
-tx_new(ndr_example, region = "State 1")
+tx_new(ndr_example, state = "State 1")
 
 ## Determine the TX_NEW for Quarter 1 of FY21 for State 2
-ndr_example \%>\%
-  tx_new(
-    from = "2020-10-01",
-    to = "2020-12-31",
-    region = "State 2"
-  )
+  tx_new(ndr_example,
+  from = "2020-10-01",
+  to = "2020-12-31",
+  state = c("State 2", "State 3"))
 }

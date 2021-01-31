@@ -1,40 +1,38 @@
 #' Subset clients starting ART within a particular period.
 #'
-#' @param data an ndr dataframe imported using the `read_ndr()`.
-#' @param from reference date to start the determination of the "TX_NEW"
-#' in ISO8601 format (i.e. "yyyy-mm-dd"). The default is to start at the
-#' beginning of the current Fiscal Year (i.e. 1st of October).
-#' @param to last reference date for the "TX_NEW" determination written in
-#' ISO8601 format (i.e. "yyyy-mm-dd"). The default is today.
-#' @param region a character vector specifying the "State" of interest.
-#' The default utilizes all the states in the dataframe.
-#' @param site a character vector of at least length 1. Default is to utilize all
-#' the facilities contained in the dataframe.
+#' Generates the line-list of clients who commenced ARV within the specified
+#' period of interest. The default is to generate the list for all clients who
+#' commenced ARV in the current Fiscal Year. You can change the period of
+#' interest using the \code{from} and \code{to} arguments; and the state or
+#' facility of interest with the \code{state} and \code{facility} arguments.
+#' For multiple states or facilities, use the \code{c()} to combine the names.
+#'
+#' @inheritParams tx_appointment
 #'
 #' @return
 #' @export
 #'
 #' @examples
-#' file_path <- "C:/Users/stephenbalogun/Documents/My R/tidyndr/ndr_example.csv"
-#' ndr_example <- read_ndr(file_path)
-#'
 #' tx_new(ndr_example)
 #'
 #' # generate the TX_NEW for a specific state (State 1)
-#' tx_new(ndr_example, region = "State 1")
+#' tx_new(ndr_example, state = "State 1")
 #'
 #' ## Determine the TX_NEW for Quarter 1 of FY21 for State 2
-#' ndr_example %>%
-#'   tx_new(
-#'     from = "2020-10-01",
-#'     to = "2020-12-31",
-#'     region = "State 2"
-#'   )
+#'   tx_new(ndr_example,
+#'   from = "2020-10-01",
+#'   to = "2020-12-31",
+#'   state = c("State 2", "State 3"))
 tx_new <- function(data,
                    from = fy_start,
-                   to = Sys.Date(),
-                   region = unique(data$state),
-                   site = unique(data$facility)) {
+                   to = end_date,
+                   state = region,
+                   facility = site) {
+
+  end_date <- Sys.Date()
+  region <- unique(data$state)
+  site <- unique(data$facility)
+
   fy_start <- lubridate::as_date(
     ifelse(lubridate::month(Sys.Date()) < 10,
       stats::update(Sys.Date(),
@@ -68,16 +66,12 @@ tx_new <- function(data,
       !is.na(lubridate::as_date(to))
   )
 
-  filter(
-    data,
-    dplyr::between(
-      art_start_date,
-      lubridate::as_date(from),
-      lubridate::as_date(to)
-    ),
-    state %in% region,
-    facility %in% site
-  )
+  dplyr::filter(data,
+                dplyr::between(art_start_date,
+                               lubridate::as_date(from),
+                               lubridate::as_date(to)),
+                state %in% region,
+                facility %in% site)
 }
 
 

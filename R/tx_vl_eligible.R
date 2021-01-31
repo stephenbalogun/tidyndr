@@ -1,31 +1,29 @@
-#' Subset clients who are eligible for viral load
+#' Subset Clients who are Eligible for Viral Load
 #'
-#' @param data an ndr dataframe imported using the `read_ndr()
-#' @param reference date, provided in ISO8601 format ("yyyy-mm-dd"), used to
-#' determine clients who are eligible for viral load. The default is to subset clients
-#' who have been on medication for at least 6 months
-#' (ART start date is at least 6 months ago).
-#' @param region a character vector specifying the "State" of interest.
-#' The default utilizes all the states in the dataframe.
-#' @param site a character vector of at least length 1. Default is to utilize all
-#' the facilities contained in the dataframe.
+#' Generates the line-list of clients who have been (or would have been) on ARv
+#' medications for at least 6 months from the reference date. The default
+#' reference date is the date of analysis.
+#'
+#' @inheritParams tx_pvls_den
 #'
 #' @return
 #' @export
 #'
 #' @examples
-#' file_path <- "C:/Users/stephenbalogun/Documents/My R/tidyndr/ndr_example.csv"
-#' ndr_example <- read_ndr(file_path)
-#'
 #' tx_vl_eligible(ndr_example)
 #'
 #' # Determine clients who are going to be eligible for VL by the end of Q2 of FY21
-#' ndr_example %>%
-#'   tx_vl_eligible(reference = "2021-03-31")
+#'   tx_vl_eligible(ndr_example,
+#'   reference = "2021-03-31")
 tx_vl_eligible <- function(data,
-                           reference = Sys.Date(),
-                           region = unique(data$state),
-                           site = unique(data$facility)) {
+                           reference = ref_date,
+                           state = region,
+                           facility = site) {
+
+  ref_date <- Sys.Date()
+  region <- unique(data$state)
+  site <- unique(data$facility)
+
   stopifnot(
     "please check that region is contained in the dataset list of states" =
       any(region %in% unique(data$state))

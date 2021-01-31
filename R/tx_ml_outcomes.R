@@ -1,16 +1,20 @@
-#' subset rows containing clients who have either "Transferred Out" or are "Deceased"
+#' Subset rows of inactive clients with specific outcome
 #'
-#' @param data an ndr dataframe imported using the `read_ndr()
-#' @param outcome the particular outcome of interest based on options available on the NDR ("transfer out" or "dead").
+#' \code{tx_ml_outcomes} generates the line-list of clients based on the
+#' outcome of interest ("dead" or "transfer out"). It should be use after
+#' \code{tx_ml()}.
+#'
+#' @param data An ndr dataframe imported using the `read_ndr()
+#' @param outcome The particular outcome of interest based on options available
+#' on the NDR ("transfer out" or "dead").
 #'
 #' @return
 #' @export
 #'
 #' @examples
-#' file_path <- "C:/Users/stephenbalogun/Documents/My R/tidyndr/ndr_example.csv"
-#' ndr_example <- read_ndr(file_path)
-#' tx_ml(ndr_example) %>%
-#'   tx_ml_outcomes("dead")
+#' tx_ml_outcomes(tx_ml(ndr_example),
+#' outcome = "dead")
+#'
 tx_ml_outcomes <- function(data,
                            outcome) {
   stopifnot(

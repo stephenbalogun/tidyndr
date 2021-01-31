@@ -1,31 +1,33 @@
 #' Subset clients who became inactive (IIT) within a given period
 #'
-#' @param data an ndr dataframe imported using the `read_ndr()
-#' @param from reference date to start the determination of the "TX_ML"
-#' in ISO8601 format (i.e. "yyyy-mm-dd"). The default is to start at the
-#' beginning of the current Fiscal Year (i.e. 1st of October).
-#' @param to last reference date for the "TX_ML" determination written in
-#' ISO8601 format (i.e. "yyyy-mm-dd"). The default is today.
-#' @param region a character vector specifying the "State" of interest.
-#' The default utilizes all the states in the dataframe.
-#' @param site a character vector of at least length 1. Default is to utilize all
-#' the facilities contained in the dataframe.
+#' \code{tx_ml} Generates clients who have become inactive over a specified
+#' period of time. The default is to generate all clients who became inactive
+#' in the current Fiscal Year. You can specify the period of interest
+#' (using the \code{from} and \code{to} arguments). Used together
+#' with \code{tx_ml_outcomes()}, generates inactive clients with a particular
+#' outcome of interest.
+#'
+#' @inheritParams tx_appointment
 #'
 #' @return
 #' @export
 #'
 #' @examples
-#' file_path <- "C:/Users/stephenbalogun/Documents/My R/tidyndr/ndr_example.csv"
-#' ndr_example <- read_ndr(file_path)
 #' tx_ml(ndr_example)
 #'
 #' # Find clients who were inactive at the end of Q1 of FY21
 #' tx_ml(ndr_example, to = "2020-12-31")
 tx_ml <- function(data,
                   from = fy_start,
-                  to = Sys.Date(),
-                  region = unique(data$state),
-                  site = unique(data$facility)) {
+                  to = end_date,
+                  state = region,
+                  facility = site) {
+
+  end_date <- Sys.Date()
+  region <- unique(data$state)
+  site <- unique(data$facility)
+
+
   fy_start <- lubridate::as_date(
     ifelse(lubridate::month(Sys.Date()) < 10,
       stats::update(Sys.Date(),
@@ -59,20 +61,17 @@ tx_ml <- function(data,
       !is.na(lubridate::as_date(to))
   )
 
-  dplyr::mutate(data,
-    date_lost = last_drug_pickup_date +
-      lubridate::days(days_of_arv_refill) +
-      lubridate::days(28)
-  ) %>%
-    dplyr::filter(
-      # current_status_28_days == "Inactive",
-      dplyr::between(
-        date_lost,
-        lubridate::as_date(from),
-        lubridate::as_date(to)
-      ),
-      state %in% region,
-      facility %in% site
+  dat <- dplyr::mutate(data,
+                       date_lost = last_drug_pickup_date +
+                         lubridate::days(days_of_arv_refill) +
+                         lubridate::days(28))
+  dplyr::filter(dat,
+                dplyr::between(
+                  date_lost,
+                  lubridate::as_date(from),
+                  lubridate::as_date(to)),
+                state %in% region,
+                facility %in% site
     )
 }
 

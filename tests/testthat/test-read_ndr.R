@@ -50,7 +50,7 @@ test_that("read_ndr() reads-in NDR '.csv' patient-level line-list", {
     `Transferred In Date` = vroom::col_date(format = "%d-%b-%y")
   )
 
-  file_path <- "C:/Users/stephenbalogun/Documents/My R/tidyndr/ndr_example.csv"
+  file_path <- system.file("extdata", "ndr_example.csv", package = "tidyndr")
 
   expect_identical(
     names(read_ndr(file_path)),

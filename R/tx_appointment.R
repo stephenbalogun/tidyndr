@@ -1,23 +1,30 @@
-#' Subset rows of clients who have clinic appointment/medication pick-up within a particular period
+#' Subset rows of clients who have clinic appointment/medication pick-up within
+#' a particular period
 #'
-#' @param data an ndr dataframe imported using the `read_ndr()
-#' @param from the start date for clients with clinic appointments in
-#' ISO8601 format (i.e. "yyyy-mm-dd"). The default is to start at the
-#' beginning of the current Fiscal Year (i.e. 1st of October).
-#' @param to the end date for the appointment period of interest written
-#' in ISO8601 format (i.e. "yyyy-mm-dd"). The default is today.
-#' @param region a character vector specifying the "State" of interest.
-#' The default utilizes all the states in the dataframe.
-#' @param site a character vector of at least length 1. Default is to utilize all
-#' the facilities contained in the dataframe.
+#' \code{tx_appointment} generates the line-list of clients who have clinic
+#' appointment/medication refill for the specified state(s) and/or facilit(ies).
+#' The default is to generate the appointment list for all the
+#' states/facilities.
+#'
+#' @param data An ndr dataframe imported using the `read_ndr().
+#' @param from The start date for clients with clinic appointments in ISO8601
+#'   format (i.e. "yyyy-mm-dd"). The default is to start at the beginning of the
+#'   current Fiscal Year (i.e. 1st of October).
+#' @param to The end date for the appointment period of interest written in
+#'   ISO8601 format (i.e. "yyyy-mm-dd"). The default is today.
+#' @param state The name(s) of the State(s) of interest. The default utilizes all
+#'   the states in the dataframe. If specifying more than one state, combine the
+#'   states using the \code{c()} e.g. \code{c("State 1", "State 2")}.
+#' @param facility The name(s) of the facilit(ies) of interest. Default is to utilize
+#'   all the facilities contained in the dataframe. If specifying more than one
+#'   facility, combine the facilities using the \code{c()} e.g.
+#'   \code{c("Facility 1", "Facility 2")}.
 #'
 #' @return
 #' @export
 #'
 #' @examples
-#' # Determine clients who have medication refill in Q2 of Fy21
-#' file_path <- "C:/Users/stephenbalogun/Documents/My R/tidyndr/ndr_example.csv"
-#' ndr_example <- read_ndr(file_path)
+#' # Determine clients who have medication refill in Q2 of FY21
 #' tx_appointment(ndr_example,
 #'   from = "2021-01-01",
 #'   to = "2021-03-30"
@@ -27,14 +34,17 @@
 #' tx_appointment(ndr_example,
 #'   from = "2021-01-01",
 #'   to = "2021-01-31",
-#'   region = "State 1",
-#'   site = "Facility 1"
+#'   state = "State 1",
+#'   facility = "Facility 1"
 #' )
 tx_appointment <- function(data,
                            from = fy_start,
-                           to = Sys.Date(),
-                           region = unique(data$state),
-                           site = unique(data$facility)) {
+                           to = end_date,
+                           state = region,
+                           facility = site) {
+  end_date <- Sys.Date()
+  region <- unique(data$state)
+  site <- unique(data$facility)
 
   fy_start <- lubridate::as_date(
     ifelse(lubridate::month(Sys.Date()) < 10,
@@ -70,20 +80,20 @@ tx_appointment <- function(data,
   )
 
 
-  data %>%
-    dplyr::mutate(appointment_date = last_drug_pickup_date +
-      lubridate::days(days_of_arv_refill)) %>%
-    dplyr::filter(
-      current_status_28_days == "Active",
-      dplyr::between(
-        appointment_date,
-        lubridate::as_date(from),
-        lubridate::as_date(to)
-      ),
-      state %in% region,
-      facility %in% site
+    dat <- dplyr::mutate(data, appointment_date = last_drug_pickup_date +
+                           lubridate::days(days_of_arv_refill))
+
+    dplyr::filter(dat,
+                  current_status_28_days == "Active",
+                  dplyr::between(
+                    appointment_date,
+                    lubridate::as_date(from),
+                    lubridate::as_date(to)
+                    ),
+                  state %in% region,
+                  facility %in% site
     )
-}
+    }
 
 
 utils::globalVariables(c("last_drug_pickup_date",

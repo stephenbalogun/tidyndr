@@ -2,40 +2,41 @@
 % Please edit documentation in R/tx_curr.R
 \name{tx_curr}
 \alias{tx_curr}
-\title{Subset clients who are on treatment}
+\title{Subset clients who are currently on treatment}
 \usage{
-tx_curr(data, region = unique(data$state), site = unique(data$facility))
+tx_curr(data, state = region, facility = site)
 }
 \arguments{
-\item{data}{an ndr dataframe imported using the \code{read_ndr()}.}
+\item{data}{An ndr dataframe imported using the `read_ndr().}
 
-\item{region}{a character vector specifying the "State" of interest.
-The default utilizes all the states in the dataframe.}
+\item{state}{The name(s) of the State(s) of interest. The default utilizes all
+the states in the dataframe. If specifying more than one state, combine the
+states using the \code{c()} e.g. \code{c("State 1", "State 2")}.}
 
-\item{site}{a character vector of at least length 1. Default is to utilize all
-the facilities contained in the dataframe.}
+\item{facility}{The name(s) of the facilit(ies) of interest. Default is to utilize
+all the facilities contained in the dataframe. If specifying more than one
+facility, combine the facilities using the \code{c()} e.g.
+\code{c("Facility 1", "Facility 2")}.}
 }
 \value{
 
 }
 \description{
-Subset clients who are on treatment
+\code{tx_curr} pulls up the line-list of clients who are active
+on treatment using the \code{current_status_28_days} column. You can specify
+the state(s) and/or facilit(ies) of interest using the \code{region} or
+\code{site} arguments.
 }
 \examples{
-file_path <- "C:/Users/stephenbalogun/Documents/My R/tidyndr/ndr_example.csv"
-ndr_example <- read_ndr(file_path)
-
-ndr_example \%>\%
-  tx_curr()
+tx_curr(ndr_example)
 
 # generate the TX_CURR for two states (e.g. "State 1" and "State 2" in the ndr_example file)
-ndr_example \%>\%
-  tx_curr(region = c("State 1", "State 2"))
+  tx_curr(ndr_example,
+  state = c("State 1", "State 2"))
 
 # determine the active clients in two facilities ("Facility 1", and "Facility 2) in "State 1"
-ndr_example \%>\%
-  tx_curr(
-    region = "State 1",
-    site = c("Facility 1", "Facility 2")
+  tx_curr(ndr_example,
+    state = "State 1",
+    facility = c("Facility 1", "Facility 2")
   )
 }

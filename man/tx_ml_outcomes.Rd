@@ -2,24 +2,26 @@
 % Please edit documentation in R/tx_ml_outcomes.R
 \name{tx_ml_outcomes}
 \alias{tx_ml_outcomes}
-\title{subset rows containing clients who have either "Transferred Out" or are "Deceased"}
+\title{Subset rows of inactive clients with specific outcome}
 \usage{
 tx_ml_outcomes(data, outcome)
 }
 \arguments{
-\item{data}{an ndr dataframe imported using the `read_ndr()}
+\item{data}{An ndr dataframe imported using the `read_ndr()}
 
-\item{outcome}{the particular outcome of interest based on options available on the NDR ("transfer out" or "dead").}
+\item{outcome}{The particular outcome of interest based on options available
+on the NDR ("transfer out" or "dead").}
 }
 \value{
 
 }
 \description{
-subset rows containing clients who have either "Transferred Out" or are "Deceased"
+\code{tx_ml_outcomes} generates the line-list of clients based on the
+outcome of interest ("dead" or "transfer out"). It should be use after
+\code{tx_ml()}.
 }
 \examples{
-file_path <- "C:/Users/stephenbalogun/Documents/My R/tidyndr/ndr_example.csv"
-ndr_example <- read_ndr(file_path)
-tx_ml(ndr_example) \%>\%
-  tx_ml_outcomes("dead")
+tx_ml_outcomes(tx_ml(ndr_example),
+outcome = "dead")
+
 }

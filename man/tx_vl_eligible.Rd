@@ -2,42 +2,38 @@
 % Please edit documentation in R/tx_vl_eligible.R
 \name{tx_vl_eligible}
 \alias{tx_vl_eligible}
-\title{Subset clients who are eligible for viral load}
+\title{Subset Clients who are Eligible for Viral Load}
 \usage{
-tx_vl_eligible(
-  data,
-  reference = Sys.Date(),
-  region = unique(data$state),
-  site = unique(data$facility)
-)
+tx_vl_eligible(data, reference = ref_date, state = region, facility = site)
 }
 \arguments{
-\item{data}{an ndr dataframe imported using the `read_ndr()}
+\item{data}{An ndr dataframe imported using the `read_ndr().}
 
-\item{reference}{date, provided in ISO8601 format ("yyyy-mm-dd"), used to
-determine clients who are eligible for viral load. The default is to subset clients
-who have been on medication for at least 6 months
-(ART start date is at least 6 months ago).}
+\item{reference}{Date provided in ISO8601 format ("yyyy-mm-dd"). Used to
+determine clients who are eligible for viral load and should have a
+documented result. The default is the date of analysis.}
 
-\item{region}{a character vector specifying the "State" of interest.
-The default utilizes all the states in the dataframe.}
+\item{state}{The name(s) of the State(s) of interest. The default utilizes all
+the states in the dataframe. If specifying more than one state, combine the
+states using the \code{c()} e.g. \code{c("State 1", "State 2")}.}
 
-\item{site}{a character vector of at least length 1. Default is to utilize all
-the facilities contained in the dataframe.}
+\item{facility}{The name(s) of the facilit(ies) of interest. Default is to utilize
+all the facilities contained in the dataframe. If specifying more than one
+facility, combine the facilities using the \code{c()} e.g.
+\code{c("Facility 1", "Facility 2")}.}
 }
 \value{
 
 }
 \description{
-Subset clients who are eligible for viral load
+Generates the line-list of clients who have been (or would have been) on ARv
+medications for at least 6 months from the reference date. The default
+reference date is the date of analysis.
 }
 \examples{
-file_path <- "C:/Users/stephenbalogun/Documents/My R/tidyndr/ndr_example.csv"
-ndr_example <- read_ndr(file_path)
-
 tx_vl_eligible(ndr_example)
 
 # Determine clients who are going to be eligible for VL by the end of Q2 of FY21
-ndr_example \%>\%
-  tx_vl_eligible(reference = "2021-03-31")
+  tx_vl_eligible(ndr_example,
+  reference = "2021-03-31")
 }
