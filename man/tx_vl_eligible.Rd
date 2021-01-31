@@ -4,7 +4,13 @@
 \alias{tx_vl_eligible}
 \title{Subset Clients who are Eligible for Viral Load}
 \usage{
-tx_vl_eligible(data, reference = ref_date, state = region, facility = site)
+tx_vl_eligible(
+  data,
+  reference = ref_date,
+  state = region,
+  facility = site,
+  sample = FALSE
+)
 }
 \arguments{
 \item{data}{An ndr dataframe imported using the `read_ndr().}
@@ -21,6 +27,10 @@ states using the \code{c()} e.g. \code{c("State 1", "State 2")}.}
 all the facilities contained in the dataframe. If specifying more than one
 facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}
+
+\item{sample}{Logical (TRUE or FALSE) indicating wheter all clients eligible for
+viral load test should be filtered irrespective of their eligibility for sample
+collection or only those due for sample collection.}
 }
 \value{
 
@@ -34,6 +44,13 @@ reference date is the date of analysis.
 tx_vl_eligible(ndr_example)
 
 # Determine clients who are going to be eligible for VL by the end of Q2 of FY21
-  tx_vl_eligible(ndr_example,
-  reference = "2021-03-31")
+tx_vl_eligible(ndr_example,
+  reference = "2021-03-31"
+)
+
+ # Subset clients from "State 1" who are due for viral load in Q2 of FY21
+ tx_vl_eligible(ndr_example,
+ reference = "2021-03-31",
+ state = "State 1",
+ sample = TRUE)
 }

@@ -22,6 +22,6 @@ outcome of interest ("dead" or "transfer out"). It should be use after
 }
 \examples{
 tx_ml_outcomes(tx_ml(ndr_example),
-outcome = "dead")
-
+  outcome = "dead"
+)
 }

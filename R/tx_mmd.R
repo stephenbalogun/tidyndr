@@ -19,12 +19,12 @@
 #'
 #' # subset active clients who had 2 or 4 months of ARV dispensed at last encounter
 #' tx_mmd(ndr_example,
-#' month = c(2, 4))
+#'   month = c(2, 4)
+#' )
 tx_mmd <- function(data,
                    month = months_dispensed,
                    state = region,
                    facility = site) {
-
   months_dispensed <- c(3, 4, 5, 6)
   region <- unique(data$state)
   site <- unique(data$facility)
@@ -44,17 +44,18 @@ tx_mmd <- function(data,
       any(site %in% unique(data$facility))
   )
 
-    dat <- dplyr::mutate(data,
-                  months_dispensed = round(days_of_arv_refill / 30, 0))
+  dat <- dplyr::mutate(data,
+    months_dispensed = round(days_of_arv_refill / 30, 0)
+  )
 
-    dplyr::filter(dat,
-                  current_status_28_days == "Active",
-                  months_dispensed %in% month,
-                  state %in% region,
-                  facility %in% site
-    )
+  dplyr::filter(
+    dat,
+    current_status_28_days == "Active",
+    months_dispensed %in% month,
+    state %in% region,
+    facility %in% site
+  )
 }
 
 
 utils::globalVariables("months_dispensed")
-

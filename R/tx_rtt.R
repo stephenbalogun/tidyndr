@@ -25,7 +25,6 @@ tx_rtt <- function(old_data,
                    new_data,
                    state = region,
                    facility = site) {
-
   region <- unique(new_data$state)
   site <- unique(new_data$facility)
 
@@ -57,14 +56,18 @@ tx_rtt <- function(old_data,
         max(new_data$art_start_date, na.rm = TRUE)
   )
 
-  losses <- dplyr::filter(old_data,
-                          current_status_28_days == "Inactive")
+  losses <- dplyr::filter(
+    old_data,
+    current_status_28_days == "Inactive"
+  )
 
-    dplyr::filter(new_data,
-                  current_status_28_days == "Active",
-                  patient_identifier %in% losses$patient_identifier,
-                  state %in% region,
-                  facility %in% site)
+  dplyr::filter(
+    new_data,
+    current_status_28_days == "Active",
+    patient_identifier %in% losses$patient_identifier,
+    state %in% region,
+    facility %in% site
+  )
 }
 
 

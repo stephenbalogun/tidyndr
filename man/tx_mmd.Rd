@@ -35,5 +35,6 @@ tx_mmd(ndr_example)
 
 # subset active clients who had 2 or 4 months of ARV dispensed at last encounter
 tx_mmd(ndr_example,
-month = c(2, 4))
+  month = c(2, 4)
+)
 }

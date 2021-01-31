@@ -14,18 +14,18 @@
 #' tx_curr(ndr_example)
 #'
 #' # generate the TX_CURR for two states (e.g. "State 1" and "State 2" in the ndr_example file)
-#'   tx_curr(ndr_example,
-#'   state = c("State 1", "State 2"))
+#' tx_curr(ndr_example,
+#'   state = c("State 1", "State 2")
+#' )
 #'
 #' # determine the active clients in two facilities ("Facility 1", and "Facility 2) in "State 1"
-#'   tx_curr(ndr_example,
-#'     state = "State 1",
-#'     facility = c("Facility 1", "Facility 2")
-#'   )
+#' tx_curr(ndr_example,
+#'   state = "State 1",
+#'   facility = c("Facility 1", "Facility 2")
+#' )
 tx_curr <- function(data,
                     state = region,
                     facility = site) {
-
   region <- unique(data$state)
   site <- unique(data$facility)
 
@@ -39,9 +39,10 @@ tx_curr <- function(data,
       any(site %in% unique(data$facility))
   )
 
-  dplyr::filter(data,
-                current_status_28_days == "Active",
-                state %in% region,
-                facility %in% site
+  dplyr::filter(
+    data,
+    current_status_28_days == "Active",
+    state %in% region,
+    facility %in% site
   )
 }

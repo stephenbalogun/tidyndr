@@ -28,7 +28,6 @@ read_ndr <- function(path,
                      suppress = FALSE,
                      cols = ndr_cols,
                      ...) {
-
   ndr_cols <- vroom::cols_only(
     IP = vroom::col_factor(),
     State = vroom::col_factor(),

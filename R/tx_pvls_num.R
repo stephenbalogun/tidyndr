@@ -16,18 +16,18 @@
 #' tx_pvls_num(ndr_example)
 #'
 #' # Determine clients who are virally suppressed for a state at the end of Q1
-#'   tx_pvls_num(ndr_example,
-#'     reference = "2020-12-31",
-#'     state = "State 1")
+#' tx_pvls_num(ndr_example,
+#'   reference = "2020-12-31",
+#'   state = "State 1"
+#' )
 #'
 #' # Determine clients with viral load result less than 400
-#'   tx_pvls_num(ndr_example, n = 400)
+#' tx_pvls_num(ndr_example, n = 400)
 tx_pvls_num <- function(data,
                         reference = ref_date,
                         state = region,
                         facility = site,
                         n = 1000) {
-
   ref_date <- Sys.Date()
   region <- unique(data$state)
   site <- unique(data$facility)
@@ -48,22 +48,27 @@ tx_pvls_num <- function(data,
   )
 
 
-  dplyr::filter(data,
-                current_status_28_days == "Active",
-                lubridate::as_date(reference) -
-                  art_start_date >= lubridate::period(6, "months"),
-                ifelse(current_age < 20,
-                       date_of_current_viral_load > lubridate::as_date(reference) -
-                         lubridate::period(month = 6),
-                       date_of_current_viral_load > lubridate::as_date(reference) -
-                         lubridate::period(year = 1)),
-                current_viral_load < n,
-                state %in% region,
-                facility %in% site)
+  dplyr::filter(
+    data,
+    current_status_28_days == "Active",
+    lubridate::as_date(reference) -
+      art_start_date >= lubridate::period(6, "months"),
+    ifelse(current_age < 20,
+      date_of_current_viral_load > lubridate::as_date(reference) -
+        lubridate::period(month = 6),
+      date_of_current_viral_load > lubridate::as_date(reference) -
+        lubridate::period(year = 1)
+    ),
+    current_viral_load < n,
+    state %in% region,
+    facility %in% site
+  )
 }
 
 
-utils::globalVariables(c("art_start_date",
-                         "current_age",
-                         "date_of_current_viral_load",
-                         "current_viral_load"))
+utils::globalVariables(c(
+  "art_start_date",
+  "current_age",
+  "date_of_current_viral_load",
+  "current_viral_load"
+))

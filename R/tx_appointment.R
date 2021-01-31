@@ -80,25 +80,28 @@ tx_appointment <- function(data,
   )
 
 
-    dat <- dplyr::mutate(data, appointment_date = last_drug_pickup_date +
-                           lubridate::days(days_of_arv_refill))
+  dat <- dplyr::mutate(data, appointment_date = last_drug_pickup_date +
+    lubridate::days(days_of_arv_refill))
 
-    dplyr::filter(dat,
-                  current_status_28_days == "Active",
-                  dplyr::between(
-                    appointment_date,
-                    lubridate::as_date(from),
-                    lubridate::as_date(to)
-                    ),
-                  state %in% region,
-                  facility %in% site
-    )
-    }
+  dplyr::filter(
+    dat,
+    current_status_28_days == "Active",
+    dplyr::between(
+      appointment_date,
+      lubridate::as_date(from),
+      lubridate::as_date(to)
+    ),
+    state %in% region,
+    facility %in% site
+  )
+}
 
 
-utils::globalVariables(c("last_drug_pickup_date",
-                         "days_of_arv_refill",
-                         "current_status_28_days",
-                         "appointment_date",
-                         "state",
-                         "facility"))
+utils::globalVariables(c(
+  "last_drug_pickup_date",
+  "days_of_arv_refill",
+  "current_status_28_days",
+  "appointment_date",
+  "state",
+  "facility"
+))

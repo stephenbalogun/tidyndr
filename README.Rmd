@@ -11,6 +11,8 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "100%"
 )
+
+library(magrittr)
 ```
 
 # tidyndr
@@ -18,43 +20,105 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of tidyndr is to ...
+The goal of {tidyndr} is to provide specialized, simple and easy to use functions that wrap around existing functions in `R` for manipulation of the [NDR](http://ndr.shieldnigeriaproject.com) patient line-list file allowing the user to focus on the tasks to be completed rather than the details of the code.  
+
+The functions are presented similar to the [PEPFAR MER indicators](https://datim.zendesk.com/hc/en-us/articles/360000084446-MER-Indicator-Reference-Guides) and are currently grouped into three categories:
+
+* The `read_ndr` function for reading the patient-level line-list downloaded from the front-end of the NDR in 'csv' format. 
+
+* The PEPFAR treatment group of indicators that can be performed on the NDR           line-list.
+
+* The 'Viral Suppression' indicators (`tx_vl_eligible()`, `tx_pvls_den()` and `tx_pvls_num()`).
 
 ## Installation
 
-You can install the released version of tidyndr from [CRAN](https://CRAN.R-project.org) with:
+<!-- You can install the released version of tidyndr from [CRAN](https://CRAN.R-project.org) with: -->
 
-``` r
-install.packages("tidyndr")
-```
+<!-- ``` r -->
+<!-- install.packages("tidyndr") -->
+<!-- ``` -->
 
-And the development version from [GitHub](https://github.com/) with:
+This package is currently not available on [CRAN](https://CRAN.R-project.org) but you can install the development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("stephenbalogun/tidyndr")
 ```
-## Example
+## Usage
 
-This is a basic example which shows you how to solve a common problem:
-
-```{r example}
+```{r load_library}
 library(tidyndr)
-## basic example code
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+### read_ndr
 
-```{r cars}
-summary(cars)
+`read_ndr()` reads the downloaded csv file into [`R`](https:://cran.r-project.org) using [`vroom::vroom()`](https://vroom.r-lib.org/) behind the scene and passing appropriate column types to the `col_types` argument. It also formats the variable names using the [`snakecase`](https://en.wikipedia.org/wiki/Snake_case) style. It can read from the local file or from a line-list placed on the internet.
+
+```{r read_ndr}
+## read from a local file path (not run)
+
+# file_path <- system.file("extdata", "ndr_example.csv", package = "tidyndr")
+
+# read_ndr(file_path)
+
+### read line-list available on the internet
+path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
+
+ndr_example <- read_ndr(path)
 ```
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this. You could also use GitHub Actions to re-render `README.Rmd` every time you push. An example workflow can be found here: <https://github.com/r-lib/actions/tree/master/examples>.
+### Treatment Indicators
 
-You can also embed plots, for example:
+```{r tx_indicators}
+## Subset "TX_NEW"
+tx_new(ndr_example)
 
-```{r pressure, echo = FALSE}
-plot(pressure)
+## Subset "TX_CURR" for a state
+ndr_example %>%
+  tx_curr(state = "State 1")
+
+## Generate line-list of clients with medication refill in January 2021 for a facility (Facility 1)
+ndr_example %>%
+  tx_appointment(from = "2021-01-01",
+                 to = "2021-01-31",
+                 facility = "Facility 1")
+
+## Generate list of clients who were active at the beginning of FY21 but became inactive at the end of Q1 of FY21.
+ndr_example %>%
+  tx_ml(from = "2020-10-01",
+        to = "2020-12-31")
 ```
 
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
+
+### Viral Suppression Indicators
+
+```{r vl_indicators}
+## Generate list of clients who are eligible for VL (i.e. expected to have a documented VL result)
+ndr_example %>%
+  tx_vl_eligible()
+
+## Generate list of clients that will be expected to have a viral load result by the end of Q2 of FY21 for "State 2"
+ndr_example %>%
+  tx_vl_eligible("2021-03-31", state = "State 2")
+
+### Calculate the Viral Load Coverage for State 3
+no_of_vl_results <- tx_pvls_den(ndr_example, state = "State 3") %>%
+  nrow()
+no_of_vl_eligible <- tx_vl_eligible(ndr_example, state = "State 3") %>%
+  nrow()
+
+vl_coverage <- scales::percent(no_of_vl_results / no_of_vl_eligible)
+
+print(vl_coverage)
+  
+```
+For all the 'Treatment' and 'Viral Suppression' indicators (except `tx_ml_outcomes()`, which should be use with `tx_ml()`), you have control over the level of action (state or facility) by supplying to the `state` and/or `facility` arguments the values of interest . For more than one state or facility, combine the values with the `c()` with each one in quotation and separated by a comma e.g.
+
+```{r multiple_indicators}
+## subset clients that have medication appointment in Q2 of FY21 for "State 1" and "State 3" and are also due for viral load
+ndr_example %>%
+  tx_appointment(from = "2021-01-01",
+                 to = "2021-03-31",
+                 state = c("State 1", "State 3")) %>%
+  tx_vl_eligible(sample = TRUE)
+```

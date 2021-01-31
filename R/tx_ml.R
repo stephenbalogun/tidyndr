@@ -22,7 +22,6 @@ tx_ml <- function(data,
                   to = end_date,
                   state = region,
                   facility = site) {
-
   end_date <- Sys.Date()
   region <- unique(data$state)
   site <- unique(data$facility)
@@ -62,17 +61,20 @@ tx_ml <- function(data,
   )
 
   dat <- dplyr::mutate(data,
-                       date_lost = last_drug_pickup_date +
-                         lubridate::days(days_of_arv_refill) +
-                         lubridate::days(28))
-  dplyr::filter(dat,
-                dplyr::between(
-                  date_lost,
-                  lubridate::as_date(from),
-                  lubridate::as_date(to)),
-                state %in% region,
-                facility %in% site
-    )
+    date_lost = last_drug_pickup_date +
+      lubridate::days(days_of_arv_refill) +
+      lubridate::days(28)
+  )
+  dplyr::filter(
+    dat,
+    dplyr::between(
+      date_lost,
+      lubridate::as_date(from),
+      lubridate::as_date(to)
+    ),
+    state %in% region,
+    facility %in% site
+  )
 }
 
 

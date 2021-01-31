@@ -13,13 +13,13 @@
 #'
 #' @examples
 #' tx_ml_outcomes(tx_ml(ndr_example),
-#' outcome = "dead")
-#'
+#'   outcome = "dead"
+#' )
 tx_ml_outcomes <- function(data,
                            outcome) {
   stopifnot(
-    'outcome is neither "transfer out" nor "dead"' =
-      outcome == "dead" || outcome == "transfer out"
+    'outcome is neither "transferred out" nor "dead"' =
+      outcome == "dead" || outcome == "transferred out"
   )
 
   if (outcome == "dead") {
@@ -27,7 +27,7 @@ tx_ml_outcomes <- function(data,
       data,
       patient_has_died == TRUE
     )
-  } else if (outcome == "transfer out") {
+  } else if (outcome == "transferred out") {
     dplyr::filter(
       data,
       patient_transferred_out == TRUE
@@ -35,5 +35,7 @@ tx_ml_outcomes <- function(data,
   }
 }
 
-utils::globalVariables(c("patient_has_died",
-                         "patient_transferred_out"))
+utils::globalVariables(c(
+  "patient_has_died",
+  "patient_transferred_out"
+))

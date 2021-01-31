@@ -19,16 +19,16 @@
 #' tx_new(ndr_example, state = "State 1")
 #'
 #' ## Determine the TX_NEW for Quarter 1 of FY21 for State 2
-#'   tx_new(ndr_example,
+#' tx_new(ndr_example,
 #'   from = "2020-10-01",
 #'   to = "2020-12-31",
-#'   state = c("State 2", "State 3"))
+#'   state = c("State 2", "State 3")
+#' )
 tx_new <- function(data,
                    from = fy_start,
                    to = end_date,
                    state = region,
                    facility = site) {
-
   end_date <- Sys.Date()
   region <- unique(data$state)
   site <- unique(data$facility)
@@ -66,12 +66,16 @@ tx_new <- function(data,
       !is.na(lubridate::as_date(to))
   )
 
-  dplyr::filter(data,
-                dplyr::between(art_start_date,
-                               lubridate::as_date(from),
-                               lubridate::as_date(to)),
-                state %in% region,
-                facility %in% site)
+  dplyr::filter(
+    data,
+    dplyr::between(
+      art_start_date,
+      lubridate::as_date(from),
+      lubridate::as_date(to)
+    ),
+    state %in% region,
+    facility %in% site
+  )
 }
 
 
