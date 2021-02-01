@@ -4,7 +4,7 @@
 \alias{tx_pvls_den}
 \title{Subset clients who have a documented viral load result}
 \usage{
-tx_pvls_den(data, reference = ref_date, state = region, facility = site)
+tx_pvls_den(data, reference = ref_date, states = regions, facilities = sites)
 }
 \arguments{
 \item{data}{An ndr dataframe imported using the `read_ndr().}
@@ -13,11 +13,11 @@ tx_pvls_den(data, reference = ref_date, state = region, facility = site)
 determine clients who are eligible for viral load and should have a
 documented result. The default is the date of analysis.}
 
-\item{state}{The name(s) of the State(s) of interest. The default utilizes all
+\item{states}{The name(s) of the State(s) of interest. The default utilizes all
 the states in the dataframe. If specifying more than one state, combine the
 states using the \code{c()} e.g. \code{c("State 1", "State 2")}.}
 
-\item{facility}{The name(s) of the facilit(ies) of interest. Default is to utilize
+\item{facilities}{The name(s) of the facilit(ies) of interest. Default is to utilize
 all the facilities contained in the dataframe. If specifying more than one
 facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}
@@ -36,6 +36,6 @@ tx_pvls_den(ndr_example)
 # Determine clients who are virally suppressed for two state at the end of Q1
 tx_pvls_den(ndr_example,
   reference = "2020-12-31",
-  state = c("State 1", "State 2")
+  states = c("State 1", "State 2")
 )
 }

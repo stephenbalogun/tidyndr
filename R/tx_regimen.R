@@ -15,11 +15,11 @@
 #' tx_regimen(ndr_example)
 tx_regimen <- function(data,
                        age_band = age_range,
-                       state = region,
-                       facility = site) {
+                       states = regions,
+                       facilities = sites) {
   age_range <- c(0, Inf)
-  region <- unique(data$state)
-  site <- unique(data$facility)
+  regions <- unique(data$state)
+  sites <- unique(data$facility)
 
   stopifnot(
     'please enter the `age_band` argument as "c(min_age, max_age)"' =
@@ -28,12 +28,12 @@ tx_regimen <- function(data,
 
   stopifnot(
     "please check that state is contained in the dataset list of states" =
-      any(state %in% unique(data$state))
+      any(states %in% unique(data$state))
   )
 
   stopifnot(
     "please check that facility is contained in the dataset list of facilities" =
-      any(facility %in% unique(data$facility))
+      any(facilities %in% unique(data$facility))
   )
 
 
@@ -52,8 +52,8 @@ tx_regimen <- function(data,
       )
     ),
     dplyr::between(current_age, age_range[1], age_range[2]),
-    state %in% region,
-    facility %in% site
+    state %in% states,
+    facility %in% facilities
   )
 }
 

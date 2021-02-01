@@ -12,10 +12,10 @@
 #'   current Fiscal Year (i.e. 1st of October).
 #' @param to The end date for the appointment period of interest written in
 #'   ISO8601 format (i.e. "yyyy-mm-dd"). The default is today.
-#' @param state The name(s) of the State(s) of interest. The default utilizes all
+#' @param states The name(s) of the State(s) of interest. The default utilizes all
 #'   the states in the dataframe. If specifying more than one state, combine the
 #'   states using the \code{c()} e.g. \code{c("State 1", "State 2")}.
-#' @param facility The name(s) of the facilit(ies) of interest. Default is to utilize
+#' @param facilities The name(s) of the facilit(ies) of interest. Default is to utilize
 #'   all the facilities contained in the dataframe. If specifying more than one
 #'   facility, combine the facilities using the \code{c()} e.g.
 #'   \code{c("Facility 1", "Facility 2")}.
@@ -34,17 +34,17 @@
 #' tx_appointment(ndr_example,
 #'   from = "2021-01-01",
 #'   to = "2021-01-31",
-#'   state = "State 1",
-#'   facility = "Facility 1"
+#'   states = "State 1",
+#'   facilities = "Facility 1"
 #' )
 tx_appointment <- function(data,
                            from = fy_start,
                            to = end_date,
-                           state = region,
-                           facility = site) {
+                           states = regions,
+                           facilities = sites) {
   end_date <- Sys.Date()
-  region <- unique(data$state)
-  site <- unique(data$facility)
+  regions <- unique(data$state)
+  sites <- unique(data$facility)
 
   fy_start <- lubridate::as_date(
     ifelse(lubridate::month(Sys.Date()) < 10,
@@ -62,12 +62,12 @@ tx_appointment <- function(data,
 
   stopifnot(
     "please check that region is contained in the dataset list of states" =
-      any(region %in% unique(data$state))
+      any(states %in% unique(data$state))
   )
 
   stopifnot(
     "please check that site is contained in the dataset list of facilities" =
-      any(site %in% unique(data$facility))
+      any(facilities %in% unique(data$facility))
   )
 
   stopifnot(
@@ -91,8 +91,8 @@ tx_appointment <- function(data,
       lubridate::as_date(from),
       lubridate::as_date(to)
     ),
-    state %in% region,
-    facility %in% site
+    state %in% states,
+    facility %in% facilities
   )
 }
 

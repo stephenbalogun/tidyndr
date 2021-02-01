@@ -23,25 +23,25 @@
 #'  # Subset clients from "State 1" who are due for viral load in Q2 of FY21
 #'  tx_vl_eligible(ndr_example,
 #'  reference = "2021-03-31",
-#'  state = "State 1",
+#'  states = c("State 1", "State 3"),
 #'  sample = TRUE)
 tx_vl_eligible <- function(data,
                            reference = ref_date,
-                           state = region,
-                           facility = site,
+                           states = regions,
+                           facilities = sites,
                            sample = FALSE) {
   ref_date <- Sys.Date()
-  region <- unique(data$state)
-  site <- unique(data$facility)
+  regions <- unique(data$state)
+  sites <- unique(data$facility)
 
   stopifnot(
     "please check that region is contained in the dataset list of states" =
-      any(region %in% unique(data$state))
+      any(states %in% unique(data$state))
   )
 
   stopifnot(
     "please check that site is contained in the dataset list of facilities" =
-      any(site %in% unique(data$facility))
+      any(facilities %in% unique(data$facility))
   )
 
   stopifnot(
@@ -55,8 +55,8 @@ tx_vl_eligible <- function(data,
       current_status_28_days == "Active",
       lubridate::as_date(reference) - art_start_date >=
         lubridate::period(6, "months"),
-      state %in% region,
-      facility %in% site)
+      state %in% states,
+      facility %in% facilities)
   } else {
     dplyr::filter(
       data,
@@ -66,8 +66,8 @@ tx_vl_eligible <- function(data,
       date_of_current_viral_load <=
         lubridate::as_date(reference) -
         lubridate::period(year = 1),
-      state %in% region,
-      facility %in% site)
+      state %in% states,
+      facility %in% facilities)
   }
 }
 

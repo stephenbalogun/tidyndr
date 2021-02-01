@@ -4,16 +4,16 @@
 \alias{tx_curr}
 \title{Subset clients who are currently on treatment}
 \usage{
-tx_curr(data, state = region, facility = site)
+tx_curr(data, states = regions, facilities = sites)
 }
 \arguments{
 \item{data}{An ndr dataframe imported using the `read_ndr().}
 
-\item{state}{The name(s) of the State(s) of interest. The default utilizes all
+\item{states}{The name(s) of the State(s) of interest. The default utilizes all
 the states in the dataframe. If specifying more than one state, combine the
 states using the \code{c()} e.g. \code{c("State 1", "State 2")}.}
 
-\item{facility}{The name(s) of the facilit(ies) of interest. Default is to utilize
+\item{facilities}{The name(s) of the facilit(ies) of interest. Default is to utilize
 all the facilities contained in the dataframe. If specifying more than one
 facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}
@@ -32,12 +32,12 @@ tx_curr(ndr_example)
 
 # generate the TX_CURR for two states (e.g. "State 1" and "State 2" in the ndr_example file)
 tx_curr(ndr_example,
-  state = c("State 1", "State 2")
+  states = c("State 1", "State 2")
 )
 
 # determine the active clients in two facilities ("Facility 1", and "Facility 2) in "State 1"
 tx_curr(ndr_example,
-  state = "State 1",
-  facility = c("Facility 1", "Facility 2")
+  states = "State 1",
+  facilities = c("Facility 1", "Facility 2")
 )
 }

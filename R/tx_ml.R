@@ -20,11 +20,11 @@
 tx_ml <- function(data,
                   from = fy_start,
                   to = end_date,
-                  state = region,
-                  facility = site) {
+                  states = regions,
+                  facilities = sites) {
   end_date <- Sys.Date()
-  region <- unique(data$state)
-  site <- unique(data$facility)
+  regions <- unique(data$state)
+  sites <- unique(data$facility)
 
 
   fy_start <- lubridate::as_date(
@@ -43,12 +43,12 @@ tx_ml <- function(data,
 
   stopifnot(
     "please check that region is contained in the dataset list of states" =
-      any(region %in% unique(data$state))
+      any(states %in% unique(data$state))
   )
 
   stopifnot(
     "please check that site is contained in the dataset list of facilities" =
-      any(site %in% unique(data$facility))
+      any(facilities %in% unique(data$facility))
   )
 
   stopifnot(
@@ -72,8 +72,8 @@ tx_ml <- function(data,
       lubridate::as_date(from),
       lubridate::as_date(to)
     ),
-    state %in% region,
-    facility %in% site
+    state %in% states,
+    facility %in% facilities
   )
 }
 

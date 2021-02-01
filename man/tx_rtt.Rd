@@ -4,7 +4,7 @@
 \alias{tx_rtt}
 \title{Subset Rows of Previously Inactive Clients Who are Now Active}
 \usage{
-tx_rtt(old_data, new_data, state = region, facility = site)
+tx_rtt(old_data, new_data, states = regions, facilities = sites)
 }
 \arguments{
 \item{old_data}{The initial dataframe containing the list of clients who
@@ -13,11 +13,11 @@ have been previously inactive.}
 \item{new_data}{The current datafame where changes in current treatment
 status will be checked.}
 
-\item{state}{The name(s) of the State(s) of interest. The default utilizes all
+\item{states}{The name(s) of the State(s) of interest. The default utilizes all
 the states in the dataframe. If specifying more than one state, combine the
 states using the \code{c()} e.g. \code{c("State 1", "State 2")}.}
 
-\item{facility}{The name(s) of the facilit(ies) of interest. Default is to utilize
+\item{facilities}{The name(s) of the facilit(ies) of interest. Default is to utilize
 all the facilities contained in the dataframe. If specifying more than one
 facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}
@@ -37,5 +37,5 @@ ndr_new <- ndr_example
 tx_rtt(ndr_old, ndr_new)
 
 # Determine RTT for a particular state
-tx_rtt(ndr_old, ndr_new, state = "State 1")
+tx_rtt(ndr_old, ndr_new, states = "State 1")
 }

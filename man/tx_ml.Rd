@@ -4,7 +4,13 @@
 \alias{tx_ml}
 \title{Subset clients who became inactive (IIT) within a given period}
 \usage{
-tx_ml(data, from = fy_start, to = end_date, state = region, facility = site)
+tx_ml(
+  data,
+  from = fy_start,
+  to = end_date,
+  states = regions,
+  facilities = sites
+)
 }
 \arguments{
 \item{data}{An ndr dataframe imported using the `read_ndr().}
@@ -16,11 +22,11 @@ current Fiscal Year (i.e. 1st of October).}
 \item{to}{The end date for the appointment period of interest written in
 ISO8601 format (i.e. "yyyy-mm-dd"). The default is today.}
 
-\item{state}{The name(s) of the State(s) of interest. The default utilizes all
+\item{states}{The name(s) of the State(s) of interest. The default utilizes all
 the states in the dataframe. If specifying more than one state, combine the
 states using the \code{c()} e.g. \code{c("State 1", "State 2")}.}
 
-\item{facility}{The name(s) of the facilit(ies) of interest. Default is to utilize
+\item{facilities}{The name(s) of the facilit(ies) of interest. Default is to utilize
 all the facilities contained in the dataframe. If specifying more than one
 facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}

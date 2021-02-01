@@ -23,11 +23,11 @@
 #' )
 tx_mmd <- function(data,
                    month = months_dispensed,
-                   state = region,
-                   facility = site) {
+                   states = regions,
+                   facilities = sites) {
   months_dispensed <- c(3, 4, 5, 6)
-  region <- unique(data$state)
-  site <- unique(data$facility)
+  regions <- unique(data$state)
+  sites <- unique(data$facility)
 
   stopifnot(
     "number of months dispensed must be numeric" = is.numeric(month)
@@ -36,12 +36,12 @@ tx_mmd <- function(data,
 
   stopifnot(
     "please check that region is contained in the dataset list of states" =
-      any(region %in% unique(data$state))
+      any(states %in% unique(data$state))
   )
 
   stopifnot(
     "please check that site is contained in the dataset list of facilities" =
-      any(site %in% unique(data$facility))
+      any(facilities %in% unique(data$facility))
   )
 
   dat <- dplyr::mutate(data,
@@ -52,8 +52,8 @@ tx_mmd <- function(data,
     dat,
     current_status_28_days == "Active",
     months_dispensed %in% month,
-    state %in% region,
-    facility %in% site
+    state %in% states,
+    facility %in% facilities
   )
 }
 

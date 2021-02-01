@@ -4,7 +4,7 @@
 \alias{tx_regimen}
 \title{Subset Clients Based on their Current ART Regimen}
 \usage{
-tx_regimen(data, age_band = age_range, state = region, facility = site)
+tx_regimen(data, age_band = age_range, states = regions, facilities = sites)
 }
 \arguments{
 \item{data}{An ndr dataframe imported using the `read_ndr()}
@@ -12,11 +12,11 @@ tx_regimen(data, age_band = age_range, state = region, facility = site)
 \item{age_band}{a numeric vector of length 2 (lower age-range and upper
 age-range).}
 
-\item{state}{The name(s) of the State(s) of interest. The default utilizes all
+\item{states}{The name(s) of the State(s) of interest. The default utilizes all
 the states in the dataframe. If specifying more than one state, combine the
 states using the \code{c()} e.g. \code{c("State 1", "State 2")}.}
 
-\item{facility}{The name(s) of the facilit(ies) of interest. Default is to utilize
+\item{facilities}{The name(s) of the facilit(ies) of interest. Default is to utilize
 all the facilities contained in the dataframe. If specifying more than one
 facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}

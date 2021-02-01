@@ -20,13 +20,13 @@
 #' tx_rtt(ndr_old, ndr_new)
 #'
 #' # Determine RTT for a particular state
-#' tx_rtt(ndr_old, ndr_new, state = "State 1")
+#' tx_rtt(ndr_old, ndr_new, states = "State 1")
 tx_rtt <- function(old_data,
                    new_data,
-                   state = region,
-                   facility = site) {
-  region <- unique(new_data$state)
-  site <- unique(new_data$facility)
+                   states = regions,
+                   facilities = sites) {
+  regions <- unique(new_data$state)
+  sites <- unique(new_data$facility)
 
   stopifnot(
     "the states contained in the 'old data' and 'new data' files are not the
@@ -42,12 +42,12 @@ tx_rtt <- function(old_data,
 
   stopifnot(
     "please check that region is contained in the dataset list of states" =
-      any(region %in% unique(new_data$state))
+      any(states %in% unique(new_data$state))
   )
 
   stopifnot(
     "please check that site is contained in the dataset list of facilities" =
-      any(site %in% unique(new_data$facility))
+      any(facilities %in% unique(new_data$facility))
   )
 
   stopifnot(
@@ -65,8 +65,8 @@ tx_rtt <- function(old_data,
     new_data,
     current_status_28_days == "Active",
     patient_identifier %in% losses$patient_identifier,
-    state %in% region,
-    facility %in% site
+    state %in% states,
+    facility %in% facilities
   )
 }
 

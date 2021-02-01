@@ -19,24 +19,24 @@
 #' # Determine clients who are virally suppressed for two state at the end of Q1
 #' tx_pvls_den(ndr_example,
 #'   reference = "2020-12-31",
-#'   state = c("State 1", "State 2")
+#'   states = c("State 1", "State 2")
 #' )
 tx_pvls_den <- function(data,
                         reference = ref_date,
-                        state = region,
-                        facility = site) {
+                        states = regions,
+                        facilities = sites) {
   ref_date <- Sys.Date()
-  region <- unique(data$state)
-  site <- unique(data$facility)
+  regions <- unique(data$state)
+  sites <- unique(data$facility)
 
   stopifnot(
     "please check that region is contained in the dataset list of states" =
-      any(region %in% unique(data$state))
+      any(states %in% unique(data$state))
   )
 
   stopifnot(
     "please check that site is contained in the dataset list of facilities" =
-      any(site %in% unique(data$facility))
+      any(facilities %in% unique(data$facility))
   )
 
   stopifnot(
@@ -57,8 +57,8 @@ tx_pvls_den <- function(data,
         lubridate::as_date(reference) -
           lubridate::period(year = 1)
     ),
-    state %in% region,
-    facility %in% site
+    state %in% states,
+    facility %in% facilities
   )
 }
 

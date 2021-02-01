@@ -4,7 +4,13 @@
 \alias{tx_new}
 \title{Subset clients starting ART within a particular period.}
 \usage{
-tx_new(data, from = fy_start, to = end_date, state = region, facility = site)
+tx_new(
+  data,
+  from = fy_start,
+  to = end_date,
+  states = regions,
+  facilities = sites
+)
 }
 \arguments{
 \item{data}{An ndr dataframe imported using the `read_ndr().}
@@ -16,11 +22,11 @@ current Fiscal Year (i.e. 1st of October).}
 \item{to}{The end date for the appointment period of interest written in
 ISO8601 format (i.e. "yyyy-mm-dd"). The default is today.}
 
-\item{state}{The name(s) of the State(s) of interest. The default utilizes all
+\item{states}{The name(s) of the State(s) of interest. The default utilizes all
 the states in the dataframe. If specifying more than one state, combine the
 states using the \code{c()} e.g. \code{c("State 1", "State 2")}.}
 
-\item{facility}{The name(s) of the facilit(ies) of interest. Default is to utilize
+\item{facilities}{The name(s) of the facilit(ies) of interest. Default is to utilize
 all the facilities contained in the dataframe. If specifying more than one
 facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}
@@ -40,12 +46,12 @@ For multiple states or facilities, use the \code{c()} to combine the names.
 tx_new(ndr_example)
 
 # generate the TX_NEW for a specific state (State 1)
-tx_new(ndr_example, state = "State 1")
+tx_new(ndr_example, states = "State 1")
 
 ## Determine the TX_NEW for Quarter 1 of FY21 for State 2
 tx_new(ndr_example,
   from = "2020-10-01",
   to = "2020-12-31",
-  state = c("State 2", "State 3")
+  states = c("State 2", "State 3")
 )
 }

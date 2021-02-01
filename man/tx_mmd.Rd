@@ -4,7 +4,7 @@
 \alias{tx_mmd}
 \title{Subset active clients based on months of ARV Dispensed}
 \usage{
-tx_mmd(data, month = months_dispensed, state = region, facility = site)
+tx_mmd(data, month = months_dispensed, states = regions, facilities = sites)
 }
 \arguments{
 \item{data}{An ndr dataframe imported using the \code{read_ndr()}.}
@@ -13,11 +13,11 @@ tx_mmd(data, month = months_dispensed, state = region, facility = site)
 (rounded to the nearest who number). The default is to subset active
 clients who had 3 - 6 months of ARV dispensed.}
 
-\item{state}{The name(s) of the State(s) of interest. The default utilizes all
+\item{states}{The name(s) of the State(s) of interest. The default utilizes all
 the states in the dataframe. If specifying more than one state, combine the
 states using the \code{c()} e.g. \code{c("State 1", "State 2")}.}
 
-\item{facility}{The name(s) of the facilit(ies) of interest. Default is to utilize
+\item{facilities}{The name(s) of the facilit(ies) of interest. Default is to utilize
 all the facilities contained in the dataframe. If specifying more than one
 facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}

@@ -7,8 +7,8 @@
 tx_pvls_num(
   data,
   reference = ref_date,
-  state = region,
-  facility = site,
+  states = regions,
+  facilities = sites,
   n = 1000
 )
 }
@@ -19,11 +19,11 @@ tx_pvls_num(
 determine clients who are eligible for viral load and should have a
 documented result. The default is the date of analysis.}
 
-\item{state}{The name(s) of the State(s) of interest. The default utilizes all
+\item{states}{The name(s) of the State(s) of interest. The default utilizes all
 the states in the dataframe. If specifying more than one state, combine the
 states using the \code{c()} e.g. \code{c("State 1", "State 2")}.}
 
-\item{facility}{The name(s) of the facilit(ies) of interest. Default is to utilize
+\item{facilities}{The name(s) of the facilit(ies) of interest. Default is to utilize
 all the facilities contained in the dataframe. If specifying more than one
 facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}
@@ -45,7 +45,7 @@ tx_pvls_num(ndr_example)
 # Determine clients who are virally suppressed for a state at the end of Q1
 tx_pvls_num(ndr_example,
   reference = "2020-12-31",
-  state = "State 1"
+  states = "State 1"
 )
 
 # Determine clients with viral load result less than 400

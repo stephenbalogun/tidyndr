@@ -7,8 +7,8 @@
 tx_vl_eligible(
   data,
   reference = ref_date,
-  state = region,
-  facility = site,
+  states = regions,
+  facilities = sites,
   sample = FALSE
 )
 }
@@ -19,11 +19,11 @@ tx_vl_eligible(
 determine clients who are eligible for viral load and should have a
 documented result. The default is the date of analysis.}
 
-\item{state}{The name(s) of the State(s) of interest. The default utilizes all
+\item{states}{The name(s) of the State(s) of interest. The default utilizes all
 the states in the dataframe. If specifying more than one state, combine the
 states using the \code{c()} e.g. \code{c("State 1", "State 2")}.}
 
-\item{facility}{The name(s) of the facilit(ies) of interest. Default is to utilize
+\item{facilities}{The name(s) of the facilit(ies) of interest. Default is to utilize
 all the facilities contained in the dataframe. If specifying more than one
 facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}
@@ -51,6 +51,6 @@ tx_vl_eligible(ndr_example,
  # Subset clients from "State 1" who are due for viral load in Q2 of FY21
  tx_vl_eligible(ndr_example,
  reference = "2021-03-31",
- state = "State 1",
+ states = c("State 1", "State 3"),
  sample = TRUE)
 }

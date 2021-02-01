@@ -9,8 +9,8 @@ tx_appointment(
   data,
   from = fy_start,
   to = end_date,
-  state = region,
-  facility = site
+  states = regions,
+  facilities = sites
 )
 }
 \arguments{
@@ -23,11 +23,11 @@ current Fiscal Year (i.e. 1st of October).}
 \item{to}{The end date for the appointment period of interest written in
 ISO8601 format (i.e. "yyyy-mm-dd"). The default is today.}
 
-\item{state}{The name(s) of the State(s) of interest. The default utilizes all
+\item{states}{The name(s) of the State(s) of interest. The default utilizes all
 the states in the dataframe. If specifying more than one state, combine the
 states using the \code{c()} e.g. \code{c("State 1", "State 2")}.}
 
-\item{facility}{The name(s) of the facilit(ies) of interest. Default is to utilize
+\item{facilities}{The name(s) of the facilit(ies) of interest. Default is to utilize
 all the facilities contained in the dataframe. If specifying more than one
 facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}
@@ -52,7 +52,7 @@ tx_appointment(ndr_example,
 tx_appointment(ndr_example,
   from = "2021-01-01",
   to = "2021-01-31",
-  state = "State 1",
-  facility = "Facility 1"
+  states = "State 1",
+  facilities = "Facility 1"
 )
 }

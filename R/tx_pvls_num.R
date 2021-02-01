@@ -18,28 +18,28 @@
 #' # Determine clients who are virally suppressed for a state at the end of Q1
 #' tx_pvls_num(ndr_example,
 #'   reference = "2020-12-31",
-#'   state = "State 1"
+#'   states = "State 1"
 #' )
 #'
 #' # Determine clients with viral load result less than 400
 #' tx_pvls_num(ndr_example, n = 400)
 tx_pvls_num <- function(data,
                         reference = ref_date,
-                        state = region,
-                        facility = site,
+                        states = regions,
+                        facilities = sites,
                         n = 1000) {
   ref_date <- Sys.Date()
-  region <- unique(data$state)
-  site <- unique(data$facility)
+  regions <- unique(data$state)
+  sites <- unique(data$facility)
 
   stopifnot(
     "please check that region is contained in the dataset list of states" =
-      any(region %in% unique(data$state))
+      any(states %in% unique(data$state))
   )
 
   stopifnot(
     "please check that site is contained in the dataset list of facilities" =
-      any(site %in% unique(data$facility))
+      any(facilities %in% unique(data$facility))
   )
 
   stopifnot(
@@ -60,8 +60,8 @@ tx_pvls_num <- function(data,
         lubridate::period(year = 1)
     ),
     current_viral_load < n,
-    state %in% region,
-    facility %in% site
+    state %in% states,
+    facility %in% facilities
   )
 }
 
