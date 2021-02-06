@@ -28,7 +28,6 @@
 tx_curr <- function(data,
                     states = regions,
                     facilities = sites) {
-
   regions <- unique(data$state)
   sites <- unique(data$facility)
 

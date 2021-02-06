@@ -8,8 +8,10 @@ test_that("tx_rtt works", {
     current_status_28_days == "Inactive"
   )
 
-  expect_identical(tx_rtt(old_data, ndr_example),
-                   ndr_example %>%
-                     subset(current_status_28_days == "Active" &
-                             patient_identifier %in% losses$patient_identifier))
+  expect_identical(
+    tx_rtt(old_data, ndr_example),
+    ndr_example %>%
+      subset(current_status_28_days == "Active" &
+        patient_identifier %in% losses$patient_identifier)
+  )
 })

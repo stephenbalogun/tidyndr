@@ -48,9 +48,10 @@ tx_vl_eligible(ndr_example,
   reference = "2021-03-31"
 )
 
- # Subset clients from "State 1" who are due for viral load in Q2 of FY21
- tx_vl_eligible(ndr_example,
- reference = "2021-03-31",
- states = c("State 1", "State 3"),
- sample = TRUE)
+# Subset clients from "State 1" who are due for viral load in Q2 of FY21
+tx_vl_eligible(ndr_example,
+  reference = "2021-03-31",
+  states = c("State 1", "State 3"),
+  sample = TRUE
+)
 }

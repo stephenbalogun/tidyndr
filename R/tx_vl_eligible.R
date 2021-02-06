@@ -20,11 +20,12 @@
 #'   reference = "2021-03-31"
 #' )
 #'
-#'  # Subset clients from "State 1" who are due for viral load in Q2 of FY21
-#'  tx_vl_eligible(ndr_example,
-#'  reference = "2021-03-31",
-#'  states = c("State 1", "State 3"),
-#'  sample = TRUE)
+#' # Subset clients from "State 1" who are due for viral load in Q2 of FY21
+#' tx_vl_eligible(ndr_example,
+#'   reference = "2021-03-31",
+#'   states = c("State 1", "State 3"),
+#'   sample = TRUE
+#' )
 tx_vl_eligible <- function(data,
                            reference = ref_date,
                            states = regions,
@@ -56,7 +57,8 @@ tx_vl_eligible <- function(data,
       lubridate::as_date(reference) - art_start_date >=
         lubridate::period(6, "months"),
       state %in% states,
-      facility %in% facilities)
+      facility %in% facilities
+    )
   } else {
     dplyr::filter(
       data,
@@ -65,9 +67,10 @@ tx_vl_eligible <- function(data,
         lubridate::period(6, "months"),
       date_of_current_viral_load <=
         lubridate::as_date(reference) -
-        lubridate::period(year = 1),
+          lubridate::period(year = 1),
       state %in% states,
-      facility %in% facilities)
+      facility %in% facilities
+    )
   }
 }
 
