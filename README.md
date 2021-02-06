@@ -344,8 +344,7 @@ For all the ‘Treatment’ and ‘Viral Suppression’ indicators (except
 `tx_ml_outcomes()`, which should be use with `tx_ml()`), you have
 control over the level of action (state or facility) by supplying to the
 `state` and/or `facility` arguments the values of interest . For more
-than one state or facility, combine the values with the `c()` with each
-one in quotation and separated by a comma e.g.
+than one state or facility, combine the values with the `c()` e.g.
 
 ``` r
 ## subset clients that have medication appointment in Q2 of FY21 for "State 1" and "State 3" and are also due for viral load
@@ -389,14 +388,14 @@ ndr_example %>%
 #> #   transferred_in_date <date>, appointment_date <date>
 ```
 
-### Summarising your Indicators
+# \#\#\# Summarising your Indicators
 
 You might want to generate a summary table of all the indicators you
 have pulled out. The `summarise_ndr()` (or `summarize_ndr()`) allows you
 to do this with ease. It accepts all the line-lists you are interested
 in creating a summary table for, the level at which you want the summary
-to be performed (country/ip, state or facility), and the names you want
-to give to each of your summary column.
+to be created (country/ip, state or facility), and the names you want to
+give to each of your summary column.
 
 ``` r
 new <- tx_new(ndr_example)  ## generates line-list of TX_NEW for the FY
