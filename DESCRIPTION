@@ -11,7 +11,7 @@ Description: The goal is to simplify routine analysis of the Nigeria National
           Data Repository (NDR) using the PEPFAR Monitoring, Evaluation, and 
           Reporting (MER) indictors. It is designed to import in to R patient-level 
           line-list downloaded as 'csv' file from the front-end of the NDR.
-License: MIT + file LICENSE
+License: GPL (>= 3) + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
