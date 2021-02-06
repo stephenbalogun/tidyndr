@@ -72,6 +72,19 @@ ndr_example <- read_ndr(path)
 
 ### Treatment Indicators
 
+The functions included in this group are:
+
+-   `tx_new()`
+
+-   `tx_curr()`
+
+-   `tx_ml()` and `tx_ml_outcomes()`
+
+-   `tx_rtt()`
+
+-   Other supporting functions are: `tx_mmd()`, `tx_regimen()` and
+    `tx_appointment()`
+
 ``` r
 ## Subset "TX_NEW"
 tx_new(ndr_example)
@@ -226,11 +239,22 @@ ndr_example %>%
 
 ### Viral Suppression Indicators
 
+The `tx_vl_eligible()`, `tx_pvls_den()` and the `tx_pvls_num()`
+functions come in handy when you need to generate the line-list of
+clients who are eligible for viral load test at a given point for a
+given facility/state, those who have a valid viral load result (not more
+than 1 year for people aged 20 years and above and not more than 6
+months for paediatrics and adolescents less or equal to 19 years), and
+those who are virally suppressed (out of those with valid viral load
+results). When the `sample = TRUE` attribute is supplied to the
+`tx_vl_eligible()` function, it generates the line-list of only those
+who are due for a viral load test out of all those who are eligible.
+
 ``` r
 ## Generate list of clients who are eligible for VL (i.e. expected to have a documented VL result)
 ndr_example %>%
   tx_vl_eligible()
-#> # A tibble: 22,473 x 48
+#> # A tibble: 22,741 x 48
 #>    ip    state lga   facility datim_code sex   patient_identif~ hospital_number
 #>    <fct> <fct> <fct> <fct>    <fct>      <fct> <chr>            <chr>          
 #>  1 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 3001       0001           
@@ -243,7 +267,7 @@ ndr_example %>%
 #>  8 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 3008       0003           
 #>  9 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 3009       0004           
 #> 10 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 1004       0003           
-#> # ... with 22,463 more rows, and 40 more variables: date_of_birth <date>,
+#> # ... with 22,731 more rows, and 40 more variables: date_of_birth <date>,
 #> #   age_at_art_initiation <dbl>, current_age <dbl>, art_start_date <date>,
 #> #   art_start_date_source <fct>, last_drug_pickup_date <date>,
 #> #   last_drug_pickup_date_q1 <date>, last_drug_pickup_date_q2 <date>,
@@ -264,24 +288,25 @@ ndr_example %>%
 #> #   transferred_out_date <date>, patient_transferred_in <lgl>,
 #> #   transferred_in_date <date>
 
-## Generate list of clients that will be expected to have a viral load result by the end of Q2 of FY21 for "State 2"
+## Generate list of clients that will be expected to have a viral load test done in Q2 of FY21 for "State 2"
 ndr_example %>%
   tx_vl_eligible("2021-03-31",
-                 states = "State 2")
-#> # A tibble: 7,619 x 48
+                 states = "State 2",
+                 sample = TRUE)
+#> # A tibble: 1,551 x 48
 #>    ip    state lga   facility datim_code sex   patient_identif~ hospital_number
 #>    <fct> <fct> <fct> <fct>    <fct>      <fct> <chr>            <chr>          
-#>  1 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 2001       0001           
-#>  2 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 2005       0002           
-#>  3 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 20011      0005           
-#>  4 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 20012      0006           
-#>  5 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 20015      0007           
-#>  6 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 20023      0002           
-#>  7 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 20024      00011          
-#>  8 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 20026      0001           
-#>  9 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 20027      00010          
-#> 10 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 20028      0001           
-#> # ... with 7,609 more rows, and 40 more variables: date_of_birth <date>,
+#>  1 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 20023      0002           
+#>  2 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 20028      0001           
+#>  3 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 20032      00012          
+#>  4 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 20048      0004           
+#>  5 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 20058      0003           
+#>  6 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 20061      0004           
+#>  7 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 20085      00027          
+#>  8 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 200102     00013          
+#>  9 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 200107     00035          
+#> 10 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 200120     00043          
+#> # ... with 1,541 more rows, and 40 more variables: date_of_birth <date>,
 #> #   age_at_art_initiation <dbl>, current_age <dbl>, art_start_date <date>,
 #> #   art_start_date_source <fct>, last_drug_pickup_date <date>,
 #> #   last_drug_pickup_date_q1 <date>, last_drug_pickup_date_q2 <date>,
@@ -311,7 +336,7 @@ no_of_vl_eligible <- tx_vl_eligible(ndr_example, states = "State 3") %>%
 vl_coverage <- scales::percent(no_of_vl_results / no_of_vl_eligible)
 
 print(vl_coverage)
-#> [1] "76%"
+#> [1] "74%"
 ```
 
 For all the ‘Treatment’ and ‘Viral Suppression’ indicators (except
@@ -328,7 +353,7 @@ ndr_example %>%
                  to = "2021-03-31",
                  states = c("State 1", "State 3")) %>%
   tx_vl_eligible(sample = TRUE)
-#> # A tibble: 297 x 49
+#> # A tibble: 328 x 49
 #>    ip    state lga   facility datim_code sex   patient_identif~ hospital_number
 #>    <fct> <fct> <fct> <fct>    <fct>      <fct> <chr>            <chr>          
 #>  1 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 1003       0002           
@@ -339,9 +364,9 @@ ndr_example %>%
 #>  6 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 300146     00054          
 #>  7 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 10089      00029          
 #>  8 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 300200     00066          
-#>  9 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 100137     00061          
-#> 10 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 100182     00064          
-#> # ... with 287 more rows, and 41 more variables: date_of_birth <date>,
+#>  9 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 100112     00051          
+#> 10 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 100137     00061          
+#> # ... with 318 more rows, and 41 more variables: date_of_birth <date>,
 #> #   age_at_art_initiation <dbl>, current_age <dbl>, art_start_date <date>,
 #> #   art_start_date_source <fct>, last_drug_pickup_date <date>,
 #> #   last_drug_pickup_date_q1 <date>, last_drug_pickup_date_q2 <date>,
@@ -361,4 +386,28 @@ ndr_example %>%
 #> #   patient_deceased_date <date>, patient_transferred_out <lgl>,
 #> #   transferred_out_date <date>, patient_transferred_in <lgl>,
 #> #   transferred_in_date <date>, appointment_date <date>
+```
+
+### Summarising your indicators
+
+You might want to generate a summary table of all the indicators you
+have pulled out. The `summarise_ndr()` (or `summarize_ndr()`) allows you
+to do this with ease. It accepts all the line-lists you are interested
+in creating a summary table for, the level at which you want the summary
+to be performed (country/ip, state or facility), and the names you want
+to give to each of your summary column.
+
+``` r
+new <- tx_new(ndr_example)  ## generates line-list of TX_NEW for the FY
+curr <- tx_curr(ndr_example) ## generates line-list of currently active clients
+ml <- tx_ml(ndr_example) ## generates line-list of clients who were active at the beginning of the FY but currently inactive
+
+summarise_ndr(data = list(new, curr, ml),
+              level = "state",
+              names = c("tx_new", "tx_curr", "tx_ml"))
+#>       ip   state tx_new tx_curr tx_ml
+#>  IP_name State 1    459    6213  2368
+#>  IP_name State 3   2925   14393  2749
+#>  IP_name State 2   1014    8592  3676
+#>    Total       -   4398   29198  8793
 ```

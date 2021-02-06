@@ -68,6 +68,18 @@ ndr_example <- read_ndr(path)
 
 ### Treatment Indicators
 
+The functions included in this group are:
+
+* `tx_new()`  
+
+* `tx_curr()`  
+
+* `tx_ml()` and `tx_ml_outcomes()`
+
+* `tx_rtt()` 
+
+* Other supporting functions are: `tx_mmd()`, `tx_regimen()` and `tx_appointment()`
+
 ```{r tx_indicators}
 ## Subset "TX_NEW"
 tx_new(ndr_example)
@@ -91,15 +103,18 @@ ndr_example %>%
 
 ### Viral Suppression Indicators
 
+The `tx_vl_eligible()`, `tx_pvls_den()` and the `tx_pvls_num()` functions come in handy when you need to generate the line-list of clients who are eligible for viral load test at a given point for a given facility/state, those who have a valid viral load result (not more than 1 year for people aged 20 years and above and not more than 6 months for paediatrics and adolescents less or equal to 19 years), and those who are virally suppressed (out of those with valid viral load results). When the `sample = TRUE` attribute is supplied to the `tx_vl_eligible()` function, it generates the line-list of only those who are due for a viral load test out of all those who are eligible.
+
 ```{r vl_indicators}
 ## Generate list of clients who are eligible for VL (i.e. expected to have a documented VL result)
 ndr_example %>%
   tx_vl_eligible()
 
-## Generate list of clients that will be expected to have a viral load result by the end of Q2 of FY21 for "State 2"
+## Generate list of clients that will be expected to have a viral load test done in Q2 of FY21 for "State 2"
 ndr_example %>%
   tx_vl_eligible("2021-03-31",
-                 states = "State 2")
+                 states = "State 2",
+                 sample = TRUE)
 
 ### Calculate the Viral Load Coverage for State 3
 no_of_vl_results <- tx_pvls_den(ndr_example, states = "State 3") %>%
@@ -112,6 +127,7 @@ vl_coverage <- scales::percent(no_of_vl_results / no_of_vl_eligible)
 print(vl_coverage)
   
 ```
+
 For all the 'Treatment' and 'Viral Suppression' indicators (except `tx_ml_outcomes()`, which should be use with `tx_ml()`), you have control over the level of action (state or facility) by supplying to the `state` and/or `facility` arguments the values of interest . For more than one state or facility, combine the values with the `c()` with each one in quotation and separated by a comma e.g.
 
 ```{r multiple_indicators}
@@ -121,4 +137,21 @@ ndr_example %>%
                  to = "2021-03-31",
                  states = c("State 1", "State 3")) %>%
   tx_vl_eligible(sample = TRUE)
+```
+
+### Summarising your indicators
+
+You might want to generate a summary table of all the indicators you have pulled out. The `summarise_ndr()` (or `summarize_ndr()`) allows you to do this with ease. It accepts all the line-lists you are interested in creating a summary table for, the level at which you want the summary to be performed (country/ip, state or facility), and the names you want to give to each of your summary column.
+
+
+```{r, summarise_ndr}
+new <- tx_new(ndr_example)  ## generates line-list of TX_NEW for the FY
+curr <- tx_curr(ndr_example) ## generates line-list of currently active clients
+ml <- tx_ml(ndr_example) ## generates line-list of clients who were active at the beginning of the FY but currently inactive
+
+summarise_ndr(data = list(new, curr, ml),
+              level = "state",
+              names = c("tx_new", "tx_curr", "tx_ml"))
+
+
 ```
