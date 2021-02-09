@@ -139,8 +139,9 @@ ndr_example %>%
   tx_vl_eligible(sample = TRUE)
 ```
 
+
 ### Summarising your Indicators
-=======
+
 
 You might want to generate a summary table of all the indicators you have pulled out. The `summarise_ndr()` (or `summarize_ndr()`) allows you to do this with ease. It accepts all the line-lists you are interested in creating a summary table for, the level at which you want the summary to be created (country/ip, state or facility), and the names you want to give to each of your summary column.
 

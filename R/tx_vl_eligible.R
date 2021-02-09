@@ -65,9 +65,15 @@ tx_vl_eligible <- function(data,
       current_status_28_days == "Active",
       lubridate::as_date(reference) - art_start_date >=
         lubridate::period(6, "months"),
-      date_of_current_viral_load <=
-        lubridate::as_date(reference) -
-          lubridate::period(year = 1),
+      ifelse(current_age < 20,
+        date_of_current_viral_load <=
+          lubridate::as_date(reference) -
+            lubridate::period(month = 6),
+        date_of_current_viral_load <=
+          lubridate::as_date(reference) -
+            lubridate::period(year = 1)
+      ) |
+        is.na(date_of_current_viral_load),
       state %in% states,
       facility %in% facilities
     )
