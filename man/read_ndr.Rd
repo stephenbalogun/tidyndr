@@ -4,13 +4,14 @@
 \alias{read_ndr}
 \title{Read NDR "csv" file}
 \usage{
-read_ndr(path, suppress = FALSE, cols = ndr_cols, ...)
+read_ndr(path, file_type = "current", cols = ndr_cols, ...)
 }
 \arguments{
 \item{path}{Path to the csv file on computer.}
 
-\item{suppress}{Either TRUE or FALSE, The default, FALSE, instructs
-\code{read_ndr()} to print warnings when using older versions of the ndr file.}
+\item{file_type}{One of three options to specify if an old, a current version
+or a new(er) version of the ndr line-list will be used. The old version was changed
+to the current version at about the beginning of Fiscal Year 2021.}
 
 \item{cols}{Sets the column types so that the columns are assigned the
 appropriate class. You can supply this argument following the instructions

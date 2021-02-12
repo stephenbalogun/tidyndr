@@ -4,8 +4,9 @@
 #' NDR front-end into R in a nicely formatted table.
 #'
 #' @param path Path to the csv file on computer.
-#' @param suppress Either TRUE or FALSE, The default, FALSE, instructs
-#'   `read_ndr()` to print warnings when using older versions of the ndr file.
+#' @param file_type One of three options to specify if an old, a current version
+#' or a new(er) version of the ndr line-list will be used. The old version was changed
+#' to the current version at about the beginning of Fiscal Year 2021.
 #' @param cols Sets the column types so that the columns are assigned the
 #'   appropriate class. You can supply this argument following the instructions
 #'   in `?vroom::cols` documentation.
@@ -25,79 +26,119 @@
 #' file_path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
 #' read_ndr(file_path)
 read_ndr <- function(path,
-                     suppress = FALSE,
+                     file_type = "current",
                      cols = ndr_cols,
                      ...) {
-  ndr_cols <- vroom::cols_only(
-    IP = vroom::col_factor(),
-    State = vroom::col_factor(),
-    LGA = vroom::col_factor(),
-    Facility = vroom::col_factor(),
-    `DATIM Code` = vroom::col_factor(),
-    Sex = vroom::col_factor(),
-    `Patient Identifier` = vroom::col_character(),
-    `Hospital Number` = vroom::col_character(),
-    `Date Of Birth` = vroom::col_date(format = "%d-%m-%y"),
-    `Age at ART Initiation` = vroom::col_double(),
-    `Current Age` = vroom::col_double(),
-    `ART Start Date` = vroom::col_date(format = "%d-%b-%y"),
-    `ART Start Date Source` = vroom::col_factor(),
-    `Last Drug Pickup date` = vroom::col_date(format = "%d-%b-%y"),
-    `Last Drug Pickup date Q1` = vroom::col_date(format = "%d-%b-%y"),
-    `Last Drug Pickup date Q2` = vroom::col_date(format = "%d-%b-%y"),
-    `Last Drug Pickup date Q3` = vroom::col_date(format = "%d-%b-%y"),
-    `Last Drug Pickup date Q4` = vroom::col_date(format = "%d-%b-%y"),
-    `Last Regimen` = vroom::col_factor(),
-    `Last Clinic Visit Date` = vroom::col_date(format = "%d-%b-%y"),
-    `Days Of ARV Refill` = vroom::col_double(),
-    `Pregnancy Status` = vroom::col_factor(),
-    `Current Viral Load` = vroom::col_double(),
-    `Date Of Current Viral Load` = vroom::col_date(format = "%d-%b-%y"),
-    `Current Viral Load Q1` = vroom::col_double(),
-    `Date Of Current Viral Load Q1` = vroom::col_date(format = "%d-%b-%y"),
-    `Current Viral Load Q2` = vroom::col_double(),
-    `Date Of Current Viral Load Q2` = vroom::col_date(format = "%d-%b-%y"),
-    `Current Viral Load Q3` = vroom::col_double(),
-    `Date Of Current Viral Load Q3` = vroom::col_date(format = "%d-%b-%y"),
-    `Current Viral Load Q4` = vroom::col_double(),
-    `Date Of Current Viral Load Q4` = vroom::col_date(format = "%d-%b-%y"),
-    `Current Status (28 Days)` = vroom::col_factor(),
-    `Current Status (90 Days)` = vroom::col_factor(),
-    `Current Status Q1 (28 Days)` = vroom::col_factor(),
-    `Current Status Q1 (90 Days)` = vroom::col_factor(),
-    `Current Status Q2 (28 Days)` = vroom::col_factor(),
-    `Current Status Q2 (90 Days)` = vroom::col_factor(),
-    `Current Status Q3 (28 Days)` = vroom::col_factor(),
-    `Current Status Q3 (90 Days)` = vroom::col_factor(),
-    `Current Status Q4 (28 Days)` = vroom::col_factor(),
-    `Current Status Q4 (90 Days)` = vroom::col_factor(),
-    `Patient Has Died` = vroom::col_logical(),
-    `Patient Deceased Date` = vroom::col_date(format = "%d-%b-%y"),
-    `Patient Transferred Out` = vroom::col_logical(),
-    `Transferred Out Date` = vroom::col_date(format = "%d-%b-%y"),
-    `Patient Transferred In` = vroom::col_logical(),
-    `Transferred In Date` = vroom::col_date(format = "%d-%b-%y")
+  current_cols <- vroom::cols_only(
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_character(),
+    vroom::col_character(),
+    vroom::col_date(),
+    vroom::col_double(),
+    vroom::col_double(),
+    vroom::col_date(format = "%d-%b-%Y"),
+    vroom::col_factor(),
+    vroom::col_date(format = "%d-%b-%Y"),
+    vroom::col_date(format = "%d-%b-%Y"),
+    vroom::col_date(format = "%d-%b-%Y"),
+    vroom::col_date(format = "%d-%b-%Y"),
+    vroom::col_date(format = "%d-%b-%Y"),
+    vroom::col_factor(),
+    vroom::col_date(format = "%d-%b-%Y"),
+    vroom::col_double(),
+    vroom::col_factor(),
+    vroom::col_double(),
+    vroom::col_date(format = "%d-%b-%Y"),
+    vroom::col_double(),
+    vroom::col_date(format = "%d-%b-%Y"),
+    vroom::col_double(),
+    vroom::col_date(format = "%d-%b-%Y"),
+    vroom::col_double(),
+    vroom::col_date(format = "%d-%b-%Y"),
+    vroom::col_double(),
+    vroom::col_date(format = "%d-%b-%Y"),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_logical(),
+    vroom::col_date(format = "%d-%b-%Y"),
+    vroom::col_logical(),
+    vroom::col_date(format = "%d-%b-%Y"),
+    vroom::col_logical(),
+    vroom::col_date(format = "%d-%b-%Y"),
+    vroom::col_skip()
   )
 
 
-  stopifnot(
-    "suppress argument is neither 'TRUE' nor 'FALSE'" = rlang::is_logical(suppress)
+  old_cols <- vroom::cols_only(
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_character(),
+    vroom::col_character(),
+    vroom::col_date(),
+    vroom::col_double(),
+    vroom::col_double(),
+    vroom::col_date(format = "%d-%b-%y"),
+    vroom::col_date(format = "%d-%b-%y"),
+    vroom::col_date(format = "%d-%b-%y"),
+    vroom::col_date(format = "%d-%b-%y"),
+    vroom::col_date(format = "%d-%b-%y"),
+    vroom::col_factor(),
+    vroom::col_date(format = "%d-%b-%y"),
+    vroom::col_double(),
+    vroom::col_factor(),
+    vroom::col_double(),
+    vroom::col_date(format = "%d-%b-%y"),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_logical(),
+    vroom::col_date(format = "%d-%b-%y"),
+    vroom::col_logical(),
+    vroom::col_date(format = "%d-%b-%y"),
   )
 
-  stopifnot(
-    "attempted file is not a '.csv' format" =
-      stringr::str_detect(path, ".csv$")
-  )
+  if (file_type == "current") {
+    ndr_cols <- current_cols
+  } else if (file_type == "old") {
+    ndr_cols <- old_cols
+  } else if (file_type == "new") {
+    ndr_cols <- cols
+  }
 
-  if (suppress == FALSE) {
-    janitor::clean_names(
+  if (any(!file_type %in% c("current", "old", "new"))) {
+    stop("`file_type` must be set to either 'current', 'old' or 'new")
+  }
+
+
+    if (file_type != "new") {
+      janitor::clean_names(
       vroom::vroom(path, col_types = cols, ...)
     )
-  } else {
-    suppressWarnings(
+    } else {
       janitor::clean_names(
-        vroom::vroom(path, col_types = cols, ...)
+        vroom::vroom(path, ...)
       )
-    )
-  }
+    }
 }

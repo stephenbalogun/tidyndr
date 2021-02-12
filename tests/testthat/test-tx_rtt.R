@@ -1,5 +1,5 @@
 test_that("tx_rtt works", {
-  file_path <- system.file("extdata", "ndr_example.csv", package = "tidyndr")
+  file_path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
 
   old_data <- read_ndr(file_path)
 

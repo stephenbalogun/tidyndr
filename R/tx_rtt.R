@@ -14,7 +14,7 @@
 #' @export
 #'
 #' @examples
-#' file_path <- system.file("extdata", "ndr_example.csv", package = "tidyndr")
+#' file_path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
 #' ndr_old <- read_ndr(file_path)
 #' ndr_new <- ndr_example
 #' tx_rtt(ndr_old, ndr_new)
@@ -27,18 +27,18 @@ tx_rtt <- function(old_data,
                    facilities = sites) {
   regions <- unique(new_data$state)
   sites <- unique(new_data$facility)
+#
+#   stopifnot(
+#     "the states contained in the 'old data' and 'new data' files are not the
+#     same. Please ensure that the two files contain similar states" =
+#       unique(old_data$state) == unique(new_data$state)
+#   )
 
-  stopifnot(
-    "the states contained in the 'old data' and 'new data' files are not the
-    same. Please ensure that the two files contain similar states" =
-      unique(old_data$state) == unique(new_data$state)
-  )
-
-  stopifnot(
-    "the facilities contained in the 'old data' and 'new data' files are not the
-    same. Please ensure that the two files contain similar facilities" =
-      unique(old_data$facility) == unique(new_data$facility)
-  )
+  # stopifnot(
+  #   "the facilities contained in the 'old data' and 'new data' files are not the
+  #   same. Please ensure that the two files contain similar facilities" =
+  #     unique(old_data$facility) == unique(new_data$facility)
+  # )
 
   stopifnot(
     "please check that region is contained in the dataset list of states" =

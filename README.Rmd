@@ -1,4 +1,5 @@
 ---
+title: Tidyndr
 output: github_document
 ---
 
@@ -12,8 +13,6 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 ```
-
-# tidyndr
 
 <!-- badges: start -->
 <!-- badges: end -->

@@ -3,15 +3,16 @@
 usethis::use_data(DATASET, overwrite = TRUE)
 
 
-ndr <- vroom::vroom("C:/Users/stephenbalogun/Documents/My R/my files/2021-01-18 patient_line_listing.csv")
+ndr <- vroom::vroom("C:/Users/stephenbalogun/Documents/My R/my files/2021-02-07 patient_line_listing.csv")
 
 
 examp <- vroom::vroom("C:/Users/stephenbalogun/Documents/My R/my_packages/tidyndr/ndr_example.csv")
 
+library(tidyverse)
 
 set.seed(0012)
 ndr_example <- ndr %>%
-  sample_n(50000)
+  dplyr::sample_n(50000)
 
 ndr_example <- ndr_example %>%
   mutate(
@@ -49,3 +50,20 @@ ndr_example <- ndr_example %>%
     `Last Drug Pickup date` = sample(ndr$`Last Drug Pickup date`, 50000),
     `Current Viral Load` = sample(ndr$`Current Viral Load`, 50000)
   )
+
+### save the ndr_example csv file (n = 5000) for shipping with the package
+write_csv(sample_n(ndr_example, 5000),
+          "C:/Users/stephenbalogun/Documents/My R/tidyndr/inst/extdata/ndr_example.csv",
+          na = "")
+
+### save the ndr_example csv file for pushing to github (n = 50, 000)e
+path <- "C:/Users/stephenbalogun/Documents/My R/example_files/ndr_example.csv"
+
+write_csv(ndr_example, path, na = "")
+
+#### read the ndr_example (n = 50, 000) for package as .rda file
+ndr_example <- tidyndr::read_ndr(path)
+usethis::use_data(ndr_example, overwrite = TRUE)
+
+
+

@@ -31,7 +31,7 @@ the \code{old_data} argument but have now become active in the data supplied
 to the \code{new_data} argument.
 }
 \examples{
-file_path <- system.file("extdata", "ndr_example.csv", package = "tidyndr")
+file_path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
 ndr_old <- read_ndr(file_path)
 ndr_new <- ndr_example
 tx_rtt(ndr_old, ndr_new)
