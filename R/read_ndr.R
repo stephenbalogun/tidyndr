@@ -132,13 +132,13 @@ read_ndr <- function(path,
   }
 
 
-    if (file_type != "new") {
-      janitor::clean_names(
+  if (file_type != "new") {
+    janitor::clean_names(
       vroom::vroom(path, col_types = cols, ...)
     )
-    } else {
-      janitor::clean_names(
-        vroom::vroom(path, ...)
-      )
-    }
+  } else {
+    janitor::clean_names(
+      vroom::vroom(path, ...)
+    )
+  }
 }

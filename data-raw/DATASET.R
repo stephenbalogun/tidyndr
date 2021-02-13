@@ -53,8 +53,9 @@ ndr_example <- ndr_example %>%
 
 ### save the ndr_example csv file (n = 5000) for shipping with the package
 write_csv(sample_n(ndr_example, 5000),
-          "C:/Users/stephenbalogun/Documents/My R/tidyndr/inst/extdata/ndr_example.csv",
-          na = "")
+  "C:/Users/stephenbalogun/Documents/My R/tidyndr/inst/extdata/ndr_example.csv",
+  na = ""
+)
 
 ### save the ndr_example csv file for pushing to github (n = 50, 000)e
 path <- "C:/Users/stephenbalogun/Documents/My R/example_files/ndr_example.csv"
@@ -64,6 +65,3 @@ write_csv(ndr_example, path, na = "")
 #### read the ndr_example (n = 50, 000) for package as .rda file
 ndr_example <- tidyndr::read_ndr(path)
 usethis::use_data(ndr_example, overwrite = TRUE)
-
-
-

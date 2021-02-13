@@ -254,7 +254,7 @@ who are due for a viral load test out of all those who are eligible.
 ## Generate list of clients who are eligible for VL (i.e. expected to have a documented VL result)
 ndr_example %>%
   tx_vl_eligible()
-#> # A tibble: 20,127 x 48
+#> # A tibble: 20,167 x 48
 #>    ip    state lga   facility datim_code sex   patient_identif~ hospital_number
 #>    <fct> <fct> <fct> <fct>    <fct>      <fct> <chr>            <chr>          
 #>  1 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 3001       0001           
@@ -267,7 +267,7 @@ ndr_example %>%
 #>  8 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 1005       0004           
 #>  9 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 3009       0004           
 #> 10 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 2009       0001           
-#> # ... with 20,117 more rows, and 40 more variables: date_of_birth <date>,
+#> # ... with 20,157 more rows, and 40 more variables: date_of_birth <date>,
 #> #   age_at_art_initiation <dbl>, current_age <dbl>, art_start_date <date>,
 #> #   art_start_date_source <fct>, last_drug_pickup_date <date>,
 #> #   last_drug_pickup_date_q1 <date>, last_drug_pickup_date_q2 <date>,
@@ -352,7 +352,7 @@ ndr_example %>%
                  to = "2021-03-31",
                  states = c("State 1", "State 3")) %>%
   tx_vl_eligible(sample = TRUE)
-#> # A tibble: 695 x 49
+#> # A tibble: 706 x 49
 #>    ip    state lga   facility datim_code sex   patient_identif~ hospital_number
 #>    <fct> <fct> <fct> <fct>    <fct>      <fct> <chr>            <chr>          
 #>  1 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 10011      0002           
@@ -365,7 +365,7 @@ ndr_example %>%
 #>  8 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 300167     00062          
 #>  9 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 300181     00072          
 #> 10 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 300228     00079          
-#> # ... with 685 more rows, and 41 more variables: date_of_birth <date>,
+#> # ... with 696 more rows, and 41 more variables: date_of_birth <date>,
 #> #   age_at_art_initiation <dbl>, current_age <dbl>, art_start_date <date>,
 #> #   art_start_date_source <fct>, last_drug_pickup_date <date>,
 #> #   last_drug_pickup_date_q1 <date>, last_drug_pickup_date_q2 <date>,
@@ -405,8 +405,31 @@ summarise_ndr(data = list(new, curr, ml),
               level = "state",
               names = c("tx_new", "tx_curr", "tx_ml"))
 #>       ip   state tx_new tx_curr tx_ml
-#>  IP_name State 1    662    5647  1829
-#>  IP_name State 2   1239    7931  2700
-#>  IP_name State 3   3338   13446  2085
-#>    Total       -   5239   27024  6615
+#>  IP_name State 1    662    5647  1857
+#>  IP_name State 2   1239    7931  2734
+#>  IP_name State 3   3338   13446  2112
+#>    Total       -   5239   27024  6704
+```
+
+The `disaggregate()` allows you to summarise an indicator of interest
+into finer details based on “age”, “sex” or “pregnancy status”. These
+are supplied to the `by` parameter of the function. The default
+disaggregates the variable of interest at the level of “states” but can
+also do this at “country/ip”, “lga” or “facility” level when any of this
+is supplied to the `level` parameter.
+
+``` r
+new_clients <- tx_new(ndr_example)  ## generates line-list of TX_NEW for the FY
+
+disaggregate(new_clients,
+             by = "age")
+#> # A tibble: 4 x 15
+#>   ip    state  `<1` `1-4` `10-14` `15-19` `20-24` `25-29` `30-34` `35-39`
+#>   <chr> <chr> <int> <int>   <int>   <int>   <int>   <int>   <int>   <int>
+#> 1 IP_n~ Stat~     1     3       1      19      78     167     169      94
+#> 2 IP_n~ Stat~     1     2       5      10     145     317     349     174
+#> 3 IP_n~ Stat~     2     8      10     131     436     702     703     474
+#> 4 Total -         4    13      16     160     659    1186    1221     742
+#> # ... with 5 more variables: `40-44` <int>, `45-49` <int>, `5-9` <int>,
+#> #   `50+` <int>, Total <dbl>
 ```

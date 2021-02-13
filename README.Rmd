@@ -141,7 +141,6 @@ ndr_example %>%
 
 ### Summarising your Indicators
 
-
 You might want to generate a summary table of all the indicators you have pulled out. The `summarise_ndr()` (or `summarize_ndr()`) allows you to do this with ease. It accepts all the line-lists you are interested in creating a summary table for, the level at which you want the summary to be created (country/ip, state or facility), and the names you want to give to each of your summary column.
 
 
@@ -153,6 +152,19 @@ ml <- tx_ml(ndr_example) ## generates line-list of clients who were active at th
 summarise_ndr(data = list(new, curr, ml),
               level = "state",
               names = c("tx_new", "tx_curr", "tx_ml"))
+
+
+```
+
+
+The `disaggregate()` allows you to summarise an indicator of interest into finer details based on "age", "sex" or "pregnancy status". These are supplied to the `by` parameter of the function. The default disaggregates the variable of interest at the level of "states" but can also do this at "country/ip", "lga" or "facility" level when any of this is supplied to the `level` parameter.
+
+
+```{r, disagg}
+new_clients <- tx_new(ndr_example)  ## generates line-list of TX_NEW for the FY
+
+disaggregate(new_clients,
+             by = "age")
 
 
 ```

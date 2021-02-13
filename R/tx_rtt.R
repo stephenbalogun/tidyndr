@@ -27,12 +27,12 @@ tx_rtt <- function(old_data,
                    facilities = sites) {
   regions <- unique(new_data$state)
   sites <- unique(new_data$facility)
-#
-#   stopifnot(
-#     "the states contained in the 'old data' and 'new data' files are not the
-#     same. Please ensure that the two files contain similar states" =
-#       unique(old_data$state) == unique(new_data$state)
-#   )
+  #
+  #   stopifnot(
+  #     "the states contained in the 'old data' and 'new data' files are not the
+  #     same. Please ensure that the two files contain similar states" =
+  #       unique(old_data$state) == unique(new_data$state)
+  #   )
 
   # stopifnot(
   #   "the facilities contained in the 'old data' and 'new data' files are not the
