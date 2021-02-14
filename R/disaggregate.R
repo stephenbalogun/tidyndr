@@ -28,6 +28,23 @@
 #' disaggregate(curr_clients, by = "sex", level = "facility")
 disaggregate <- function(data, by, level = "state") {
 
+  if (any(!by %in% c("gender", "sex", "age", "current_age", "current age",
+                    "pregnancy status", "pregnancy_status"))) {
+    stop("the value supplied to the `by` parameter is invalid. Please check!")
+  }
+
+  stopifnot(
+    'the value supplied to the `level` parameter is invalid!' =
+      any(level %in% c("ip", "country", "state", "lga", "facility"))
+  )
+
+  stopifnot(
+    'You have supplied more than one values to the `level` or `by` parameter' =
+      length(level) == 1 && length(by) == 1
+  )
+
+
+
   ### by == "sex"
   if (by == "sex" || by == "gender") {
     if (level == "ip" || level == "country") {

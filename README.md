@@ -88,6 +88,7 @@ The functions included in this group are:
 ``` r
 ## Subset "TX_NEW"
 tx_new(ndr_example)
+#> Warning: One or more parsing issues, see `problems()` for details
 #> # A tibble: 5,239 x 48
 #>    ip    state lga   facility datim_code sex   patient_identif~ hospital_number
 #>    <fct> <fct> <fct> <fct>    <fct>      <fct> <chr>            <chr>          
@@ -254,7 +255,7 @@ who are due for a viral load test out of all those who are eligible.
 ## Generate list of clients who are eligible for VL (i.e. expected to have a documented VL result)
 ndr_example %>%
   tx_vl_eligible()
-#> # A tibble: 20,167 x 48
+#> # A tibble: 20,180 x 48
 #>    ip    state lga   facility datim_code sex   patient_identif~ hospital_number
 #>    <fct> <fct> <fct> <fct>    <fct>      <fct> <chr>            <chr>          
 #>  1 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 3001       0001           
@@ -267,7 +268,7 @@ ndr_example %>%
 #>  8 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 1005       0004           
 #>  9 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 3009       0004           
 #> 10 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 2009       0001           
-#> # ... with 20,157 more rows, and 40 more variables: date_of_birth <date>,
+#> # ... with 20,170 more rows, and 40 more variables: date_of_birth <date>,
 #> #   age_at_art_initiation <dbl>, current_age <dbl>, art_start_date <date>,
 #> #   art_start_date_source <fct>, last_drug_pickup_date <date>,
 #> #   last_drug_pickup_date_q1 <date>, last_drug_pickup_date_q2 <date>,
@@ -336,7 +337,7 @@ no_of_vl_eligible <- tx_vl_eligible(ndr_example, states = "State 3") %>%
 vl_coverage <- scales::percent(no_of_vl_results / no_of_vl_eligible)
 
 print(vl_coverage)
-#> [1] "78%"
+#> [1] "77%"
 ```
 
 For all the ‘Treatment’ and ‘Viral Suppression’ indicators (except
@@ -352,7 +353,7 @@ ndr_example %>%
                  to = "2021-03-31",
                  states = c("State 1", "State 3")) %>%
   tx_vl_eligible(sample = TRUE)
-#> # A tibble: 706 x 49
+#> # A tibble: 709 x 49
 #>    ip    state lga   facility datim_code sex   patient_identif~ hospital_number
 #>    <fct> <fct> <fct> <fct>    <fct>      <fct> <chr>            <chr>          
 #>  1 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 10011      0002           
@@ -365,7 +366,7 @@ ndr_example %>%
 #>  8 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 300167     00062          
 #>  9 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 300181     00072          
 #> 10 IP_n~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 300228     00079          
-#> # ... with 696 more rows, and 41 more variables: date_of_birth <date>,
+#> # ... with 699 more rows, and 41 more variables: date_of_birth <date>,
 #> #   age_at_art_initiation <dbl>, current_age <dbl>, art_start_date <date>,
 #> #   art_start_date_source <fct>, last_drug_pickup_date <date>,
 #> #   last_drug_pickup_date_q1 <date>, last_drug_pickup_date_q2 <date>,
@@ -405,10 +406,10 @@ summarise_ndr(data = list(new, curr, ml),
               level = "state",
               names = c("tx_new", "tx_curr", "tx_ml"))
 #>       ip   state tx_new tx_curr tx_ml
-#>  IP_name State 1    662    5647  1857
-#>  IP_name State 2   1239    7931  2734
-#>  IP_name State 3   3338   13446  2112
-#>    Total       -   5239   27024  6704
+#>  IP_name State 1    662    5647  1891
+#>  IP_name State 2   1239    7931  2799
+#>  IP_name State 3   3338   13446  2164
+#>    Total       -   5239   27024  6855
 ```
 
 The `disaggregate()` allows you to summarise an indicator of interest
@@ -432,4 +433,17 @@ disaggregate(new_clients,
 #> 4 Total -         4    13      16     160     659    1186    1221     742
 #> # ... with 5 more variables: `40-44` <int>, `45-49` <int>, `5-9` <int>,
 #> #   `50+` <int>, Total <dbl>
+
+## disaggregate 'TX_CURR' by sex
+
+ndr_example %>%
+  tx_curr() %>%
+  disaggregate(by = "sex")
+#> # A tibble: 4 x 5
+#>   ip      state   Female  Male Total
+#>   <chr>   <chr>    <int> <int> <dbl>
+#> 1 IP_name State 1   1662  3985  5647
+#> 2 IP_name State 2   2335  5596  7931
+#> 3 IP_name State 3   5894  7552 13446
+#> 4 Total   -         9891 17133 27024
 ```

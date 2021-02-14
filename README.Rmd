@@ -166,5 +166,10 @@ new_clients <- tx_new(ndr_example)  ## generates line-list of TX_NEW for the FY
 disaggregate(new_clients,
              by = "age")
 
+## disaggregate 'TX_CURR' by sex
+
+ndr_example %>%
+  tx_curr() %>%
+  disaggregate(by = "sex")
 
 ```
