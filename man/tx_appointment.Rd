@@ -33,7 +33,7 @@ facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}
 }
 \value{
-
+tx_appointment
 }
 \description{
 \code{tx_appointment} generates the line-list of clients who have clinic

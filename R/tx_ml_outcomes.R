@@ -8,7 +8,7 @@
 #' @param outcome The particular outcome of interest based on options available
 #' on the NDR ("transfer out" or "dead").
 #'
-#' @return
+#' @return tx_ml_outcomes
 #' @export
 #'
 #' @examples

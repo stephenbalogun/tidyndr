@@ -19,7 +19,7 @@ facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}
 }
 \value{
-
+tx_curr
 }
 \description{
 \code{tx_curr} pulls up the line-list of clients who are active

@@ -20,7 +20,7 @@
 #'   facility, combine the facilities using the \code{c()} e.g.
 #'   \code{c("Facility 1", "Facility 2")}.
 #'
-#' @return
+#' @return tx_appointment
 #' @export
 #'
 #' @examples

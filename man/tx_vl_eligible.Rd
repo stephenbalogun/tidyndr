@@ -33,7 +33,7 @@ viral load test should be filtered irrespective of their eligibility for sample
 collection or only those due for sample collection.}
 }
 \value{
-
+tx_vl_eligible
 }
 \description{
 Generates the line-list of clients who have been (or would have been) on ARv

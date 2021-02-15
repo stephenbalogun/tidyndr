@@ -8,7 +8,7 @@
 #'
 #' @inheritParams summarise_ndr
 #'
-#' @return
+#' @return summarize_ndr
 #' @export
 #'
 #' @examples

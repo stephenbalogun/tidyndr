@@ -13,7 +13,7 @@
 #' @param ... passes other arguments supplied to the `vroom::vroom()` used
 #'   behind the hood.
 #'
-#' @return
+#' @return read_ndr
 #' @export
 #'
 #' @examples

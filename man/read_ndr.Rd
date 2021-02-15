@@ -21,7 +21,7 @@ in \code{?vroom::cols} documentation.}
 behind the hood.}
 }
 \value{
-
+read_ndr
 }
 \description{
 Import your NDR patient-level line-list downloaded as ".csv" format from the

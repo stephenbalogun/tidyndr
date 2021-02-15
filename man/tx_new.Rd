@@ -32,7 +32,7 @@ facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}
 }
 \value{
-
+tx_new
 }
 \description{
 Generates the line-list of clients who commenced ARV within the specified

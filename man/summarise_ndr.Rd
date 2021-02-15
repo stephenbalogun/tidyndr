@@ -16,7 +16,7 @@ are "ip" (or "country"), "state" or "facility".}
 the output}
 }
 \value{
-
+summarise_ndr
 }
 \description{
 The \code{summarise_ndr()} function counts the number of occurrence of

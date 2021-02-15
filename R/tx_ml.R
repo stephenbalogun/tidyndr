@@ -9,7 +9,7 @@
 #'
 #' @inheritParams tx_appointment
 #'
-#' @return
+#' @return tx_ml
 #' @export
 #'
 #' @examples

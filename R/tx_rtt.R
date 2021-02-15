@@ -10,7 +10,7 @@
 #'    status will be checked.
 #' @inheritParams tx_appointment
 #'
-#' @return
+#' @return tx_rtt
 #' @export
 #'
 #' @examples

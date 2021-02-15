@@ -23,7 +23,7 @@ facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}
 }
 \value{
-
+tx_pvls_den
 }
 \description{
 Generate the line-list of clients whose date of last viral load result is not

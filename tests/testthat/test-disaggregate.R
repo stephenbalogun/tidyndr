@@ -3,11 +3,12 @@ test_that("disaggregation works", {
     dt <- janitor::adorn_totals(
       tidyr::pivot_wider(
         dplyr::mutate(
-          dplyr::filter(
-            dplyr::count(ndr_example, ip, state, sex, .drop = TRUE),
-            sex %in% c("F", "M")
-          ),
-          sex = factor(sex, labels = c("Female", "Male"))
+          dplyr::count(ndr_example, ip, state, sex, .drop = TRUE),
+          sex = dplyr::recode_factor(sex,
+            "F" = "Female",
+            "M" = "Male",
+            .default = "unknown"
+          )
         ),
         names_from = sex,
         values_from = n

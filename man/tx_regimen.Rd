@@ -22,7 +22,7 @@ facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}
 }
 \value{
-
+tx_regimen
 }
 \description{
 Generates the line-list of clients on first-line regimen who are on the choice

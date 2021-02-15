@@ -13,7 +13,7 @@ tx_ml_outcomes(data, outcome)
 on the NDR ("transfer out" or "dead").}
 }
 \value{
-
+tx_ml_outcomes
 }
 \description{
 \code{tx_ml_outcomes} generates the line-list of clients based on the

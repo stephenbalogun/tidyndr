@@ -8,7 +8,7 @@
 #'    age-range).
 #' @inheritParams tx_appointment
 #'
-#' @return
+#' @return tx_regimen
 #' @export
 #'
 #' @examples

@@ -15,7 +15,7 @@
 #' The options are "ip" (or "country"), "state", "lga" or "facility". The default
 #' value is "state".
 #'
-#' @return
+#' @return disaggregate
 #' @export
 #'
 #' @examples
@@ -27,19 +27,20 @@
 #' curr_clients <- tx_curr(ndr_example)
 #' disaggregate(curr_clients, by = "sex", level = "facility")
 disaggregate <- function(data, by, level = "state") {
-
-  if (any(!by %in% c("gender", "sex", "age", "current_age", "current age",
-                    "pregnancy status", "pregnancy_status"))) {
+  if (any(!by %in% c(
+    "gender", "sex", "age", "current_age", "current age",
+    "pregnancy status", "pregnancy_status"
+  ))) {
     stop("the value supplied to the `by` parameter is invalid. Please check!")
   }
 
   stopifnot(
-    'the value supplied to the `level` parameter is invalid!' =
+    "the value supplied to the `level` parameter is invalid!" =
       any(level %in% c("ip", "country", "state", "lga", "facility"))
   )
 
   stopifnot(
-    'You have supplied more than one values to the `level` or `by` parameter' =
+    "You have supplied more than one values to the `level` or `by` parameter" =
       length(level) == 1 && length(by) == 1
   )
 
@@ -47,16 +48,18 @@ disaggregate <- function(data, by, level = "state") {
 
   ### by == "sex"
   if (by == "sex" || by == "gender") {
+    gender <- forcats::fct_collapse(data$sex,
+      "Male" = "M",
+      "Female" = "F",
+      other_level = "unknown"
+    )
+
+    dat <- dplyr::mutate(data, sex = gender)
+
     if (level == "ip" || level == "country") {
       dt <- janitor::adorn_totals(
         tidyr::pivot_wider(
-          dplyr::mutate(
-            dplyr::filter(
-              dplyr::count(data, ip, sex, .drop = TRUE),
-              sex %in% c("F", "M")
-            ),
-            sex = factor(sex, labels = c("Female", "Male"))
-          ),
+          dplyr::count(dat, ip, sex, .drop = TRUE),
           names_from = sex,
           values_from = n
         ),
@@ -65,13 +68,7 @@ disaggregate <- function(data, by, level = "state") {
     } else if (level == "state") {
       dt <- janitor::adorn_totals(
         tidyr::pivot_wider(
-          dplyr::mutate(
-            dplyr::filter(
-              dplyr::count(data, ip, state, sex, .drop = TRUE),
-              sex %in% c("F", "M")
-            ),
-            sex = factor(sex, labels = c("Female", "Male"))
-          ),
+          dplyr::count(dat, ip, state, sex, .drop = TRUE),
           names_from = sex,
           values_from = n
         ),
@@ -82,13 +79,7 @@ disaggregate <- function(data, by, level = "state") {
     } else if (level == "lga") {
       dt <- janitor::adorn_totals(
         tidyr::pivot_wider(
-          dplyr::mutate(
-            dplyr::filter(
-              dplyr::count(data, ip, state, lga, sex, .drop = TRUE),
-              sex %in% c("F", "M")
-            ),
-            sex = factor(sex, labels = c("Female", "Male"))
-          ),
+          dplyr::count(dat, ip, state, lga, sex, .drop = TRUE),
           names_from = sex,
           values_from = n
         ),
@@ -99,13 +90,7 @@ disaggregate <- function(data, by, level = "state") {
     } else if (level == "facility") {
       dt <- janitor::adorn_totals(
         tidyr::pivot_wider(
-          dplyr::mutate(
-            dplyr::filter(
-              dplyr::count(data, ip, state, facility, sex, .drop = TRUE),
-              sex %in% c("F", "M")
-            ),
-            sex = factor(sex, labels = c("Female", "Male"))
-          ),
+          dplyr::count(dat, ip, state, facility, sex, .drop = TRUE),
           names_from = sex,
           values_from = n
         ),
@@ -231,6 +216,8 @@ disaggregate <- function(data, by, level = "state") {
 
       dt[is.na(dt)] <- 0 ## replace NAs with Zero
     }
+
+    dt <- dplyr::relocate(dt, `5-9`, .after = `1-4`)
   }
   tibble::as_tibble(dt)
 }
@@ -238,5 +225,5 @@ disaggregate <- function(data, by, level = "state") {
 
 
 utils::globalVariables(
-  c("lga", "n", "pregnancy_status", "sex")
+  c("lga", "n", "pregnancy_status", "sex", "5-9", "1-4")
 )

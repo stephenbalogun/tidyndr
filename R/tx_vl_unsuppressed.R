@@ -5,29 +5,27 @@
 #' paediatrics and adolescents) from the specified reference date and are virally
 #' suppressed.
 #'
-#' @param n the value below which viral load result is adjudged to be suppressed.
-#' @inheritParams tx_appointment
-#' @inheritParams tx_pvls_den
+#' @inheritParams tx_pvls_num
 #'
-#' @return tx_pvls_num
+#' @return tx_vl_unsuppressed
 #' @export
 #'
 #' @examples
-#' tx_pvls_num(ndr_example)
+#' tx_vl_unsuppressed(ndr_example)
 #'
-#' # Determine clients who are virally suppressed for a state at the end of Q1
-#' tx_pvls_num(ndr_example,
+#' # Determine clients who are virally unsuppressed for a state at the end of Q1
+#' tx_vl_unsuppressed(ndr_example,
 #'   reference = "2020-12-31",
 #'   states = "State 1"
 #' )
 #'
-#' # Determine clients with viral load result less than 400
-#' tx_pvls_num(ndr_example, n = 400)
-tx_pvls_num <- function(data,
-                        reference = ref_date,
-                        states = regions,
-                        facilities = sites,
-                        n = 1000) {
+#' # Determine clients with viral load result of 400 or more (low level viremia)
+#' tx_vl_unsuppressed(ndr_example, n = 400)
+tx_vl_unsuppressed <- function(data,
+                               reference = ref_date,
+                               states = regions,
+                               facilities = sites,
+                               n = 1000) {
   ref_date <- Sys.Date()
   regions <- unique(data$state)
   sites <- unique(data$facility)
@@ -59,7 +57,7 @@ tx_pvls_num <- function(data,
       date_of_current_viral_load > lubridate::as_date(reference) -
         lubridate::period(year = 1)
     ),
-    current_viral_load < n,
+    current_viral_load >= n,
     state %in% states,
     facility %in% facilities
   )

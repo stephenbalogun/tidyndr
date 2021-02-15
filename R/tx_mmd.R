@@ -11,7 +11,7 @@
 #'    clients who had 3 - 6 months of ARV dispensed.
 #' @inheritParams tx_appointment
 #'
-#' @return
+#' @return tx_mmd
 #' @export
 #'
 #' @examples

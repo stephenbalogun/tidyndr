@@ -9,7 +9,7 @@
 #'
 #' @importFrom magrittr %>%
 #'
-#' @return
+#' @return tx_curr
 #' @export
 #'
 #' @examples

@@ -21,7 +21,7 @@ The options are "ip" (or "country"), "state", "lga" or "facility". The default
 value is "state".}
 }
 \value{
-
+disaggregate
 }
 \description{
 Counts the number of occurrence of an outcome based on the category of

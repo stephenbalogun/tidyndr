@@ -11,7 +11,7 @@
 #' @param names The names to be passed to the summary columns created in
 #' the output
 #'
-#' @return
+#' @return summarise_ndr
 #' @export
 #'
 #' @examples

@@ -32,7 +32,7 @@ facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}
 }
 \value{
-
+tx_ml
 }
 \description{
 \code{tx_ml} Generates clients who have become inactive over a specified

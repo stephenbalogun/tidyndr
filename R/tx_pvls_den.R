@@ -10,7 +10,7 @@
 #'    documented result. The default is the date of analysis.
 #' @inheritParams tx_appointment
 #'
-#' @return
+#' @return tx_pvls_den
 #' @export
 #'
 #' @examples

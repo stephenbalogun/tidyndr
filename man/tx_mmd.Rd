@@ -23,7 +23,7 @@ facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}
 }
 \value{
-
+tx_mmd
 }
 \description{
 Generates list of clients who had 3 - 6 months of ARV dispensed during the

@@ -9,7 +9,7 @@
 #' collection or only those due for sample collection.
 #' @inheritParams tx_pvls_den
 #'
-#' @return
+#' @return tx_vl_eligible
 #' @export
 #'
 #' @examples
