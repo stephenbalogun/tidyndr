@@ -116,7 +116,11 @@ read_ndr <- function(path,
     vroom::col_logical(),
     vroom::col_date(format = "%d-%b-%Y"),
     vroom::col_logical(),
+<<<<<<< HEAD
     vroom::col_date(format = "%d-%b-%Y"),
+=======
+    vroom::col_date(format = "%d-%b-%y"),
+>>>>>>> f8e49e8c739e22389f9d3df737d06fa8577f7be4
     vroom::col_skip()
   )
 
