@@ -117,6 +117,7 @@ read_ndr <- function(path,
     vroom::col_date(format = "%d-%b-%y"),
     vroom::col_logical(),
     vroom::col_date(format = "%d-%b-%y"),
+    vroom::col_skip()
   )
 
   if (file_type == "current") {
