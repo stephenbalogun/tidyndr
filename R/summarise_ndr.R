@@ -7,7 +7,7 @@
 #'
 #' @param data A list of dataframes to be summarised
 #' @param level The level at which the summary should be performed. The options
-#' are "ip" (or "country"), "state" or "facility".
+#' are "ip" (or "country"), "state", "lga" or "facility".
 #' @param names The names to be passed to the summary columns created in
 #' the output
 #'
@@ -46,6 +46,10 @@ summarise_ndr <- function(data, level, names) {
       length(level) == 1
   )
 
+  if (!any(level %in% c("ip", "country", "state", "lga", "facility"))) {
+    stop("level must be one of 'ip', 'country', 'state', 'lga', or 'facility'")
+  }
+
   stopifnot(
     'the number of dataframes supplied is not equal to the number of names supplied to the "names" argument' =
       length(data) == length(names)
@@ -71,6 +75,9 @@ summarise_ndr <- function(data, level, names) {
     } else if (l == "country" | l == "ip") {
       data %>%
         dplyr::count(ip, name = n, .drop = TRUE)
+    } else if (l == "lga") {
+      data %>%
+        dplyr::count(ip, state, lga, name = n, .drop = TRUE)
     }
   }
   #################################################
@@ -90,10 +97,10 @@ summarise_ndr <- function(data, level, names) {
 
       i <- i + 1
     }
-    invisible(df)
 
     # join all the the outputs together
-    purrr::reduce(df, dplyr::left_join, by = c("ip", "state"))
+    dt <- purrr::reduce(df, dplyr::left_join, by = c("ip", "state"))
+
   } else if (level == "facility") {
     i <- 1
 
@@ -104,13 +111,11 @@ summarise_ndr <- function(data, level, names) {
 
       i <- i + 1
     }
-    invisible(df)
 
     dt <- purrr::reduce(df, dplyr::left_join, by = c("ip", "state", "facility"))
 
     dt[is.na(dt)] <- 0 ## replace NAs with Zero
 
-    print(dt)
   } else if (level == "country" | level == "ip") {
     i <- 1
 
@@ -122,10 +127,22 @@ summarise_ndr <- function(data, level, names) {
       i <- i + 1
     }
 
-    invisible(df)
+    dt <- purrr::reduce(df, dplyr::left_join, by = "ip")
+  } else if (level == "lga") {
+    i <- 1
 
-    purrr::reduce(df, dplyr::left_join, by = "ip")
+    df <- vector("list", length(data))
+
+    while (i <= length(data)) {
+      df[[i]] <- my_summary(data[[i]], l = level, n = names[[i]])
+
+      i <- i + 1
+    }
+
+    dt <- purrr::reduce(df, dplyr::left_join, by = c("ip", "state", "lga"))
   }
+
+  dt
 }
 
 
