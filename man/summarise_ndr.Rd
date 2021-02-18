@@ -10,7 +10,7 @@ summarise_ndr(data, level, names)
 \item{data}{A list of dataframes to be summarised}
 
 \item{level}{The level at which the summary should be performed. The options
-are "ip" (or "country"), "state" or "facility".}
+are "ip" (or "country"), "state", "lga" or "facility".}
 
 \item{names}{The names to be passed to the summary columns created in
 the output}
