@@ -6,7 +6,11 @@
 #' @param n The name assignment to the summary operator
 #'
 #' @export
+<<<<<<< HEAD
 #' @keywords internal
+=======
+#'
+>>>>>>> 82bc88cea456aae49cd70b9b04969fc72b487d3c
 my_summary <- function(data, l, n) {
   if (l == "state") {
     data %>%

@@ -9,4 +9,7 @@ fy_start()
 \description{
 Sets the date of some functions to begin at 1st of October.
 }
+<<<<<<< HEAD
 \keyword{internal}
+=======
+>>>>>>> 82bc88cea456aae49cd70b9b04969fc72b487d3c

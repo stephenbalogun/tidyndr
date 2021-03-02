@@ -17,4 +17,7 @@ my_summary(data, l, n)
 \description{
 Utils-summarise-ndr
 }
+<<<<<<< HEAD
 \keyword{internal}
+=======
+>>>>>>> 82bc88cea456aae49cd70b9b04969fc72b487d3c
