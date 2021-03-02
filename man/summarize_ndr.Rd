@@ -4,10 +4,10 @@
 \alias{summarize_ndr}
 \title{Count the number of outcomes based on a specified level}
 \usage{
-summarize_ndr(data, level, names)
+summarize_ndr(..., level, names)
 }
 \arguments{
-\item{data}{A list of dataframes to be summarised}
+\item{...}{Dataframes to be summarised.}
 
 \item{level}{The level at which the summary should be performed. The options
 are "ip" (or "country"), "state", "lga" or "facility".}
@@ -16,22 +16,29 @@ are "ip" (or "country"), "state", "lga" or "facility".}
 the output}
 }
 \value{
-summarize_ndr
+summarise_ndr
 }
 \description{
-The \code{summarize_ndr()} function counts the number of occurrence of
+The \code{summarise_ndr()} function counts the number of occurrence of
 specified level for each of the supplied dataframe. It then combines the
 given dataframes into a single table. It also adds a "Total" roll that
 adds all the rows for each of the numeric columns.
 }
 \examples{
+new <- tx_new(ndr_example)
 curr <- tx_curr(ndr_example)
-vl_eligible <- tx_vl_eligible(ndr_example)
-vl_result <- tx_pvls_den(ndr_example)
 
 summarize_ndr(
-  data = list(curr, vl_eligible, vl_result),
+  new,
+  curr,
   level = "state",
-  names = c("tx_curr", "vl_eligible", "tx_pvls_den")
+  names = c("tx_new", "tx_curr")
+)
+
+### summarize for only one dataframe
+summarize_ndr(
+  new,
+  level = "ip",
+  names = "tx_new"
 )
 }

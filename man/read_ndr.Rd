@@ -2,20 +2,23 @@
 % Please edit documentation in R/read_ndr.R
 \name{read_ndr}
 \alias{read_ndr}
-\title{Read NDR "csv" file}
+\title{Read NDR "csv" file
+
+Import your NDR patient-level line-list downloaded as ".csv" format from the
+NDR front-end into R in a nicely formatted table.}
 \usage{
-read_ndr(path, file_type = "current", cols = ndr_cols, ...)
+read_ndr(path, time_stamp, cols = NULL, quiet = FALSE, ...)
 }
 \arguments{
 \item{path}{Path to the csv file on computer.}
 
-\item{file_type}{One of three options to specify if an old, a current version
-or a new(er) version of the ndr line-list will be used. The old version was changed
-to the current version at about the beginning of Fiscal Year 2021.}
+\item{time_stamp}{The reference date for the downloaded line-list.}
 
 \item{cols}{Sets the column types so that the columns are assigned the
 appropriate class. You can supply this argument following the instructions
 in \code{?vroom::cols} documentation.}
+
+\item{quiet}{Logical, to determine if the function message should be printed or not.}
 
 \item{...}{passes other arguments supplied to the \code{vroom::vroom()} used
 behind the hood.}
@@ -24,16 +27,18 @@ behind the hood.}
 read_ndr
 }
 \description{
+Read NDR "csv" file
+
 Import your NDR patient-level line-list downloaded as ".csv" format from the
 NDR front-end into R in a nicely formatted table.
 }
 \examples{
 # Read \code{ndr_example.csv} from a path
 file_path <- system.file("extdata", "ndr_example.csv", package = "tidyndr")
-read_ndr(file_path)
+read_ndr(file_path, time_stamp = "2021-02-15")
 
 ## Not run:
 # Read using a link to the NDR csv file on the internet
 file_path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
-read_ndr(file_path)
+read_ndr(file_path, time_stamp = "2021-02-15")
 }

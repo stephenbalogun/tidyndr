@@ -4,7 +4,13 @@
 \alias{tx_regimen}
 \title{Subset Clients Based on their Current ART Regimen}
 \usage{
-tx_regimen(data, age_band = age_range, states = regions, facilities = sites)
+tx_regimen(
+  data,
+  age_band = NULL,
+  states = .s,
+  facilities = .f,
+  status = "calculated"
+)
 }
 \arguments{
 \item{data}{An ndr dataframe imported using the `read_ndr()}
@@ -20,6 +26,10 @@ states using the \code{c()} e.g. \code{c("State 1", "State 2")}.}
 all the facilities contained in the dataframe. If specifying more than one
 facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}
+
+\item{status}{Determines how the number of active clients is calculated. The options
+are to either to use the NDR \code{current_status_28_days} column ("default") or the
+derived \code{current_status} column ("calculated").}
 }
 \value{
 tx_regimen
@@ -30,4 +40,7 @@ combination regimen for their age or weight.
 }
 \examples{
 tx_regimen(ndr_example)
+
+tx_regimen(ndr_example, status = "default",
+age_band = c(0, 3))
 }

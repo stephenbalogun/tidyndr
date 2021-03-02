@@ -4,7 +4,7 @@
 \alias{tx_curr}
 \title{Subset clients who are currently on treatment}
 \usage{
-tx_curr(data, states = regions, facilities = sites)
+tx_curr(data, states = .s, facilities = .f, status = "calculated")
 }
 \arguments{
 \item{data}{An ndr dataframe imported using the `read_ndr().}
@@ -17,6 +17,10 @@ states using the \code{c()} e.g. \code{c("State 1", "State 2")}.}
 all the facilities contained in the dataframe. If specifying more than one
 facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}
+
+\item{status}{Determines how the number of active clients is calculated. The options
+are to either to use the NDR \code{current_status_28_days} column ("default") or the
+derived \code{current_status} column ("calculated").}
 }
 \value{
 tx_curr
@@ -28,7 +32,11 @@ the state(s) and/or facilit(ies) of interest using the \code{region} or
 \code{site} arguments.
 }
 \examples{
+# Calculatd active clients using the derived current status
 tx_curr(ndr_example)
+
+# Calculate the active clients using the NDR `current_status_28_days` column
+tx_curr(ndr_example, status = "default")
 
 # generate the TX_CURR for two states (e.g. "State 1" and "State 2" in the ndr_example file)
 tx_curr(ndr_example,

@@ -7,7 +7,18 @@
 #' facility of interest with the \code{state} and \code{facility} arguments.
 #' For multiple states or facilities, use the \code{c()} to combine the names.
 #'
-#' @inheritParams tx_appointment
+#' @param data An ndr dataframe imported using the `read_ndr().
+#' @param from The start date in ISO8601 format (i.e. "yyyy-mm-dd").
+#' The default is to start at the beginning of the current Fiscal Year (i.e. 1st of October).
+#' @param to The end date written in ISO8601 format (i.e. "yyyy-mm-dd").
+#' The default is today (the date of analysis).
+#' @param states The name(s) of the State(s) of interest. The default utilizes all
+#'   the states in the dataframe. If specifying more than one state, combine the
+#'   states using the \code{c()} e.g. \code{c("State 1", "State 2")}.
+#' @param facilities The name(s) of the facilit(ies) of interest. Default is to utilize
+#'   all the facilities contained in the dataframe. If specifying more than one
+#'   facility, combine the facilities using the \code{c()} e.g.
+#'   \code{c("Facility 1", "Facility 2")}.
 #'
 #' @return tx_new
 #' @export
@@ -25,46 +36,32 @@
 #'   states = c("State 2", "State 3")
 #' )
 tx_new <- function(data,
-                   from = fy_start,
-                   to = end_date,
-                   states = regions,
-                   facilities = sites) {
-  end_date <- Sys.Date()
-  regions <- unique(data$state)
-  sites <- unique(data$facility)
+                   from = get("fy_start")(),
+                   to = get("Sys.Date")(),
+                   states = .s,
+                   facilities = .f) {
+  .s <- unique(data$state)
 
-  fy_start <- lubridate::as_date(
-    ifelse(lubridate::month(Sys.Date()) < 10,
-      stats::update(Sys.Date(),
-        year = lubridate::year(Sys.Date()) - 1,
-        month = 10,
-        day = 1
-      ),
-      stats::update(Sys.Date(),
-        month = 10,
-        day = 1
-      )
-    )
-  )
+  .f <- unique(data$facility)
 
-  stopifnot(
-    "please check that region is contained in the dataset list of states" =
-      any(states %in% unique(data$state))
-  )
+  if (!any(states %in% unique(data$state))) {
+    rlang::abort("state(s) is not contained in the supplied data. Check the spelling and/or case.")
+  }
 
-  stopifnot(
-    "please check that site is contained in the dataset list of facilities" =
-      any(facilities %in% unique(data$facility))
-  )
+  if (!any(facilities %in% unique(subset(data, state %in% states)$facility))) {
+    rlang::abort("facilit(ies) is/are not found in the data or state supplied.
+                 Check that the facilit(ies) is/are correctly spelt and located in the state.")
+  }
 
-  stopifnot(
-    'please check that your date format is "yyyy-mm-dd"' =
-      !is.na(lubridate::as_date(from))
-  )
-  stopifnot(
-    'please check that your date format is "yyyy-mm-dd"' =
-      !is.na(lubridate::as_date(to))
-  )
+  if(is.na(lubridate::as_date(from)) || is.na(lubridate::as_date(to))) {
+    rlang::abort("The supplied date is not in 'yyyy-mm-dd' format.")
+  }
+
+  if (lubridate::as_date(from) > Sys.Date() || lubridate::as_date(to) > Sys.Date()) {
+    rlang::abort("The date arguments cannot be in the future!!")
+  }
+
+
 
   dplyr::filter(
     data,

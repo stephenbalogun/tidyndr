@@ -7,21 +7,21 @@ a particular period}
 \usage{
 tx_appointment(
   data,
-  from = fy_start,
-  to = end_date,
-  states = regions,
-  facilities = sites
+  from = get("fy_start")(),
+  to = get("Sys.Date")(),
+  states = .s,
+  facilities = .f,
+  status = "calculated"
 )
 }
 \arguments{
 \item{data}{An ndr dataframe imported using the `read_ndr().}
 
-\item{from}{The start date for clients with clinic appointments in ISO8601
-format (i.e. "yyyy-mm-dd"). The default is to start at the beginning of the
-current Fiscal Year (i.e. 1st of October).}
+\item{from}{The start date in ISO8601 format (i.e. "yyyy-mm-dd").
+The default is to start at the beginning of the current Fiscal Year (i.e. 1st of October).}
 
-\item{to}{The end date for the appointment period of interest written in
-ISO8601 format (i.e. "yyyy-mm-dd"). The default is today.}
+\item{to}{The end date written in ISO8601 format (i.e. "yyyy-mm-dd").
+The default is today (the date of analysis).}
 
 \item{states}{The name(s) of the State(s) of interest. The default utilizes all
 the states in the dataframe. If specifying more than one state, combine the
@@ -31,6 +31,10 @@ states using the \code{c()} e.g. \code{c("State 1", "State 2")}.}
 all the facilities contained in the dataframe. If specifying more than one
 facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}
+
+\item{status}{Determines how the number of active clients is calculated. The options
+are to either to use the NDR \code{current_status_28_days} column ("default") or the
+derived \code{current_status} column ("calculated").}
 }
 \value{
 tx_appointment
@@ -47,6 +51,12 @@ tx_appointment(ndr_example,
   from = "2021-01-01",
   to = "2021-03-30"
 )
+
+# Determine clients who have medication refill in March 2021 using the 'default' status
+tx_appointment(ndr_example,
+from = "2021-03-01",
+to = "2021-03-31",
+status = "default")
 
 # Determine clients with medication refill in January 2021 for a particular facility
 tx_appointment(ndr_example,

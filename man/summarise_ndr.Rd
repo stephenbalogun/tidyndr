@@ -4,10 +4,10 @@
 \alias{summarise_ndr}
 \title{Count the number of outcomes based on a specified level}
 \usage{
-summarise_ndr(data, level, names)
+summarise_ndr(..., level, names)
 }
 \arguments{
-\item{data}{A list of dataframes to be summarised}
+\item{...}{Data frames to be summarised.}
 
 \item{level}{The level at which the summary should be performed. The options
 are "ip" (or "country"), "state", "lga" or "facility".}
@@ -29,14 +29,15 @@ new <- tx_new(ndr_example)
 curr <- tx_curr(ndr_example)
 
 summarise_ndr(
-  data = list(new, curr),
+  new,
+  curr,
   level = "state",
   names = c("tx_new", "tx_curr")
 )
 
 ### summarise for only one dataframe
 summarise_ndr(
-  data = list(new),
+  data = new,
   level = "ip",
   names = "tx_new"
 )

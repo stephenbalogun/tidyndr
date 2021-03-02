@@ -6,16 +6,17 @@
 \usage{
 tx_pvls_num(
   data,
-  reference = ref_date,
-  states = regions,
-  facilities = sites,
+  ref = get("Sys.Date")(),
+  states = .s,
+  facilities = .f,
+  status = "calculated",
   n = 1000
 )
 }
 \arguments{
 \item{data}{An ndr dataframe imported using the `read_ndr().}
 
-\item{reference}{Date provided in ISO8601 format ("yyyy-mm-dd"). Used to
+\item{ref}{Date provided in ISO8601 format ("yyyy-mm-dd"). Used to
 determine clients who are eligible for viral load and should have a
 documented result. The default is the date of analysis.}
 
@@ -27,6 +28,10 @@ states using the \code{c()} e.g. \code{c("State 1", "State 2")}.}
 all the facilities contained in the dataframe. If specifying more than one
 facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}
+
+\item{status}{Determines how the number of active clients is calculated. The options
+are to either to use the NDR \code{current_status_28_days} column ("default") or the
+derived \code{current_status} column ("calculated").}
 
 \item{n}{the value below which viral load result is adjudged to be suppressed.}
 }
@@ -44,7 +49,7 @@ tx_pvls_num(ndr_example)
 
 # Determine clients who are virally suppressed for a state at the end of Q1
 tx_pvls_num(ndr_example,
-  reference = "2020-12-31",
+  ref = "2020-12-31",
   states = "State 1"
 )
 

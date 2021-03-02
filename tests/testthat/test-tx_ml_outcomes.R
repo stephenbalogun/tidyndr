@@ -7,9 +7,6 @@ test_that("tx_ml_outcome works", {
     ) %>%
       tx_ml_outcomes("dead"),
     ndr_example %>%
-      dplyr::mutate(date_lost = last_drug_pickup_date +
-        lubridate::days(days_of_arv_refill) +
-        lubridate::days(28)) %>%
       dplyr::filter(
         dplyr::between(
           date_lost,
