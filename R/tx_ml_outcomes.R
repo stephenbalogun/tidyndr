@@ -17,22 +17,16 @@
 #' )
 tx_ml_outcomes <- function(data,
                            outcome) {
-  stopifnot(
-    'outcome is neither "transferred out" nor "dead"' =
-      outcome == "dead" || outcome == "transferred out"
-  )
 
-  if (outcome == "dead") {
-    dplyr::filter(
-      data,
-      patient_has_died == TRUE
-    )
-  } else if (outcome == "transferred out") {
-    dplyr::filter(
-      data,
-      patient_transferred_out == TRUE
-    )
+  if (outcome != "dead" && outcome != "transferred out") {
+    rlang::abort("Outcome should be either `dead` or `transferred out`.
+                 Check you spellings and your CAPS!")
   }
+
+  switch(outcome,
+         "dead" = dplyr::filter(data, patient_has_died == TRUE),
+         "transferred out" = dplyr::filter(data, patient_transferred_out == TRUE)
+         )
 }
 
 utils::globalVariables(c(

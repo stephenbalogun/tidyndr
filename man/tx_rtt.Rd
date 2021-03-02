@@ -4,7 +4,7 @@
 \alias{tx_rtt}
 \title{Subset Rows of Previously Inactive Clients Who are Now Active}
 \usage{
-tx_rtt(old_data, new_data, states = regions, facilities = sites)
+tx_rtt(old_data, new_data, states = .s, facilities = .f, status = "calculated")
 }
 \arguments{
 \item{old_data}{The initial dataframe containing the list of clients who
@@ -21,6 +21,10 @@ states using the \code{c()} e.g. \code{c("State 1", "State 2")}.}
 all the facilities contained in the dataframe. If specifying more than one
 facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}
+
+\item{status}{Determines how the number of active clients is calculated. The options
+are to either to use the NDR \code{current_status_28_days} column ("default") or the
+derived \code{current_status} column ("calculated").}
 }
 \value{
 tx_rtt
@@ -32,7 +36,7 @@ to the \code{new_data} argument.
 }
 \examples{
 file_path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
-ndr_old <- read_ndr(file_path)
+ndr_old <- read_ndr(file_path, time_stamp = "2021-02-15")
 ndr_new <- ndr_example
 tx_rtt(ndr_old, ndr_new)
 

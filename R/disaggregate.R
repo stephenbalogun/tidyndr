@@ -27,24 +27,20 @@
 #' curr_clients <- tx_curr(ndr_example)
 #' disaggregate(curr_clients, by = "sex", level = "facility")
 disaggregate <- function(data, by, level = "state") {
-  if (any(!by %in% c(
+  if (!any(by %in% c(
     "gender", "sex", "age", "current_age", "current age",
     "pregnancy status", "pregnancy_status"
   ))) {
-    stop("the value supplied to the `by` parameter is invalid. Please check!")
+    rlang::abort("the value supplied to the `by` parameter is invalid. Please check! \nDid you make a spelling mistake or capitalise the first letter?")
   }
 
-  stopifnot(
-    "the value supplied to the `level` parameter is invalid!" =
-      any(level %in% c("ip", "country", "state", "lga", "facility"))
-  )
+  if (!any(level %in% c("ip", "country", "state", "lga", "facility"))) {
+    rlang::abort("the value supplied to the `level` parameter is invalid! \nDid you make a spelling mistake or capitalise the first letter?")
+  }
 
-  stopifnot(
-    "You have supplied more than one values to the `level` or `by` parameter" =
-      length(level) == 1 && length(by) == 1
-  )
-
-
+  if(length(level) != 1 || length(by) != 1) {
+    rlang::abort("You have supplied more than one values to the `level` or `by` parameter.")
+  }
 
   ### by == "sex"
   if (by == "sex" || by == "gender") {
@@ -75,7 +71,6 @@ disaggregate <- function(data, by, level = "state") {
         where = c("row", "col")
       )
 
-      dt[is.na(dt)] <- 0 ## replace NAs with Zero
     } else if (level == "lga") {
       dt <- janitor::adorn_totals(
         tidyr::pivot_wider(
@@ -86,7 +81,6 @@ disaggregate <- function(data, by, level = "state") {
         where = "col"
       )
 
-      dt[is.na(dt)] <- 0 ## replace NAs with Zero
     } else if (level == "facility") {
       dt <- janitor::adorn_totals(
         tidyr::pivot_wider(
@@ -97,7 +91,6 @@ disaggregate <- function(data, by, level = "state") {
         where = "col"
       )
 
-      dt[is.na(dt)] <- 0 ## replace NAs with Zero
     }
   }
 
@@ -130,7 +123,6 @@ disaggregate <- function(data, by, level = "state") {
       where = c("row", "col")
       )
 
-      dt[is.na(dt)] <- 0 ## replace NAs with Zero
     } else if (level == "lga") {
       dt <- janitor::adorn_totals(tidyr::pivot_wider(
         dplyr::count(dat, ip, state, lga, pregnancy_status, .drop = TRUE),
@@ -140,7 +132,6 @@ disaggregate <- function(data, by, level = "state") {
       where = "col"
       )
 
-      dt[is.na(dt)] <- 0 ## replace NAs with Zero
     } else if (level == "facility") {
       dt <- janitor::adorn_totals(tidyr::pivot_wider(
         dplyr::count(dat, ip, state, facility, pregnancy_status, .drop = TRUE),
@@ -150,7 +141,6 @@ disaggregate <- function(data, by, level = "state") {
       where = "col"
       )
 
-      dt[is.na(dt)] <- 0 ## replace NAs with Zero
     }
   }
 
@@ -173,8 +163,6 @@ disaggregate <- function(data, by, level = "state") {
       is.na(data$current_age) ~ "missing"
     )
 
-
-
     dat <- dplyr::mutate(data, current_age = age)
 
     if (level == "ip" || level == "country") {
@@ -194,7 +182,6 @@ disaggregate <- function(data, by, level = "state") {
       where = c("row", "col")
       )
 
-      dt[is.na(dt)] <- 0 ## replace NAs with Zero
     } else if (level == "lga") {
       dt <- janitor::adorn_totals(tidyr::pivot_wider(
         dplyr::count(dat, ip, state, lga, current_age, .drop = TRUE),
@@ -204,7 +191,6 @@ disaggregate <- function(data, by, level = "state") {
       where = "col"
       )
 
-      dt[is.na(dt)] <- 0 ## replace NAs with Zero
     } else if (level == "facility") {
       dt <- janitor::adorn_totals(tidyr::pivot_wider(
         dplyr::count(dat, ip, state, facility, current_age, .drop = TRUE),
@@ -214,11 +200,12 @@ disaggregate <- function(data, by, level = "state") {
       where = "col"
       )
 
-      dt[is.na(dt)] <- 0 ## replace NAs with Zero
     }
 
     dt <- dplyr::relocate(dt, `5-9`, .after = `1-4`)
   }
+
+  dt[is.na(dt)] <- 0 ## replace NAs with Zero
   tibble::as_tibble(dt)
 }
 

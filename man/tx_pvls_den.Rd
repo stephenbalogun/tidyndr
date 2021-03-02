@@ -4,12 +4,19 @@
 \alias{tx_pvls_den}
 \title{Subset clients who have a documented viral load result}
 \usage{
-tx_pvls_den(data, reference = ref_date, states = regions, facilities = sites)
+tx_pvls_den(
+  data,
+  ref = get("Sys.Date")(),
+  states = .s,
+  facilities = .f,
+  status = "calculated",
+  n = 1000
+)
 }
 \arguments{
 \item{data}{An ndr dataframe imported using the `read_ndr().}
 
-\item{reference}{Date provided in ISO8601 format ("yyyy-mm-dd"). Used to
+\item{ref}{Date provided in ISO8601 format ("yyyy-mm-dd"). Used to
 determine clients who are eligible for viral load and should have a
 documented result. The default is the date of analysis.}
 
@@ -21,6 +28,12 @@ states using the \code{c()} e.g. \code{c("State 1", "State 2")}.}
 all the facilities contained in the dataframe. If specifying more than one
 facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}
+
+\item{status}{Determines how the number of active clients is calculated. The options
+are to either to use the NDR \code{current_status_28_days} column ("default") or the
+derived \code{current_status} column ("calculated").}
+
+\item{n}{The cut-off value for classification of viral load result. The default is 1000}
 }
 \value{
 tx_pvls_den
@@ -31,11 +44,11 @@ more than one year (for adults 20 years and above) and 6 months (for
 paediatrics and adolescents) from the specified reference date.
 }
 \examples{
-tx_pvls_den(ndr_example)
+tx_pvls_den(ndr_example, status = "default")
 
 # Determine clients who are virally suppressed for two state at the end of Q1
 tx_pvls_den(ndr_example,
-  reference = "2020-12-31",
+  ref = "2020-12-31",
   states = c("State 1", "State 2")
 )
 }

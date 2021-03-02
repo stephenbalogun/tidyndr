@@ -18,55 +18,31 @@
 #' # Find clients who were inactive at the end of Q1 of FY21
 #' tx_ml(ndr_example, to = "2020-12-31")
 tx_ml <- function(data,
-                  from = fy_start,
-                  to = end_date,
-                  states = regions,
-                  facilities = sites) {
-  end_date <- Sys.Date()
-  regions <- unique(data$state)
-  sites <- unique(data$facility)
+                  from = get("fy_start")(),
+                  to = get("Sys.Date")(),
+                  states = .s,
+                  facilities = .f) {
+
+  .s <- unique(data$state)
+
+  .f <- unique(data$facility)
 
 
-  fy_start <- lubridate::as_date(
-    ifelse(lubridate::month(Sys.Date()) < 10,
-      stats::update(Sys.Date(),
-        year = lubridate::year(Sys.Date()) - 1,
-        month = 10,
-        day = 1
-      ),
-      stats::update(Sys.Date(),
-        month = 10,
-        day = 1
-      )
-    )
-  )
+  if (!any(states %in% unique(data$state))) {
+    rlang::abort("region(s) is not contained in the supplied data. Check the spelling and/or case.")
+  }
 
-  stopifnot(
-    "please check that region is contained in the dataset list of states" =
-      any(states %in% unique(data$state))
-  )
+  if (!any(facilities %in% unique(subset(data, state %in% states)$facility))) {
+    rlang::abort("site(s) is not found in the data or state supplied.
+                 Check that the state is correctly spelt and located in the state.")
+  }
 
-  stopifnot(
-    "please check that site is contained in the dataset list of facilities" =
-      any(facilities %in% unique(data$facility))
-  )
+  if(is.na(lubridate::as_date(from)) || is.na(lubridate::as_date(to))) {
+    rlang::abort("The supplied date is not in 'yyyy-mm-dd' format.")
+  }
 
-  stopifnot(
-    'please check that your date format is "yyyy-mm-dd"' =
-      !is.na(lubridate::as_date(from))
-  )
-  stopifnot(
-    'please check that your date format is "yyyy-mm-dd"' =
-      !is.na(lubridate::as_date(to))
-  )
-
-  dat <- dplyr::mutate(data,
-    date_lost = last_drug_pickup_date +
-      lubridate::days(days_of_arv_refill) +
-      lubridate::days(28)
-  )
   dplyr::filter(
-    dat,
+    data,
     dplyr::between(
       date_lost,
       lubridate::as_date(from),

@@ -13,7 +13,11 @@
 #' @export
 #'
 #' @examples
+#' # Calculatd active clients using the derived current status
 #' tx_curr(ndr_example)
+#'
+#' # Calculate the active clients using the NDR `current_status_28_days` column
+#' tx_curr(ndr_example, status = "default")
 #'
 #' # generate the TX_CURR for two states (e.g. "State 1" and "State 2" in the ndr_example file)
 #' tx_curr(ndr_example,
@@ -26,25 +30,39 @@
 #'   facilities = c("Facility 1", "Facility 2")
 #' )
 tx_curr <- function(data,
-                    states = regions,
-                    facilities = sites) {
-  regions <- unique(data$state)
-  sites <- unique(data$facility)
+                    states = .s,
+                    facilities = .f,
+                    status = "calculated") {
 
-  stopifnot(
-    "please check that region is contained in the dataset list of states" =
-      any(states %in% unique(data$state))
-  )
+  .s <- unique(data$state)
 
-  stopifnot(
-    "please check that site is contained in the dataset list of facilities" =
-      any(facilities %in% unique(data$facility))
-  )
+  .f <- unique(data$facility)
 
-  dplyr::filter(
-    data,
-    current_status_28_days == "Active",
-    state %in% states,
-    facility %in% facilities
-  )
+  if (!any(states %in% unique(data$state))) {
+    rlang::abort("region(s) is not contained in the supplied data. Check the spelling and/or case.")
+  }
+
+  if (!any(facilities %in% unique(subset(data, state %in% states)$facility))) {
+    rlang::abort("site(s) is not found in the data or state supplied.
+                 Check that the state is correctly spelt and located in the state.")
+  }
+
+  if(!status %in% c("default", "calculated")) {
+    rlang::abort("`status` can only be one of 'default' or 'calculated'. Check that you did not mispell, include CAPS or forget to quotation marks!")
+  }
+
+  switch(status,
+         "calculated" = dplyr::filter(data,
+                                   current_status == "Active",
+                                   state %in% states,
+                                   facility %in% facilities),
+         "default" = dplyr::filter(data,
+                                      current_status_28_days == "Active",
+                                      state %in% states,
+                                      facility %in% facilities)
+         )
+
 }
+
+
+utils::globalVariables("current_status")

@@ -1,15 +1,14 @@
-#' Read NDR "csv" file
+#' @title Read NDR "csv" file
 #'
 #' Import your NDR patient-level line-list downloaded as ".csv" format from the
 #' NDR front-end into R in a nicely formatted table.
 #'
 #' @param path Path to the csv file on computer.
-#' @param file_type One of three options to specify if an old, a current version
-#' or a new(er) version of the ndr line-list will be used. The old version was changed
-#' to the current version at about the beginning of Fiscal Year 2021.
+#' @param time_stamp The reference date for the downloaded line-list.
 #' @param cols Sets the column types so that the columns are assigned the
 #'   appropriate class. You can supply this argument following the instructions
 #'   in `?vroom::cols` documentation.
+#' @param quiet Logical, to determine if the function message should be printed or not.
 #' @param ... passes other arguments supplied to the `vroom::vroom()` used
 #'   behind the hood.
 #'
@@ -19,128 +18,50 @@
 #' @examples
 #' # Read \code{ndr_example.csv} from a path
 #' file_path <- system.file("extdata", "ndr_example.csv", package = "tidyndr")
-#' read_ndr(file_path)
+#' read_ndr(file_path, time_stamp = "2021-02-15")
 #'
 #' ## Not run:
 #' # Read using a link to the NDR csv file on the internet
 #' file_path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
-#' read_ndr(file_path)
+#' read_ndr(file_path, time_stamp = "2021-02-15")
+
+
 read_ndr <- function(path,
-                     file_type = "current",
-                     cols = ndr_cols,
+                     time_stamp,
+                     cols = NULL,
+                     quiet = FALSE,
                      ...) {
-  current_cols <- vroom::cols_only(
-    vroom::col_factor(),
-    vroom::col_factor(),
-    vroom::col_factor(),
-    vroom::col_factor(),
-    vroom::col_factor(),
-    vroom::col_factor(),
-    vroom::col_character(),
-    vroom::col_character(),
-    vroom::col_date(),
-    vroom::col_double(),
-    vroom::col_double(),
-    vroom::col_date(format = "%d-%b-%Y"),
-    vroom::col_factor(),
-    vroom::col_date(format = "%d-%b-%Y"),
-    vroom::col_date(format = "%d-%b-%Y"),
-    vroom::col_date(format = "%d-%b-%Y"),
-    vroom::col_date(format = "%d-%b-%Y"),
-    vroom::col_date(format = "%d-%b-%Y"),
-    vroom::col_factor(),
-    vroom::col_date(format = "%d-%b-%Y"),
-    vroom::col_double(),
-    vroom::col_factor(),
-    vroom::col_double(),
-    vroom::col_date(format = "%d-%b-%Y"),
-    vroom::col_double(),
-    vroom::col_date(format = "%d-%b-%Y"),
-    vroom::col_double(),
-    vroom::col_date(format = "%d-%b-%Y"),
-    vroom::col_double(),
-    vroom::col_date(format = "%d-%b-%Y"),
-    vroom::col_double(),
-    vroom::col_date(format = "%d-%b-%Y"),
-    vroom::col_factor(),
-    vroom::col_factor(),
-    vroom::col_factor(),
-    vroom::col_factor(),
-    vroom::col_factor(),
-    vroom::col_factor(),
-    vroom::col_factor(),
-    vroom::col_factor(),
-    vroom::col_factor(),
-    vroom::col_factor(),
-    vroom::col_logical(),
-    vroom::col_date(format = "%d-%b-%Y"),
-    vroom::col_logical(),
-    vroom::col_date(format = "%d-%b-%Y"),
-    vroom::col_logical(),
-    vroom::col_date(format = "%d-%b-%Y"),
-    vroom::col_skip()
+
+
+  if (rlang::is_missing(time_stamp)) {
+    rlang::abort("time_stamp value is missing. Please supply a date to the `time_stamp` argument")
+  }
+
+  if(rlang::is_na(lubridate::as_date(time_stamp))) {
+    rlang::abort("the date supplied to time_stamp is not in the 'yyyy-mm-dd' format.")
+  }
+
+  if(lubridate::as_date(time_stamp) > Sys.Date()) {
+    rlang::abort("The date supplied to the `time_stamp` argument cannot be in the future!")
+  }
+
+  df <- tryCatch(error = function(cnd) {
+        vroom::vroom(path, col_types = old_cols(), ...)
+    },
+      vroom::vroom(path, col_types = cols %||% current_cols(), ...)
+    )
+
+  df <- dplyr::mutate(
+    janitor::clean_names(df),
+    date_lost = last_drug_pickup_date +
+      lubridate::days(days_of_arv_refill) +
+                        lubridate::days(28),
+    current_status = dplyr::if_else(date_lost > lubridate::as_date(time_stamp),
+                                    "Active", "Inactive")
   )
 
-
-  old_cols <- vroom::cols_only(
-    vroom::col_factor(),
-    vroom::col_factor(),
-    vroom::col_factor(),
-    vroom::col_factor(),
-    vroom::col_factor(),
-    vroom::col_factor(),
-    vroom::col_character(),
-    vroom::col_character(),
-    vroom::col_date(),
-    vroom::col_double(),
-    vroom::col_double(),
-    vroom::col_date(format = "%d-%b-%Y"),
-    vroom::col_date(format = "%d-%b-%Y"),
-    vroom::col_date(format = "%d-%b-%Y"),
-    vroom::col_date(format = "%d-%b-%Y"),
-    vroom::col_date(format = "%d-%b-%Y"),
-    vroom::col_factor(),
-    vroom::col_date(format = "%d-%b-%Y"),
-    vroom::col_double(),
-    vroom::col_factor(),
-    vroom::col_double(),
-    vroom::col_date(format = "%d-%b-%Y"),
-    vroom::col_factor(),
-    vroom::col_factor(),
-    vroom::col_factor(),
-    vroom::col_factor(),
-    vroom::col_factor(),
-    vroom::col_factor(),
-    vroom::col_factor(),
-    vroom::col_factor(),
-    vroom::col_logical(),
-    vroom::col_date(format = "%d-%b-%Y"),
-    vroom::col_logical(),
-    vroom::col_date(format = "%d-%b-%Y"),
-    vroom::col_date(format = "%d-%b-%Y"),
-    vroom::col_skip()
-  )
-
-  if (file_type == "current") {
-    ndr_cols <- current_cols
-  } else if (file_type == "old") {
-    ndr_cols <- old_cols
-  } else if (file_type == "new") {
-    ndr_cols <- cols
+  if (quiet == FALSE) {
+    message("\nTwo new variables created: \n[1] `date_lost` \n[2] `current_status \n")
   }
-
-  if (any(!file_type %in% c("current", "old", "new"))) {
-    stop("`file_type` must be set to either 'current', 'old' or 'new")
+  df
   }
-
-
-  if (file_type != "new") {
-    janitor::clean_names(
-      vroom::vroom(path, col_types = cols, ...)
-    )
-  } else {
-    janitor::clean_names(
-      vroom::vroom(path, ...)
-    )
-  }
-}

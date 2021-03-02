@@ -15,7 +15,7 @@
 #'
 #' @examples
 #' file_path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
-#' ndr_old <- read_ndr(file_path)
+#' ndr_old <- read_ndr(file_path, time_stamp = "2021-02-15")
 #' ndr_new <- ndr_example
 #' tx_rtt(ndr_old, ndr_new)
 #'
@@ -23,52 +23,55 @@
 #' tx_rtt(ndr_old, ndr_new, states = "State 1")
 tx_rtt <- function(old_data,
                    new_data,
-                   states = regions,
-                   facilities = sites) {
-  regions <- unique(new_data$state)
-  sites <- unique(new_data$facility)
+                   states = .s,
+                   facilities = .f,
+                   status = "calculated") {
+  .s <- unique(new_data$state)
+  .f <- unique(new_data$facility)
+
+
+  # if (!any(states %in% unique(data$state))) {
+  #   rlang::abort("state(s) is not contained in the supplied data. Check the spelling and/or case.")
+  # }
   #
-  #   stopifnot(
-  #     "the states contained in the 'old data' and 'new data' files are not the
-  #     same. Please ensure that the two files contain similar states" =
-  #       unique(old_data$state) == unique(new_data$state)
-  #   )
+  # if (!any(facilities %in% unique(subset(old_ddata, state %in% states)$facility))) {
+  #   rlang::abort("facilit(ies) is/are not found in the data or state supplied.
+  #                Check that the facility is correctly spelt and located in the state.")
+  # }
 
-  # stopifnot(
-  #   "the facilities contained in the 'old data' and 'new data' files are not the
-  #   same. Please ensure that the two files contain similar facilities" =
-  #     unique(old_data$facility) == unique(new_data$facility)
-  # )
+  # if (max(old_data$art_start_date, na.rm = TRUE) >
+  #      max(new_data$art_start_date, na.rm = TRUE)) {
+  #   rlang::abort("old_data is more recent than new_data. Did you swtich the position of the two datasets?")
+  # }
 
-  stopifnot(
-    "please check that region is contained in the dataset list of states" =
-      any(states %in% unique(new_data$state))
-  )
+  if(!status %in% c("default", "calculated")) {
+    rlang::abort("`status` can only be one of 'default' or 'calculated'. Check that you did not mispell, include CAPS or forget to quotation marks!")
+  }
 
-  stopifnot(
-    "please check that site is contained in the dataset list of facilities" =
-      any(facilities %in% unique(new_data$facility))
-  )
 
-  stopifnot(
-    "old_data is more recent than new_data" =
-      max(old_data$art_start_date, na.rm = TRUE) <=
-        max(new_data$art_start_date, na.rm = TRUE)
-  )
+  losses <- switch(status,
+         "calculated" = dplyr::filter(old_data,
+           current_status == "Inactive"),
+         "default" = dplyr::filter(old_data,
+           current_status_28_days == "Inactive")
+         )
 
-  losses <- dplyr::filter(
-    old_data,
-    current_status_28_days == "Inactive"
-  )
-
-  dplyr::filter(
-    new_data,
-    current_status_28_days == "Active",
-    patient_identifier %in% losses$patient_identifier,
-    state %in% states,
-    facility %in% facilities
+  switch(status,
+         "calculated" =  dplyr::filter(
+           new_data,
+           current_status == "Active",
+           patient_identifier %in% losses$patient_identifier,
+           state %in% states,
+           facility %in% facilities),
+         "default" =  dplyr::filter(
+           new_data,
+           current_status_28_days == "Active",
+           patient_identifier %in% losses$patient_identifier,
+           state %in% states,
+           facility %in% facilities)
   )
 }
 
 
-utils::globalVariables("patient_identifier")
+utils::globalVariables(c("patient_identifier",
+                         "current_status"))

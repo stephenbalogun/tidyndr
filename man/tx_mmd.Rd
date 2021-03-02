@@ -4,7 +4,7 @@
 \alias{tx_mmd}
 \title{Subset active clients based on months of ARV Dispensed}
 \usage{
-tx_mmd(data, month = months_dispensed, states = regions, facilities = sites)
+tx_mmd(data, month = .m, states = .s, facilities = .f, status = "calculated")
 }
 \arguments{
 \item{data}{An ndr dataframe imported using the \code{read_ndr()}.}
@@ -21,6 +21,10 @@ states using the \code{c()} e.g. \code{c("State 1", "State 2")}.}
 all the facilities contained in the dataframe. If specifying more than one
 facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}
+
+\item{status}{Determines how the number of active clients is calculated. The options
+are to either to use the NDR \code{current_status_28_days} column ("default") or the
+derived \code{current_status} column ("calculated").}
 }
 \value{
 tx_mmd
@@ -35,6 +39,7 @@ tx_mmd(ndr_example)
 
 # subset active clients who had 2 or 4 months of ARV dispensed at last encounter
 tx_mmd(ndr_example,
-  month = c(2, 4)
+  month = c(2, 4),
+  status = "default"
 )
 }

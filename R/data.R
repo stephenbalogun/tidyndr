@@ -54,6 +54,9 @@
 #'   \item{transferred_out_date}{Date of transfer, if transferred out}
 #'   \item{patient_transferred_in}{TRUE or FALSE (or NA) indicating if patient is a transferred from other facility}
 #'   \item{transferred_in_date}{TRUE or FALSE (or NA) indicating date client was transferred in}
+#'   \item{x49}{column missing column name and containing negligible entries}
+#'   \item{current_status}{TRUE or FALSE indicating whether the client is active or not based on the calculated date of LTFU}
+#'   \item{date_lost}{The calculated expected LTFU date based on the last_drug_pick_up_date, days_of_arv_refill and 28 days missed appointment date}
 #'   }
 #' @note for more information, kindly visit \url{http://www.ndr.shieldnigeriaproject.com/}
 "ndr_example"

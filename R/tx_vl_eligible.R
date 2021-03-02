@@ -17,69 +17,95 @@
 #'
 #' # Determine clients who are going to be eligible for VL by the end of Q2 of FY21
 #' tx_vl_eligible(ndr_example,
-#'   reference = "2021-03-31"
+#'   ref = "2021-03-31"
 #' )
 #'
 #' # Subset clients from "State 1" who are due for viral load in Q2 of FY21
 #' tx_vl_eligible(ndr_example,
-#'   reference = "2021-03-31",
+#'   ref = "2021-03-31",
 #'   states = c("State 1", "State 3"),
 #'   sample = TRUE
 #' )
 tx_vl_eligible <- function(data,
-                           reference = ref_date,
-                           states = regions,
-                           facilities = sites,
+                           ref = get("Sys.Date")(),
+                           states = .s,
+                           facilities = .f,
+                           status = "calculated",
                            sample = FALSE) {
-  ref_date <- Sys.Date()
-  regions <- unique(data$state)
-  sites <- unique(data$facility)
+  .s <- unique(data$state)
+  .f <- unique(data$facility)
 
-  stopifnot(
-    "please check that region is contained in the dataset list of states" =
-      any(states %in% unique(data$state))
-  )
+  if (!any(states %in% unique(data$state))) {
+    rlang::abort("state(s) is not contained in the supplied data. Check the spelling and/or case.")
+  }
 
-  stopifnot(
-    "please check that site is contained in the dataset list of facilities" =
-      any(facilities %in% unique(data$facility))
-  )
+  if (!any(facilities %in% unique(subset(data, state %in% states)$facility))) {
+    rlang::abort("facilit(ies) is/are not found in the data or state supplied.
+                 Check that the facility is correctly spelt and located in the state.")
+  }
 
-  stopifnot(
-    'please check that your reference date format is "yyyy-mm-dd"' =
-      !is.na(lubridate::as_date(reference))
-  )
+  if(is.na(lubridate::as_date(ref))) {
+    rlang::abort("The supplied date is not in 'yyyy-mm-dd' format.")
+  }
 
-  if (sample == FALSE) {
-    dplyr::filter(
-      data,
-      current_status_28_days == "Active",
-      lubridate::as_date(reference) - art_start_date >=
-        lubridate::period(6, "months"),
-      state %in% states,
-      facility %in% facilities
-    )
+  if(!status %in% c("default", "calculated")) {
+    rlang::abort("`status` can only be one of 'default' or 'calculated'. Check that you did not mispell, include CAPS or forget to quotation marks!")
+  }
+
+  if (sample) {
+    switch(status,
+         "calculated" = dplyr::filter(data,
+                                      current_status == "Active",
+                                      lubridate::as_date(ref) - art_start_date >=
+                                        lubridate::period(6, "months"),
+                                      dplyr::if_else(current_age < 20,
+                                                     lubridate::as_date(ref) -
+                                                       date_of_current_viral_load >
+                                                       lubridate::period(6, "months"),
+                                                     lubridate::as_date(ref) -
+                                                       date_of_current_viral_load >
+                                                       lubridate::period(1, "year")
+                                      ) |
+                                        is.na(date_of_current_viral_load),
+                                      state %in% states,
+                                      facility %in% facilities),
+         "default" = dplyr::filter(data,
+                                   current_status_28_days == "Active",
+                                   lubridate::as_date(ref) - art_start_date >=
+                                     lubridate::period(6, "months"),
+                                   dplyr::if_else(current_age < 20,
+                                                  lubridate::as_date(ref) -
+                                                    date_of_current_viral_load >
+                                                    lubridate::period(6, "months"),
+                                                  lubridate::as_date(ref) -
+                                                    date_of_current_viral_load >
+                                                    lubridate::period(1, "year")
+                                   ) |
+                                     is.na(date_of_current_viral_load),
+                                   state %in% states,
+                                   facility %in% facilities)
+         )
   } else {
-    dplyr::filter(
-      data,
-      current_status_28_days == "Active",
-      lubridate::as_date(reference) - art_start_date >=
-        lubridate::period(6, "months"),
-      ifelse(current_age < 20,
-        date_of_current_viral_load <=
-          lubridate::as_date(reference) -
-            lubridate::period(month = 6),
-        date_of_current_viral_load <=
-          lubridate::as_date(reference) -
-            lubridate::period(year = 1)
-      ) |
-        is.na(date_of_current_viral_load),
-      state %in% states,
-      facility %in% facilities
+    switch(status,
+           "calculated" = dplyr::filter(data,
+                                        current_status == "Active",
+                                        lubridate::as_date(ref) - art_start_date >=
+                                          lubridate::period(6, "months"),
+                                        state %in% states,
+                                        facility %in% facilities),
+           "default" = dplyr::filter(data,
+                                     current_status_28_days == "Active",
+                                     lubridate::as_date(ref) - art_start_date >=
+                                       lubridate::period(6, "months"),
+                                     state %in% states,
+                                     facility %in% facilities)
     )
   }
+
 }
 
 
 
-utils::globalVariables("art_start_date")
+utils::globalVariables(c(
+  "art_start_date",
+  "current_status"))

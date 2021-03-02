@@ -5,66 +5,89 @@
 #' paediatrics and adolescents) from the specified reference date.
 #'
 #' @param data An ndr dataframe imported using the `read_ndr().
-#' @param reference Date provided in ISO8601 format ("yyyy-mm-dd"). Used to
+#' @param ref Date provided in ISO8601 format ("yyyy-mm-dd"). Used to
 #'    determine clients who are eligible for viral load and should have a
 #'    documented result. The default is the date of analysis.
+#' @param n The cut-off value for classification of viral load result. The default is 1000
 #' @inheritParams tx_appointment
 #'
 #' @return tx_pvls_den
 #' @export
 #'
 #' @examples
-#' tx_pvls_den(ndr_example)
+#' tx_pvls_den(ndr_example, status = "default")
 #'
 #' # Determine clients who are virally suppressed for two state at the end of Q1
 #' tx_pvls_den(ndr_example,
-#'   reference = "2020-12-31",
+#'   ref = "2020-12-31",
 #'   states = c("State 1", "State 2")
 #' )
 tx_pvls_den <- function(data,
-                        reference = ref_date,
-                        states = regions,
-                        facilities = sites) {
-  ref_date <- Sys.Date()
-  regions <- unique(data$state)
-  sites <- unique(data$facility)
+                        ref = get("Sys.Date")(),
+                        states = .s,
+                        facilities = .f,
+                        status = "calculated",
+                        n = 1000) {
 
-  stopifnot(
-    "please check that region is contained in the dataset list of states" =
-      any(states %in% unique(data$state))
+  .s <- unique(data$state)
+  .f <- unique(data$facility)
+
+  if (!any(states %in% unique(data$state))) {
+    rlang::abort("state(s) is not contained in the supplied data. Check the spelling and/or case.")
+  }
+
+  if (!any(facilities %in% unique(subset(data, state %in% states)$facility))) {
+    rlang::abort("facilit(ies) is/are not found in the data or state supplied.
+                 Check that the facility is correctly spelt and located in the state.")
+  }
+
+  if(is.na(lubridate::as_date(ref))) {
+    rlang::abort("The supplied date is not in 'yyyy-mm-dd' format.")
+  }
+
+  if(!status %in% c("default", "calculated")) {
+    rlang::abort("`status` can only be one of 'default' or 'calculated'. Check that you did not mispell, include CAPS or forget to quotation marks!")
+  }
+
+
+
+  switch(status,
+         "calculated" = dplyr::filter(data,
+                                      current_status == "Active",
+                                      lubridate::as_date(ref) - art_start_date >=
+                                        lubridate::period(6, "months"),
+                                      dplyr::if_else(current_age < 20,
+                                                     lubridate::as_date(ref) -
+                                                       date_of_current_viral_load <=
+                                                       lubridate::period(6, "months"),
+                                                     lubridate::as_date(ref) -
+                                                       date_of_current_viral_load <=
+                                                       lubridate::period(1, "year")
+                                      ),
+                                      state %in% states,
+                                      facility %in% facilities),
+         "default" = dplyr::filter(data,
+                                   current_status_28_days == "Active",
+                                   lubridate::as_date(ref) - art_start_date >=
+                                     lubridate::period(6, "months"),
+                                   dplyr::if_else(current_age < 20,
+                                                  lubridate::as_date(ref) -
+                                                    date_of_current_viral_load <=
+                                                    lubridate::period(6, "months"),
+                                                  lubridate::as_date(ref) -
+                                                    date_of_current_viral_load <=
+                                                    lubridate::period(1, "year")
+                                   ),
+                                   state %in% states,
+                                   facility %in% facilities)
   )
 
-  stopifnot(
-    "please check that site is contained in the dataset list of facilities" =
-      any(facilities %in% unique(data$facility))
-  )
-
-  stopifnot(
-    'please check that your reference date format is "yyyy-mm-dd"' =
-      !is.na(lubridate::as_date(reference))
-  )
-
-  dplyr::filter(
-    data,
-    current_status_28_days == "Active",
-    lubridate::as_date(reference) - art_start_date >=
-      lubridate::period(6, "months"),
-    ifelse(current_age < 20,
-      date_of_current_viral_load >
-        lubridate::as_date(reference) -
-          lubridate::period(month = 6),
-      date_of_current_viral_load >
-        lubridate::as_date(reference) -
-          lubridate::period(year = 1)
-    ),
-    state %in% states,
-    facility %in% facilities
-  )
 }
 
 
 utils::globalVariables(c(
   "art_start_date",
   "current_age",
+  "current_status",
   "date_of_current_viral_load"
 ))

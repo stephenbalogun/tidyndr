@@ -6,21 +6,20 @@
 \usage{
 tx_ml(
   data,
-  from = fy_start,
-  to = end_date,
-  states = regions,
-  facilities = sites
+  from = get("fy_start")(),
+  to = get("Sys.Date")(),
+  states = .s,
+  facilities = .f
 )
 }
 \arguments{
 \item{data}{An ndr dataframe imported using the `read_ndr().}
 
-\item{from}{The start date for clients with clinic appointments in ISO8601
-format (i.e. "yyyy-mm-dd"). The default is to start at the beginning of the
-current Fiscal Year (i.e. 1st of October).}
+\item{from}{The start date in ISO8601 format (i.e. "yyyy-mm-dd").
+The default is to start at the beginning of the current Fiscal Year (i.e. 1st of October).}
 
-\item{to}{The end date for the appointment period of interest written in
-ISO8601 format (i.e. "yyyy-mm-dd"). The default is today.}
+\item{to}{The end date written in ISO8601 format (i.e. "yyyy-mm-dd").
+The default is today (the date of analysis).}
 
 \item{states}{The name(s) of the State(s) of interest. The default utilizes all
 the states in the dataframe. If specifying more than one state, combine the
