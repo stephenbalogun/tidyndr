@@ -5,11 +5,7 @@
 #'
 #'@name ndr-null-op
 #' @export
-<<<<<<< HEAD
 #' @keywords internal
-=======
-#'
->>>>>>> 82bc88cea456aae49cd70b9b04969fc72b487d3c
 `%||%` <- function (x, y)
 {
   if (rlang::is_null(x))
