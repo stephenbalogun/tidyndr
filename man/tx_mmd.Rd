@@ -7,7 +7,7 @@
 tx_mmd(data, month = .m, states = .s, facilities = .f, status = "calculated")
 }
 \arguments{
-\item{data}{An ndr dataframe imported using the \code{read_ndr()}.}
+\item{data}{An NDR dataframe imported using the \code{read_ndr()}.}
 
 \item{month}{The number(s) of month of interest of ARV dispensed
 (rounded to the nearest who number). The default is to subset active

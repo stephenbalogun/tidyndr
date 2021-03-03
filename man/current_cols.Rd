@@ -9,7 +9,4 @@ current_cols()
 \description{
 Specify the variable types for each of the NDR columns.
 }
-<<<<<<< HEAD
 \keyword{internal}
-=======
->>>>>>> 82bc88cea456aae49cd70b9b04969fc72b487d3c

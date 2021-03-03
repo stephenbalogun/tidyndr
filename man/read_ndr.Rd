@@ -5,20 +5,23 @@
 \title{Read NDR "csv" file
 
 Import your NDR patient-level line-list downloaded as ".csv" format from the
-NDR front-end into R in a nicely formatted table.}
+NDR front-end into R in a nicely formatted table. The function also creates two
+additional variables - \code{date_ltfu} and \code{current_status} for ease of referencing
+during analysis.}
 \usage{
 read_ndr(path, time_stamp, cols = NULL, quiet = FALSE, ...)
 }
 \arguments{
 \item{path}{Path to the csv file on computer.}
 
-\item{time_stamp}{The reference date for the downloaded line-list.}
+\item{time_stamp}{The date stamp for the downloaded line-list.}
 
-\item{cols}{Sets the column types so that the columns are assigned the
-appropriate class. You can supply this argument following the instructions
+\item{cols}{The column types of the downloaded NDR line-lists. The default sets the columns
+based on the NDR line-list specifications between October 2020 and March 2021.
+If the default fails, you can supply your column specifications following the instructions
 in \code{?vroom::cols} documentation.}
 
-\item{quiet}{Logical, to determine if the function message should be printed or not.}
+\item{quiet}{Logical, to determine if the message about creating new columns should be printed or not.}
 
 \item{...}{passes other arguments supplied to the \code{vroom::vroom()} used
 behind the hood.}
@@ -30,7 +33,9 @@ read_ndr
 Read NDR "csv" file
 
 Import your NDR patient-level line-list downloaded as ".csv" format from the
-NDR front-end into R in a nicely formatted table.
+NDR front-end into R in a nicely formatted table. The function also creates two
+additional variables - \code{date_ltfu} and \code{current_status} for ease of referencing
+during analysis.
 }
 \examples{
 # Read \code{ndr_example.csv} from a path

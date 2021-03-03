@@ -14,7 +14,7 @@ tx_pvls_num(
 )
 }
 \arguments{
-\item{data}{An ndr dataframe imported using the `read_ndr().}
+\item{data}{An NDR dataframe imported using the `read_ndr().}
 
 \item{ref}{Date provided in ISO8601 format ("yyyy-mm-dd"). Used to
 determine clients who are eligible for viral load and should have a

@@ -66,7 +66,8 @@ ndr_example
 \description{
 A dataset containing clients details that were randomly generated to simulate
 the NDR patient line-list downloaded from the front-end of the Nigeria National Data
-Repository.
+Repository. Two additional variables are added for easy referencing during analysis.
+These variables are: \code{date_ltfu} and \code{current_status} based on the calculated \code{date_ltfu}.
 }
 \note{
 for more information, kindly visit \url{http://www.ndr.shieldnigeriaproject.com/}

@@ -22,22 +22,21 @@ tx_ml <- function(data,
                   to = get("Sys.Date")(),
                   states = .s,
                   facilities = .f) {
-
   .s <- unique(data$state)
 
   .f <- unique(data$facility)
 
 
   if (!any(states %in% unique(data$state))) {
-    rlang::abort("region(s) is not contained in the supplied data. Check the spelling and/or case.")
+    rlang::abort("state(s) is/are not contained in the supplied data. Check the spelling and/or case.")
   }
 
   if (!any(facilities %in% unique(subset(data, state %in% states)$facility))) {
-    rlang::abort("site(s) is not found in the data or state supplied.
-                 Check that the state is correctly spelt and located in the state.")
+    rlang::abort("facilit(ies) is/are not found in the data or state supplied.
+                 Check that the facility is correctly spelt and located in the state.")
   }
 
-  if(is.na(lubridate::as_date(from)) || is.na(lubridate::as_date(to))) {
+  if (is.na(lubridate::as_date(from)) || is.na(lubridate::as_date(to))) {
     rlang::abort("The supplied date is not in 'yyyy-mm-dd' format.")
   }
 

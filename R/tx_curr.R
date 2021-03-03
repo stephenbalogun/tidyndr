@@ -33,35 +33,37 @@ tx_curr <- function(data,
                     states = .s,
                     facilities = .f,
                     status = "calculated") {
-
   .s <- unique(data$state)
 
   .f <- unique(data$facility)
 
   if (!any(states %in% unique(data$state))) {
-    rlang::abort("region(s) is not contained in the supplied data. Check the spelling and/or case.")
+    rlang::abort("state(s) is/are not contained in the supplied data. Check the spelling and/or case.")
   }
 
   if (!any(facilities %in% unique(subset(data, state %in% states)$facility))) {
-    rlang::abort("site(s) is not found in the data or state supplied.
-                 Check that the state is correctly spelt and located in the state.")
+    rlang::abort("facilit(ies) is/are not found in the data or state supplied.
+                 Check that the facility is correctly spelt and located in the state.")
   }
 
-  if(!status %in% c("default", "calculated")) {
+  if (!status %in% c("default", "calculated")) {
     rlang::abort("`status` can only be one of 'default' or 'calculated'. Check that you did not mispell, include CAPS or forget to quotation marks!")
   }
 
   switch(status,
-         "calculated" = dplyr::filter(data,
-                                   current_status == "Active",
-                                   state %in% states,
-                                   facility %in% facilities),
-         "default" = dplyr::filter(data,
-                                      current_status_28_days == "Active",
-                                      state %in% states,
-                                      facility %in% facilities)
-         )
-
+    "calculated" = dplyr::filter(
+      data,
+      current_status == "Active",
+      state %in% states,
+      facility %in% facilities
+    ),
+    "default" = dplyr::filter(
+      data,
+      current_status_28_days == "Active",
+      state %in% states,
+      facility %in% facilities
+    )
+  )
 }
 
 

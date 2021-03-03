@@ -5,7 +5,7 @@
 #' by changing the \code{month} argument.
 #'
 #'
-#' @param data An ndr dataframe imported using the `read_ndr()`.
+#' @param data An NDR dataframe imported using the `read_ndr()`.
 #' @param month The number(s) of month of interest of ARV dispensed
 #'    (rounded to the nearest who number). The default is to subset active
 #'    clients who had 3 - 6 months of ARV dispensed.
@@ -27,45 +27,52 @@ tx_mmd <- function(data,
                    states = .s,
                    facilities = .f,
                    status = "calculated") {
-
   .m <- c(3, 4, 5, 6)
   .s <- unique(data$state)
   .f <- unique(data$facility)
 
-  if (!is.numeric(month) || any(month < 0)){
+  if (!is.numeric(month) || any(month < 0)) {
     rlang::abort("The number of months supplied must be numeric, and not a negative number.")
   }
 
 
   if (!any(states %in% unique(data$state))) {
-    rlang::abort("region(s) is not contained in the supplied data. Check the spelling and/or case.")
+    rlang::abort("state(s) is/are not contained in the supplied data. Check the spelling and/or case.")
   }
 
   if (!any(facilities %in% unique(subset(data, state %in% states)$facility))) {
-    rlang::abort("site(s) is not found in the data or state supplied.
-                 Check that the state is correctly spelt and located in the state.")
+    rlang::abort("facilit(ies) is/are not found in the data or state supplied.
+                 Check that the facility is correctly spelt and located in the state.")
   }
 
-  if(!status %in% c("default", "calculated")) {
+  if (!status %in% c("default", "calculated")) {
     rlang::abort("`status` can only be one of 'default' or 'calculated'. Check that you did not mispell, include CAPS or forget to quotation marks!")
   }
 
   switch(status,
-                "calculated" = dplyr::filter(dplyr::mutate(data,
-                                                           months_dispensed = round(days_of_arv_refill /30, 0)),
-                                             current_status == "Active",
-                                             months_dispensed %in% month,
-                                             state %in% states,
-                                             facility %in% facilities),
-                "default" = dplyr::filter(dplyr::mutate(data,
-                                                        months_dispensed = round(days_of_arv_refill /30, 0)),
-                                          current_status_28_days == "Active",
-                                          months_dispensed %in% month,
-                                          state %in% states,
-                                          facility %in% facilities))
+    "calculated" = dplyr::filter(
+      dplyr::mutate(data,
+        months_dispensed = round(days_of_arv_refill / 30, 0)
+      ),
+      current_status == "Active",
+      months_dispensed %in% month,
+      state %in% states,
+      facility %in% facilities
+    ),
+    "default" = dplyr::filter(
+      dplyr::mutate(data,
+        months_dispensed = round(days_of_arv_refill / 30, 0)
+      ),
+      current_status_28_days == "Active",
+      months_dispensed %in% month,
+      state %in% states,
+      facility %in% facilities
+    )
+  )
 }
 
 
 utils::globalVariables(c(
   "months_dispensed",
-  "current_status"))
+  "current_status"
+))
