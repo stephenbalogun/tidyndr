@@ -15,13 +15,13 @@ tx_appointment(
 )
 }
 \arguments{
-\item{data}{An ndr dataframe imported using the `read_ndr().}
+\item{data}{An NDR dataframe imported using the `read_ndr().}
 
 \item{from}{The start date in ISO8601 format (i.e. "yyyy-mm-dd").
 The default is to start at the beginning of the current Fiscal Year (i.e. 1st of October).}
 
 \item{to}{The end date written in ISO8601 format (i.e. "yyyy-mm-dd").
-The default is today (the date of analysis).}
+The default is the date of analysis.}
 
 \item{states}{The name(s) of the State(s) of interest. The default utilizes all
 the states in the dataframe. If specifying more than one state, combine the
@@ -54,9 +54,10 @@ tx_appointment(ndr_example,
 
 # Determine clients who have medication refill in March 2021 using the 'default' status
 tx_appointment(ndr_example,
-from = "2021-03-01",
-to = "2021-03-31",
-status = "default")
+  from = "2021-03-01",
+  to = "2021-03-31",
+  status = "default"
+)
 
 # Determine clients with medication refill in January 2021 for a particular facility
 tx_appointment(ndr_example,

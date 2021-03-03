@@ -3,9 +3,8 @@
 #' Generates the line-list of clients on first-line regimen who are on the choice
 #' combination regimen for their age or weight.
 #'
-#' @param data An ndr dataframe imported using the `read_ndr()
-#' @param age_band a numeric vector of length 2 (lower age-range and upper
-#'    age-range).
+#' @param data An NDR dataframe imported using the `read_ndr()
+#' @param age_band a numeric vector of length 2 `c(min_age, max_age)`.
 #' @inheritParams tx_appointment
 #'
 #' @return tx_regimen
@@ -14,8 +13,10 @@
 #' @examples
 #' tx_regimen(ndr_example)
 #'
-#' tx_regimen(ndr_example, status = "default",
-#' age_band = c(0, 3))
+#' tx_regimen(ndr_example,
+#'   status = "default",
+#'   age_band = c(0, 3)
+#' )
 tx_regimen <- function(data,
                        age_band = NULL,
                        states = .s,
@@ -34,7 +35,7 @@ tx_regimen <- function(data,
   }
 
   if (!any(states %in% unique(data$state))) {
-    rlang::abort("state(s) is not contained in the supplied data. Check the spelling and/or case.")
+    rlang::abort("state(s) is/are not contained in the supplied data. Check the spelling and/or case.")
   }
 
   if (!any(facilities %in% unique(subset(data, state %in% states)$facility))) {
@@ -42,40 +43,56 @@ tx_regimen <- function(data,
                  Check that the facility is correctly spelt and located in the state.")
   }
 
-  if(!status %in% c("default", "calculated")) {
+  if (!status %in% c("default", "calculated")) {
     rlang::abort("`status` can only be one of 'default' or 'calculated'. Check that you did not mispell, include CAPS or forget to quotation marks!")
   }
 
 
   switch(status,
-         "calculated" = dplyr::filter(data,
-                                      current_status == "Active",
-                                      dplyr::if_else(current_age <= 3,
-                                                     last_regimen %in% c(
-                                                       "ABC-3TC-LPV/r",
-                                                       "AZT-3TC-LPV/r"),
-                                                     last_regimen %in% c(
-                                                       "ABC-3TC-DTG",
-                                                       "TDF-3TC-DTG")),
-                                      dplyr::between(current_age,
-                                                     age_band[[1]] %||% age_range[[1]],
-                                                     age_band[[2]] %||% age_range[[2]]),
-                                      state %in% states,
-                                      facility %in% facilities),
-         "default" = dplyr::filter(data,
-                                   current_status_28_days == "Active",
-                                   dplyr::if_else(current_age <= 3,
-                                                  last_regimen %in% c(
-                                                    "ABC-3TC-LPV/r",
-                                                    "AZT-3TC-LPV/r"),
-                                                  last_regimen %in% c(
-                                                    "ABC-3TC-DTG",
-                                                    "TDF-3TC-DTG")),
-                                   dplyr::between(current_age,
-                                                  age_band[[1]] %||% age_range[[1]],
-                                                  age_band[[2]] %||% age_range[[2]]),
-                                   state %in% states,
-                                   facility %in% facilities)
+    "calculated" = dplyr::filter(
+      data,
+      current_status == "Active",
+      dplyr::if_else(
+        current_age <= 3,
+        last_regimen %in% c(
+          "ABC-3TC-LPV/r",
+          "AZT-3TC-LPV/r"
+        ),
+        last_regimen %in% c(
+          "ABC-3TC-DTG",
+          "TDF-3TC-DTG"
+        )
+      ),
+      dplyr::between(
+        current_age,
+        age_band[[1]] %||% age_range[[1]],
+        age_band[[2]] %||% age_range[[2]]
+      ),
+      state %in% states,
+      facility %in% facilities
+    ),
+    "default" = dplyr::filter(
+      data,
+      current_status_28_days == "Active",
+      dplyr::if_else(
+        current_age <= 3,
+        last_regimen %in% c(
+          "ABC-3TC-LPV/r",
+          "AZT-3TC-LPV/r"
+        ),
+        last_regimen %in% c(
+          "ABC-3TC-DTG",
+          "TDF-3TC-DTG"
+        )
+      ),
+      dplyr::between(
+        current_age,
+        age_band[[1]] %||% age_range[[1]],
+        age_band[[2]] %||% age_range[[2]]
+      ),
+      state %in% states,
+      facility %in% facilities
+    )
   )
 }
 

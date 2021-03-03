@@ -9,13 +9,14 @@ test_that("tx_pvls_den works", {
       subset(current_status_28_days == "Active" &
         lubridate::as_date("2021-03-31") - art_start_date >=
           lubridate::period(6, "months") &
-        dplyr::if_else(current_age < 20,
-                       lubridate::as_date("2021-03-31") -
-                         date_of_current_viral_load <=
-                         lubridate::period(6, "months"),
-                       lubridate::as_date("2021-03-31") -
-                         date_of_current_viral_load <=
-                         lubridate::period(1, "year")
+        dplyr::if_else(
+          current_age < 20,
+          lubridate::as_date("2021-03-31") -
+            date_of_current_viral_load <=
+            lubridate::period(6, "months"),
+          lubridate::as_date("2021-03-31") -
+            date_of_current_viral_load <=
+            lubridate::period(1, "year")
         ))
   )
 })

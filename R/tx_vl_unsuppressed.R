@@ -31,7 +31,7 @@ tx_vl_unsuppressed <- function(data,
   .f <- unique(data$facility)
 
   if (!any(states %in% unique(data$state))) {
-    rlang::abort("state(s) is not contained in the supplied data. Check the spelling and/or case.")
+    rlang::abort("state(s) is/are not contained in the supplied data. Check the spelling and/or case.")
   }
 
   if (!any(facilities %in% unique(subset(data, state %in% states)$facility))) {
@@ -39,46 +39,52 @@ tx_vl_unsuppressed <- function(data,
                  Check that the facility is correctly spelt and located in the state.")
   }
 
-  if(is.na(lubridate::as_date(ref))) {
+  if (is.na(lubridate::as_date(ref))) {
     rlang::abort("The supplied date is not in 'yyyy-mm-dd' format.")
   }
 
-  if(!status %in% c("default", "calculated")) {
+  if (!status %in% c("default", "calculated")) {
     rlang::abort("`status` can only be one of 'default' or 'calculated'. Check that you did not mispell, include CAPS or forget to quotation marks!")
   }
 
 
   switch(status,
-         "calculated" = dplyr::filter(data,
-                                      current_status == "Active",
-                                      lubridate::as_date(ref) - art_start_date >=
-                                        lubridate::period(6, "months"),
-                                      dplyr::if_else(current_age < 20,
-                                                     lubridate::as_date(ref) -
-                                                       date_of_current_viral_load <=
-                                                       lubridate::period(6, "months"),
-                                                     lubridate::as_date(ref) -
-                                                       date_of_current_viral_load <=
-                                                       lubridate::period(1, "year")
-                                      ),
-                                      current_viral_load >= n,
-                                      state %in% states,
-                                      facility %in% facilities),
-         "default" = dplyr::filter(data,
-                                   current_status_28_days == "Active",
-                                   lubridate::as_date(ref) - art_start_date >=
-                                     lubridate::period(6, "months"),
-                                   dplyr::if_else(current_age < 20,
-                                                  lubridate::as_date(ref) -
-                                                    date_of_current_viral_load <=
-                                                    lubridate::period(6, "months"),
-                                                  lubridate::as_date(ref) -
-                                                    date_of_current_viral_load <=
-                                                    lubridate::period(1, "year")
-                                   ),
-                                   current_viral_load >= n,
-                                   state %in% states,
-                                   facility %in% facilities)
+    "calculated" = dplyr::filter(
+      data,
+      current_status == "Active",
+      lubridate::as_date(ref) - art_start_date >=
+        lubridate::period(6, "months"),
+      dplyr::if_else(
+        current_age < 20,
+        lubridate::as_date(ref) -
+          date_of_current_viral_load <=
+          lubridate::period(6, "months"),
+        lubridate::as_date(ref) -
+          date_of_current_viral_load <=
+          lubridate::period(1, "year")
+      ),
+      current_viral_load >= n,
+      state %in% states,
+      facility %in% facilities
+    ),
+    "default" = dplyr::filter(
+      data,
+      current_status_28_days == "Active",
+      lubridate::as_date(ref) - art_start_date >=
+        lubridate::period(6, "months"),
+      dplyr::if_else(
+        current_age < 20,
+        lubridate::as_date(ref) -
+          date_of_current_viral_load <=
+          lubridate::period(6, "months"),
+        lubridate::as_date(ref) -
+          date_of_current_viral_load <=
+          lubridate::period(1, "year")
+      ),
+      current_viral_load >= n,
+      state %in% states,
+      facility %in% facilities
+    )
   )
 }
 

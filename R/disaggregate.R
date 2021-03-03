@@ -8,7 +8,7 @@
 #' @param by The variable of interest to be used for the disaggregation. The
 #' options are any of: \code{"sex"}, \code{"age"} and \code{"pregnancy status"}.
 #' To improve the user experience, the \code{by} parameter accepts any of
-#' \code{"current_age"} and \code{"current_age"} as substitutes for \code{"age"},
+#' \code{"current_age"} and \code{"current age"} as substitutes for \code{"age"},
 #' \code{"gender"} as substitute for \code{"sex"} and
 #' \code{"pregnancy_status"} as substitute for \code{"pregnancy status"}.
 #' @param level The level at which the disaggregation should be performed.
@@ -23,7 +23,7 @@
 #' new_clients <- tx_new(ndr_example)
 #' disaggregate(new_clients, by = "age") # default value of level is "state"
 #'
-#' ### Disaggregate "TX_CURR" into by gender for each facility
+#' ### Disaggregate "TX_CURR" by gender for each facility
 #' curr_clients <- tx_curr(ndr_example)
 #' disaggregate(curr_clients, by = "sex", level = "facility")
 disaggregate <- function(data, by, level = "state") {
@@ -38,7 +38,7 @@ disaggregate <- function(data, by, level = "state") {
     rlang::abort("the value supplied to the `level` parameter is invalid! \nDid you make a spelling mistake or capitalise the first letter?")
   }
 
-  if(length(level) != 1 || length(by) != 1) {
+  if (length(level) != 1 || length(by) != 1) {
     rlang::abort("You have supplied more than one values to the `level` or `by` parameter.")
   }
 
@@ -70,7 +70,6 @@ disaggregate <- function(data, by, level = "state") {
         ),
         where = c("row", "col")
       )
-
     } else if (level == "lga") {
       dt <- janitor::adorn_totals(
         tidyr::pivot_wider(
@@ -80,7 +79,6 @@ disaggregate <- function(data, by, level = "state") {
         ),
         where = "col"
       )
-
     } else if (level == "facility") {
       dt <- janitor::adorn_totals(
         tidyr::pivot_wider(
@@ -90,7 +88,6 @@ disaggregate <- function(data, by, level = "state") {
         ),
         where = "col"
       )
-
     }
   }
 
@@ -122,7 +119,6 @@ disaggregate <- function(data, by, level = "state") {
       ),
       where = c("row", "col")
       )
-
     } else if (level == "lga") {
       dt <- janitor::adorn_totals(tidyr::pivot_wider(
         dplyr::count(dat, ip, state, lga, pregnancy_status, .drop = TRUE),
@@ -131,7 +127,6 @@ disaggregate <- function(data, by, level = "state") {
       ),
       where = "col"
       )
-
     } else if (level == "facility") {
       dt <- janitor::adorn_totals(tidyr::pivot_wider(
         dplyr::count(dat, ip, state, facility, pregnancy_status, .drop = TRUE),
@@ -140,7 +135,6 @@ disaggregate <- function(data, by, level = "state") {
       ),
       where = "col"
       )
-
     }
   }
 
@@ -181,7 +175,6 @@ disaggregate <- function(data, by, level = "state") {
       ),
       where = c("row", "col")
       )
-
     } else if (level == "lga") {
       dt <- janitor::adorn_totals(tidyr::pivot_wider(
         dplyr::count(dat, ip, state, lga, current_age, .drop = TRUE),
@@ -190,7 +183,6 @@ disaggregate <- function(data, by, level = "state") {
       ),
       where = "col"
       )
-
     } else if (level == "facility") {
       dt <- janitor::adorn_totals(tidyr::pivot_wider(
         dplyr::count(dat, ip, state, facility, current_age, .drop = TRUE),
@@ -199,7 +191,6 @@ disaggregate <- function(data, by, level = "state") {
       ),
       where = "col"
       )
-
     }
 
     dt <- dplyr::relocate(dt, `5-9`, .after = `1-4`)

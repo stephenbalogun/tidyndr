@@ -60,12 +60,16 @@ test_that("read_ndr() reads-in NDR '.csv' patient-level line-list", {
       suppressWarnings(
         vroom::vroom(file_path, col_types = cols) %>%
           janitor::clean_names() %>%
-          dplyr::mutate(date_lost = last_drug_pickup_date +
-                          lubridate::days(days_of_arv_refill) +
-                          lubridate::days(28),
-                        current_status = dplyr::if_else(date_lost >
-                                                          lubridate::as_date("2021-02-15"),
-                                                        "Active", "Inactive"))
+          dplyr::mutate(
+            date_lost = last_drug_pickup_date +
+              lubridate::days(days_of_arv_refill) +
+              lubridate::days(28),
+            current_status = dplyr::if_else(
+              date_lost >
+                lubridate::as_date("2021-02-15"),
+              "Active", "Inactive"
+            )
+          )
       )
     )
   )

@@ -4,7 +4,7 @@
 #' more than one year (for adults 20 years and above) and 6 months (for
 #' paediatrics and adolescents) from the specified reference date.
 #'
-#' @param data An ndr dataframe imported using the `read_ndr().
+#' @param data An NDR dataframe imported using the `read_ndr().
 #' @param ref Date provided in ISO8601 format ("yyyy-mm-dd"). Used to
 #'    determine clients who are eligible for viral load and should have a
 #'    documented result. The default is the date of analysis.
@@ -28,7 +28,6 @@ tx_pvls_den <- function(data,
                         facilities = .f,
                         status = "calculated",
                         n = 1000) {
-
   .s <- unique(data$state)
   .f <- unique(data$facility)
 
@@ -41,47 +40,52 @@ tx_pvls_den <- function(data,
                  Check that the facility is correctly spelt and located in the state.")
   }
 
-  if(is.na(lubridate::as_date(ref))) {
+  if (is.na(lubridate::as_date(ref))) {
     rlang::abort("The supplied date is not in 'yyyy-mm-dd' format.")
   }
 
-  if(!status %in% c("default", "calculated")) {
+  if (!status %in% c("default", "calculated")) {
     rlang::abort("`status` can only be one of 'default' or 'calculated'. Check that you did not mispell, include CAPS or forget to quotation marks!")
   }
 
 
 
   switch(status,
-         "calculated" = dplyr::filter(data,
-                                      current_status == "Active",
-                                      lubridate::as_date(ref) - art_start_date >=
-                                        lubridate::period(6, "months"),
-                                      dplyr::if_else(current_age < 20,
-                                                     lubridate::as_date(ref) -
-                                                       date_of_current_viral_load <=
-                                                       lubridate::period(6, "months"),
-                                                     lubridate::as_date(ref) -
-                                                       date_of_current_viral_load <=
-                                                       lubridate::period(1, "year")
-                                      ),
-                                      state %in% states,
-                                      facility %in% facilities),
-         "default" = dplyr::filter(data,
-                                   current_status_28_days == "Active",
-                                   lubridate::as_date(ref) - art_start_date >=
-                                     lubridate::period(6, "months"),
-                                   dplyr::if_else(current_age < 20,
-                                                  lubridate::as_date(ref) -
-                                                    date_of_current_viral_load <=
-                                                    lubridate::period(6, "months"),
-                                                  lubridate::as_date(ref) -
-                                                    date_of_current_viral_load <=
-                                                    lubridate::period(1, "year")
-                                   ),
-                                   state %in% states,
-                                   facility %in% facilities)
+    "calculated" = dplyr::filter(
+      data,
+      current_status == "Active",
+      lubridate::as_date(ref) - art_start_date >=
+        lubridate::period(6, "months"),
+      dplyr::if_else(
+        current_age < 20,
+        lubridate::as_date(ref) -
+          date_of_current_viral_load <=
+          lubridate::period(6, "months"),
+        lubridate::as_date(ref) -
+          date_of_current_viral_load <=
+          lubridate::period(1, "year")
+      ),
+      state %in% states,
+      facility %in% facilities
+    ),
+    "default" = dplyr::filter(
+      data,
+      current_status_28_days == "Active",
+      lubridate::as_date(ref) - art_start_date >=
+        lubridate::period(6, "months"),
+      dplyr::if_else(
+        current_age < 20,
+        lubridate::as_date(ref) -
+          date_of_current_viral_load <=
+          lubridate::period(6, "months"),
+        lubridate::as_date(ref) -
+          date_of_current_viral_load <=
+          lubridate::period(1, "year")
+      ),
+      state %in% states,
+      facility %in% facilities
+    )
   )
-
 }
 
 

@@ -13,10 +13,9 @@ tx_regimen(
 )
 }
 \arguments{
-\item{data}{An ndr dataframe imported using the `read_ndr()}
+\item{data}{An NDR dataframe imported using the `read_ndr()}
 
-\item{age_band}{a numeric vector of length 2 (lower age-range and upper
-age-range).}
+\item{age_band}{a numeric vector of length 2 \code{c(min_age, max_age)}.}
 
 \item{states}{The name(s) of the State(s) of interest. The default utilizes all
 the states in the dataframe. If specifying more than one state, combine the
@@ -41,6 +40,8 @@ combination regimen for their age or weight.
 \examples{
 tx_regimen(ndr_example)
 
-tx_regimen(ndr_example, status = "default",
-age_band = c(0, 3))
+tx_regimen(ndr_example,
+  status = "default",
+  age_band = c(0, 3)
+)
 }

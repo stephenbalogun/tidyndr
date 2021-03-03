@@ -31,18 +31,16 @@
 #'   level = "ip",
 #'   names = "tx_new"
 #' )
-
 summarise_ndr <- function(..., level, names) {
-
   data <- rlang::list2(...)
 
 
-  if(length(unique(level)) > 1) {
+  if (length(unique(level)) > 1) {
     rlang::abort('You have supplied more than one type of levels to the
                  "level" argument')
   }
 
-  if(rlang::is_null(level)) {
+  if (rlang::is_null(level)) {
     rlang::abort("Did you forget to pass a value to `level`?")
   }
 
@@ -52,18 +50,21 @@ summarise_ndr <- function(..., level, names) {
 
   if (length(data) != length(names)) {
     rlang::abort(
-    'the number of dataframes supplied is not equal to the number of names supplied to the "names" argument')
+      'the number of dataframes supplied is not equal to the number of names supplied to the "names" argument'
+    )
   }
 
   if (rlang::is_null(names)) {
     rlang::abort(
-      'Did you forget to specify the name(s) for your summary?')
+      "Did you forget to specify the name(s) for your summary?"
+    )
   }
 
 
-  if (!is.character(names)){
+  if (!is.character(names)) {
     rlang::abort(
-      'names must be supplied as characters. Did you forget to put the names in quotes?')
+      "names must be supplied as characters. Did you forget to put the names in quotes?"
+    )
   }
 
 
@@ -84,23 +85,18 @@ summarise_ndr <- function(..., level, names) {
     i <- i + 1
   }
 
+  dt <- switch(level,
+    "state" = purrr::reduce(df, dplyr::left_join, by = c("ip", "state")),
+    "facility" = purrr::reduce(df, dplyr::left_join, by = c("ip", "state", "facility")),
+    "country" = purrr::reduce(df, dplyr::left_join, by = "ip"),
+    "ip" = purrr::reduce(df, dplyr::left_join, by = "ip"),
+    "lga" = purrr::reduce(df, dplyr::left_join, by = c("ip", "state", "lga"))
+  )
 
-  if (level == "state") {
-    dt <- purrr::reduce(df, dplyr::left_join, by = c("ip", "state"))
-
-  } else if (level == "facility") {
-    dt <- purrr::reduce(df, dplyr::left_join, by = c("ip", "state", "facility"))
-
-  } else if (level == "country" | level == "ip") {
-    dt <- purrr::reduce(df, dplyr::left_join, by = "ip")
-
-  } else if (level == "lga") {
-    dt <- purrr::reduce(df, dplyr::left_join, by = c("ip", "state", "lga"))
-  }
 
   dt[is.na(dt)] <- 0 ## replace NAs with Zero
 
-  dt
+  tibble::as_tibble(dt)
 }
 
 

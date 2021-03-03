@@ -12,7 +12,7 @@ disaggregate(data, by, level = "state")
 \item{by}{The variable of interest to be used for the disaggregation. The
 options are any of: \code{"sex"}, \code{"age"} and \code{"pregnancy status"}.
 To improve the user experience, the \code{by} parameter accepts any of
-\code{"current_age"} and \code{"current_age"} as substitutes for \code{"age"},
+\code{"current_age"} and \code{"current age"} as substitutes for \code{"age"},
 \code{"gender"} as substitute for \code{"sex"} and
 \code{"pregnancy_status"} as substitute for \code{"pregnancy status"}.}
 
@@ -33,7 +33,7 @@ where appropriate.
 new_clients <- tx_new(ndr_example)
 disaggregate(new_clients, by = "age") # default value of level is "state"
 
-### Disaggregate "TX_CURR" into by gender for each facility
+### Disaggregate "TX_CURR" by gender for each facility
 curr_clients <- tx_curr(ndr_example)
 disaggregate(curr_clients, by = "sex", level = "facility")
 }

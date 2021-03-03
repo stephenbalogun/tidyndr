@@ -2,16 +2,16 @@
 #'
 #' Generates the line-list of clients who commenced ARV within the specified
 #' period of interest. The default is to generate the list for all clients who
-#' commenced ARV in the current Fiscal Year. You can change the period of
+#' commenced ARV in the current Fiscal Year. You can specify the period of
 #' interest using the \code{from} and \code{to} arguments; and the state or
-#' facility of interest with the \code{state} and \code{facility} arguments.
+#' facility of interest with the \code{states} and \code{facilities} arguments.
 #' For multiple states or facilities, use the \code{c()} to combine the names.
 #'
-#' @param data An ndr dataframe imported using the `read_ndr().
+#' @param data An NDR dataframe imported using the `read_ndr().
 #' @param from The start date in ISO8601 format (i.e. "yyyy-mm-dd").
 #' The default is to start at the beginning of the current Fiscal Year (i.e. 1st of October).
 #' @param to The end date written in ISO8601 format (i.e. "yyyy-mm-dd").
-#' The default is today (the date of analysis).
+#' The default is the date of analysis.
 #' @param states The name(s) of the State(s) of interest. The default utilizes all
 #'   the states in the dataframe. If specifying more than one state, combine the
 #'   states using the \code{c()} e.g. \code{c("State 1", "State 2")}.
@@ -45,15 +45,15 @@ tx_new <- function(data,
   .f <- unique(data$facility)
 
   if (!any(states %in% unique(data$state))) {
-    rlang::abort("state(s) is not contained in the supplied data. Check the spelling and/or case.")
+    rlang::abort("state(s) is/are not contained in the supplied data. Check the spelling and/or case.")
   }
 
   if (!any(facilities %in% unique(subset(data, state %in% states)$facility))) {
     rlang::abort("facilit(ies) is/are not found in the data or state supplied.
-                 Check that the facilit(ies) is/are correctly spelt and located in the state.")
+                 Check that the facility is correctly spelt and located in the state.")
   }
 
-  if(is.na(lubridate::as_date(from)) || is.na(lubridate::as_date(to))) {
+  if (is.na(lubridate::as_date(from)) || is.na(lubridate::as_date(to))) {
     rlang::abort("The supplied date is not in 'yyyy-mm-dd' format.")
   }
 

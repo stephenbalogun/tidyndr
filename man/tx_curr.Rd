@@ -7,7 +7,7 @@
 tx_curr(data, states = .s, facilities = .f, status = "calculated")
 }
 \arguments{
-\item{data}{An ndr dataframe imported using the `read_ndr().}
+\item{data}{An NDR dataframe imported using the `read_ndr().}
 
 \item{states}{The name(s) of the State(s) of interest. The default utilizes all
 the states in the dataframe. If specifying more than one state, combine the
