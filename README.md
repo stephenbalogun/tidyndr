@@ -6,8 +6,11 @@ Tidyndr
 # dplyr <a href=''><img src='man/figures/logo.svg' align="right" height="139" /></a>
 
 <!-- badges: start -->
-<!-- [![R build status](https://github.com/stephenbalogun/tidyndr/workflows/R-CMD-check/badge.svg)]https://github.com/stephenbalogun/tidyndr/actions?workflow=R-CMD-check) -->
-<!-- [![Codecov test coverage](https://codecov.io/gh/stephenbalogun/tidyndr/branch/master/graph/badge.svg)](https://codecov.io/gh/stephenbalogun/tidyndr?branch=master) -->
+
+[![R build
+status](https://github.com/stephenbalogun/tidyndr/workflows/R-CMD-check/badge.svg)](https://github.com/stephenbalogun/tidyndr/actions?workflow=R-CMD-check)
+[![Codecov test
+coverage](https://codecov.io/gh/stephenbalogun/tidyndr/branch/master/graph/badge.svg)](https://codecov.io/gh/stephenbalogun/tidyndr?branch=master)
 <!-- badges: end -->
 
 The goal of {tidyndr} is to provide specialized, simple and easy to use
@@ -273,7 +276,7 @@ who are due for a viral load test out of all those who are eligible.
 ## Generate list of clients who are eligible for VL (i.e. expected to have a documented VL result)
 ndr_example %>%
   tx_vl_eligible()
-#> # A tibble: 13,708 x 51
+#> # A tibble: 13,735 x 51
 #>    ip     state lga   facility datim_code sex   patient_identif~ hospital_number
 #>    <fct>  <fct> <fct> <fct>    <fct>      <fct> <chr>            <chr>          
 #>  1 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 1001       0001           
@@ -286,7 +289,7 @@ ndr_example %>%
 #>  8 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 1005       0004           
 #>  9 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 3009       0004           
 #> 10 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 2009       0001           
-#> # ... with 13,698 more rows, and 43 more variables: date_of_birth <date>,
+#> # ... with 13,725 more rows, and 43 more variables: date_of_birth <date>,
 #> #   age_at_art_initiation <dbl>, current_age <dbl>, art_start_date <date>,
 #> #   art_start_date_source <fct>, last_drug_pickup_date <date>,
 #> #   last_drug_pickup_date_q1 <date>, last_drug_pickup_date_q2 <date>,
@@ -375,7 +378,7 @@ ndr_example %>%
                  to = "2021-03-31",
                  states = c("State 1", "State 3")) %>%
   tx_vl_eligible(sample = TRUE)
-#> # A tibble: 2,382 x 51
+#> # A tibble: 2,391 x 51
 #>    ip     state lga   facility datim_code sex   patient_identif~ hospital_number
 #>    <fct>  <fct> <fct> <fct>    <fct>      <fct> <chr>            <chr>          
 #>  1 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 1001       0001           
@@ -388,7 +391,7 @@ ndr_example %>%
 #>  8 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 30049      00021          
 #>  9 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 30065      00030          
 #> 10 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 10050      0001           
-#> # ... with 2,372 more rows, and 43 more variables: date_of_birth <date>,
+#> # ... with 2,381 more rows, and 43 more variables: date_of_birth <date>,
 #> #   age_at_art_initiation <dbl>, current_age <dbl>, art_start_date <date>,
 #> #   art_start_date_source <fct>, last_drug_pickup_date <date>,
 #> #   last_drug_pickup_date_q1 <date>, last_drug_pickup_date_q2 <date>,
@@ -431,10 +434,10 @@ summarise_ndr(new, curr, ml,
 #> # A tibble: 4 x 5
 #>   ip      state   tx_new tx_curr tx_ml
 #>   <chr>   <chr>    <int>   <int> <int>
-#> 1 IP_name State 1    662    3705  2385
-#> 2 IP_name State 2   1239    5031  3722
-#> 3 IP_name State 3   3338    7881  2913
-#> 4 Total   -         5239   16617  9021
+#> 1 IP_name State 1    662    3705  2417
+#> 2 IP_name State 2   1239    5031  3761
+#> 3 IP_name State 3   3338    7881  2940
+#> 4 Total   -         5239   16617  9119
 ```
 
 The `disaggregate()` allows you to summarise an indicator of interest

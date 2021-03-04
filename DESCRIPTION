@@ -2,11 +2,23 @@ Package: tidyndr
 Title: Analysis of the Nigeria National Data Repository (NDR)
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "Stephen",
+    c(person(given = "Stephen",
            family = "Balogun",
            role = c("aut", "cre"),
            email = "stephentaiyebalogun@gmail.com",
-           comment = c(ORCID = "0000-0002-9928-3703"))
+           comment = c(ORCID = "0000-0002-9928-3703")),
+           person(given = "Scholastica",
+           family = "Olanrewaju",
+           role = "ctb"),
+            person(given = "Oluwaseun",
+           family = "Okunuga",
+           role = "ctb"),
+            person(given = "Temitope",
+           family = "Kolade",
+           role = "ctb"),
+            person(given = "Geraldine",
+           family = "Abone",
+           role = "ctb"))
 Description: The goal is to simplify routine analysis of the Nigeria National  Data Repository (NDR) using the PEPFAR Monitoring, Evaluation, and Reporting (MER) indictors. It is designed to import in to R patient-level line-list downloaded as 'csv' file from the front-end of the NDR.
 License: GPL (>= 3) + file LICENSE
 Encoding: UTF-8
@@ -23,11 +35,9 @@ Imports:
     purrr (>= 0.3.4),
     rlang (>= 0.4.10),
     stats,
-    stringr (>= 1.4.0),
     tibble,
     tidyr,
-    utils,
-    vroom (>= 1.3.2),
+    vroom (>= 1.3.2)
 Suggests: 
     testthat (>= 3.0.0),
     knitr,

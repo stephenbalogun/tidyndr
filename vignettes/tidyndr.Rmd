@@ -197,7 +197,7 @@ q2_appt <- tx_appointment(ndr_example,
               from = "2021-01-01",
               to = "2021-03-31")
 
-## print the number of patients with appointments in Q2
+## print the number of clients with appointments in Q2
 nrow(q2_appt)
 ```
 
@@ -262,7 +262,7 @@ tx_pvls_den(ndr_example,
 
 
 ### `tx_pvls_num`
-This determines the number of clients whose viral load test results are below a particular limit among those with a documented viral load result, thus are sadi to be virally suppressed. It helps you to know how many patients are doing well on their current medication. It accepts the following arguments:   
+This determines the number of clients whose viral load test results are below a particular limit among those with a documented viral load result, thus are sadi to be virally suppressed. It helps you to know how many clients are doing well on their current medication. It accepts the following arguments:   
 
 * `data`, `ref`, `states`, `facilities` and `status` - kindly see the documentation for [`tx_vl_eligible()`](#tx_vl_eligible) above.  
 * `n` - the reference at which viral load values below are said to be suppressed. The default is 1000.
@@ -310,7 +310,7 @@ summarise_ndr(curr, new, level = "state", names = c("curr", "tx_new"))
 ```
 
 ### `disaggregate`
-A very powerful function that allows you to summarise your generated line-list disaggregated based on a particular variable. The disaggregation options currently available are "age (or current age)", "sex (or gender)", "pregnancy status" or "population (Key Population or General Population)". It accepts 3 arguments:  
+A very powerful function that allows you to summarise your generated line-list disaggregated based on a particular variable. The disaggregation options currently available are "age (or current age)", "sex (or gender)", or "pregnancy status". It accepts 3 arguments:  
 * `data` - see [`tx_new()`](#tx_new) documentation above.  
 * `by` and `level` - see the documentation for [`summarise_ndr()`](#summarise_ndr) above.   
 

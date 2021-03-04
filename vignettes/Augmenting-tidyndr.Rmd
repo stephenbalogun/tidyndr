@@ -1,21 +1,147 @@
 ---
-title: "Augmenting tidyndr with the tidyverse packages"
+title: "Extending the functionality of tidyndr"
 output: rmarkdown::html_vignette
 description: >
-    You'll learn the basic principle of the tidyndr package, the conception, and how it helps to perform a seamless analysis of the Nigeria National Data Repository of HIV program in.
+    Here, we focus on discussing indicators that are derived from calculations. The {dplyr} package provides a very useful function `mutate()` that we will be leveraging on to provide our summary statistics.
 vignette: >
-  %\VignetteIndexEntry{Augmenting tidyndr with the tidyverse packages}
+  %\VignetteIndexEntry{Extending tidyndr}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 ```{r, echo = FALSE, message = FALSE}
-knitr::opts_chunk$set(collapse = T, comment = "#>")
+knitr::opts_chunk$set(collapse = T, comment = "#>", message = FALSE, warning = FALSE)
 options(tibble.print_min = 4L, tibble.print_max = 4L)
 library(tidyndr)
 # library(tidyverse)
 set.seed(1014)
 ```
 
+While the {tidyndr} package focuses on generating line-list of common PEPFAR indicators and providing summaries for these, a few indicators are derived from mathematical calculation of existing indicators. These indicators include:  
+
+1. `TX NEW NEW` 
+2. `Continuity of Treatment Proxy`
+3. `Viral Load Testing Coverage`
+4. `Viral Load Suppression Coverage`
+
+
 ```{r setup}
 library(tidyndr)
+library(dplyr)
 ```
+
+
+### TX NET NEW
+This indicator measures the increase (or decrease) in the number of clients on ART over a period of time. It is calculated by substracting the number of active clients in a previous period from the number of active clients from the current period.  
+
+$tx\_net\_new\ =\ tx\_curr\ current\ period - tx\_curr\ previous\ period$
+
+
+To create this in R, we will: 
+
+1. Import the line-list of the previous NDR data and the current NDR data  
+2. Generate the line-list of the tx_curr for each of the imported data  
+3. Summarise our line-list at the desired level ("ip", "state" or "facility") using the `summarise_ndr()`.  
+4. Substract the value of the previous tx_curr from the current tx_curr.  
+
+```{r, tx_net_new}
+## import both previous and current NDR line-lists
+file_path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
+
+prev_data <- read_ndr(file_path,
+                     time_stamp = "2020-12-31") 
+current_data <- read_ndr(file_path,
+                     time_stamp = "2020-02-28") 
+
+## generate the tx_curr for each of the imported line-lists
+tx_curr_prev <- tx_curr(prev_data)
+
+tx_curr_now <- tx_curr(current_data)
+
+## summarise the treatment currents at state level
+tx_currs <- summarise_ndr(tx_curr_prev,
+              tx_curr_now,
+              level = "state",
+              names = c("tx_curr_prev", "tx_curr_now"))
+
+## create a new column that calculates the tx_net_new
+tx_net_new <- tx_currs %>%
+  mutate(tx_net_new = tx_curr_now - tx_curr_prev)
+
+print(tx_net_new)
+```
+
+
+
+### Continuity of Treatment Proxy
+Previously called "Retention Proxy". It measures how many of the clients who started the period of interest remained on treatment at the end of that period. It is generally calculated using two different formulas:   
+
+  
+
+$Continuity\ of\ Treatment\ Proxy\ = \frac{tx\_curr\ at\ end\ of\ reporting\ period}{tx\_curr\ at\ beginning\ of\ period\ +\ tx\_new\ during\ period}$   
+
+
+
+or using the standard PEPFAR formula - 
+
+
+
+$Continuity\ of\ Treatment\ Proxy\ = 1\ +\ \frac{(tx\_net\_new\ *\ 4)\ -\ (tx\_new\ *\ 4)}{[tx\_curr\ -\ tx\_net\_new\ +\ (tx\_new\ *\ 4)]}$ 
+
+
+
+To calculate the Continuity of Treatment Proxy using the second approach, we will:  
+* continue with the summary table calculated under `tx_net_new` above.  
+* generate and summarise the new clients within the reporting period.  
+* join the first two tables together using another {dplyr} function `left_join()`.  
+* create a new column that calculates the continuity of treatment proxy using the formula above.  
+
+```{r, cot_proxy}
+## calculate the tx_new between the two periods
+tx_new <- tx_new(current_data, from = "2021-01-01", to = "2021-02-28") %>%
+  summarise_ndr(level = "state", names = "tx_new")
+
+## add the tx_new summary to the initial table and calculate the tx_net_new
+tx_net_new %>%
+  left_join(tx_new, by = c("ip", "state")) %>%
+  mutate(cot_proxy = 1 + (
+  ((tx_net_new * 4) - (tx_new) * 4 ) /
+    (tx_curr_now - tx_net_new + (tx_new * 4)))
+  )
+```
+
+
+### Viral Load Testing Coverage
+The standard viral load testing coverage is calculated by dividing the number of clients with a viral load test result in the period of interest by the number of active clients within the same program 6 months prior. 
+
+$1. Viral\ Load\ Testing\ Coverage = \frac{tx\_pvls\_den}{tx\_curr\ 6\ months\ prior}\ *\ 100$   
+
+This means that you will be needing two different datasets (i.e. the current dataset and the dataset of 6 months ago). In the absence of these two datasets, viral load testing coverage can be estimated by calculating the number of clients with a viral load result and dividing by the total number of clients estimated to be eligible for viral load during the period under review.  
+
+$2. Viral\ Load\ Testing\ Coverage = \frac{tx\_pvls\_den}{tx\_vl\_eligible}\ *\ 100$  
+
+
+
+Below is an example using the second approach: 
+```{r, vl_testing_coverage}
+vl_eligible <- tx_vl_eligible(current_data)
+
+vl_result <- tx_pvls_den(current_data)
+
+nrow(vl_result) / nrow(vl_eligible) * 100
+```
+
+### Viral Load Suppression Coverage
+This is calculated using: 
+
+$Viral\ Load\ Suppression\ Coverage = \frac{tx\_pvls\_num\ (no.\ of\ clients\ who\ are\ virally\ suppressed)}{tx\_pvls\_den\ (no.\ of\ clients\ with\ viral\ load\ results)}$   
+
+
+```{r, vl_suppression_coverage}
+vl_result <- tx_pvls_den(current_data)
+
+vl_suppressed <- tx_pvls_num(current_data)
+
+nrow(vl_suppressed) / nrow(vl_result) * 100
+```
+
+
