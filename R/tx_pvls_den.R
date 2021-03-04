@@ -26,8 +26,7 @@ tx_pvls_den <- function(data,
                         ref = get("Sys.Date")(),
                         states = .s,
                         facilities = .f,
-                        status = "calculated",
-                        n = 1000) {
+                        status = "calculated") {
   .s <- unique(data$state)
   .f <- unique(data$facility)
 
