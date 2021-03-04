@@ -14,10 +14,14 @@ knitr::opts_chunk$set(
 )
 ```
 
+# dplyr <a href=''><img src='man/figures/logo.svg' align="right" height="139" /></a>
+
 <!-- badges: start -->
+<!-- [![R build status](https://github.com/stephenbalogun/tidyndr/workflows/R-CMD-check/badge.svg)]https://github.com/stephenbalogun/tidyndr/actions?workflow=R-CMD-check) -->
+<!-- [![Codecov test coverage](https://codecov.io/gh/stephenbalogun/tidyndr/branch/master/graph/badge.svg)](https://codecov.io/gh/stephenbalogun/tidyndr?branch=master) -->
 <!-- badges: end -->
 
-The goal of {tidyndr} is to provide specialized, simple and easy to use functions that wrap around existing functions in `R` for manipulation of the [NDR](http://ndr.shieldnigeriaproject.com) patient line-list file allowing the user to focus on the tasks to be completed rather than the details of the code.  
+The goal of {tidyndr} is to provide specialized, simple and easy to use functions that wrap around existing functions in `R` for manipulation of the [NDR](http://ndr.shieldnigeriaproject.com) patient line-list file allowing the user to focus on the tasks to be completed rather than the formula details.  
 
 The functions presented are similar to the [PEPFAR MER indicators](https://datim.zendesk.com/hc/en-us/articles/360000084446-MER-Indicator-Reference-Guides) and are currently grouped into three categories:
 
@@ -25,7 +29,9 @@ The functions presented are similar to the [PEPFAR MER indicators](https://datim
 
 * The PEPFAR treatment group of indicators that can be performed on the NDR           line-list.
 
-* The 'Viral Suppression' indicators (`tx_vl_eligible()`, `tx_pvls_den()` and `tx_pvls_num()`).
+* The 'Viral Load' indicators (`tx_vl_eligible()`, `tx_pvls_den()` `tx_pvls_num()` and `tx_vl_unsuppressed()`).  
+
+The summary functions (`summarise_ndr()` and `disaggregrate()`) provides a tabular summary for the tasks that have been completed using any of the functions above.   
 
 ## Installation
 
@@ -39,30 +45,30 @@ This package is currently not available on [CRAN](https://CRAN.R-project.org) bu
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("stephenbalogun/tidyndr")
+devtools::install_github("stephenbalogun/tidyndr",
+build_vignette = TRUE)
 ```
 ## Usage
 
 ```{r load_library}
 library(tidyndr)
-library(magrittr) ## to use the piping operator "%>%"
 ```
 
 ### read_ndr
 
-`read_ndr()` reads the downloaded csv file into [`R`](https:://cran.r-project.org) using [`vroom::vroom()`](https://vroom.r-lib.org/) behind the scene and passing appropriate column types to the `col_types` argument. It also formats the variable names using the [`snakecase`](https://en.wikipedia.org/wiki/Snake_case) style. It can read from the local file or from a line-list placed on the internet.
+`read_ndr()` reads the downloaded "csv" file into [`R`](https:://cran.r-project.org) using [`vroom::vroom()`](https://vroom.r-lib.org/) behind the scene and passing appropriate column types to the `col_types` argument. It also formats the variable names using the [`snakecase`](https://en.wikipedia.org/wiki/Snake_case) style.
 
 ```{r read_ndr}
 ## read from a local file path (not run)
 
 # file_path <- system.file("extdata", "ndr_example.csv", package = "tidyndr")
 
-# read_ndr(file_path)
+# read_ndr(file_path, time_stamp = "2021-02-15")
 
 ### read line-list available on the internet
 path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
 
-ndr_example <- read_ndr(path)
+ndr_example <- read_ndr(path, time_stamp = "2021-02-20")
 ```
 
 ### Treatment Indicators
@@ -116,18 +122,19 @@ ndr_example %>%
                  sample = TRUE)
 
 ### Calculate the Viral Load Coverage for State 3
-no_of_vl_results <- tx_pvls_den(ndr_example, states = "State 3") %>%
+no_of_vl_results <- tx_pvls_den(ndr_example,
+                                states = "State 3") %>%
   nrow()
-no_of_vl_eligible <- tx_vl_eligible(ndr_example, states = "State 3") %>%
+no_of_vl_eligible <- tx_vl_eligible(ndr_example,
+                                    states = "State 3") %>%
   nrow()
 
 vl_coverage <- scales::percent(no_of_vl_results / no_of_vl_eligible)
 
 print(vl_coverage)
-  
 ```
 
-For all the 'Treatment' and 'Viral Suppression' indicators (except `tx_ml_outcomes()`, which should be use with `tx_ml()`), you have control over the level of action (state or facility) by supplying to the `state` and/or `facility` arguments the values of interest . For more than one state or facility, combine the values with the `c()` e.g.
+For all the 'Treatment' and 'Viral Suppression' indicators (except `tx_ml_outcomes()`, which should be use with `tx_ml()`), you have control over the level of action (state or facility) by supplying to the `states` and/or `facilities` arguments the values of interest . For more than one state or facility, combine the values with the `c()` e.g.
 
 ```{r multiple_indicators}
 ## subset clients that have medication appointment in Q2 of FY21 for "State 1" and "State 3" and are also due for viral load
@@ -149,11 +156,9 @@ new <- tx_new(ndr_example)  ## generates line-list of TX_NEW for the FY
 curr <- tx_curr(ndr_example) ## generates line-list of currently active clients
 ml <- tx_ml(ndr_example) ## generates line-list of clients who were active at the beginning of the FY but currently inactive
 
-summarise_ndr(data = list(new, curr, ml),
+summarise_ndr(new, curr, ml,
               level = "state",
               names = c("tx_new", "tx_curr", "tx_ml"))
-
-
 ```
 
 
@@ -171,5 +176,4 @@ disaggregate(new_clients,
 ndr_example %>%
   tx_curr() %>%
   disaggregate(by = "sex")
-
 ```

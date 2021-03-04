@@ -1,0 +1,21 @@
+---
+title: "Augmenting tidyndr with the tidyverse packages"
+output: rmarkdown::html_vignette
+description: >
+    You'll learn the basic principle of the tidyndr package, the conception, and how it helps to perform a seamless analysis of the Nigeria National Data Repository of HIV program in.
+vignette: >
+  %\VignetteIndexEntry{Augmenting tidyndr with the tidyverse packages}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+```{r, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(collapse = T, comment = "#>")
+options(tibble.print_min = 4L, tibble.print_max = 4L)
+library(tidyndr)
+# library(tidyverse)
+set.seed(1014)
+```
+
+```{r setup}
+library(tidyndr)
+```
