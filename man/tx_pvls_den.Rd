@@ -9,8 +9,7 @@ tx_pvls_den(
   ref = get("Sys.Date")(),
   states = .s,
   facilities = .f,
-  status = "calculated",
-  n = 1000
+  status = "calculated"
 )
 }
 \arguments{
@@ -32,8 +31,6 @@ facility, combine the facilities using the \code{c()} e.g.
 \item{status}{Determines how the number of active clients is calculated. The options
 are to either to use the NDR \code{current_status_28_days} column ("default") or the
 derived \code{current_status} column ("calculated").}
-
-\item{n}{The cut-off value for classification of viral load result. The default is 1000}
 }
 \value{
 tx_pvls_den

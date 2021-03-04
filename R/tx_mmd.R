@@ -7,8 +7,6 @@
 #'
 #' @param data An NDR dataframe imported using the `read_ndr()`.
 #' @param months The number(s) of months of interest of ARV dispensed. The default is to subset active
-#' @param month The number(s) of month of interest of ARV dispensed
-#'    (rounded to the nearest who number). The default is to subset active
 #'    clients who had 3 - 6 months of ARV dispensed.
 #' @inheritParams tx_appointment
 #'
@@ -70,7 +68,7 @@ tx_mmd <- function(data,
       facility %in% facilities
     )
   )
-  }
+}
 
 
 utils::globalVariables(c(

@@ -28,7 +28,7 @@ tx_ml_outcomes <- function(data,
     "transfer out" = dplyr::filter(data, patient_transferred_out == TRUE),
     "transferred out" = dplyr::filter(data, patient_transferred_out == TRUE)
   )
-  }
+}
 
 utils::globalVariables(c(
   "patient_has_died",

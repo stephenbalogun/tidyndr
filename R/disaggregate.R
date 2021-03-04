@@ -29,7 +29,7 @@
 disaggregate <- function(data, by, level = "state") {
   if (!any(by %in% c(
     "gender", "sex", "age", "current_age", "current age",
-    "pregnancy status", "pregnancy_status", "population", "pop"
+    "pregnancy status", "pregnancy_status"
   ))) {
     rlang::abort("the value supplied to the `by` parameter is invalid. Please check! \nDid you make a spelling mistake or capitalise the first letter?")
   }
@@ -138,60 +138,60 @@ disaggregate <- function(data, by, level = "state") {
     }
   }
 
-  ### by == "key_gen pop"
-  if (by == "population" || by == "pop") {
-    kp_sites <- c("Anawim OSS", "KPIF_Gwarinpa OSS", "Gwagwalada KP One Stop Shop",
-                       "Gwarinpa One Stop Shop", "MABUSHI One Stop Shop",
-                       "Nyanya One Stop Shop", "YOUTHRISE One Stop Shop",
-                       "International Center for Advocacy on Rights to Health",
-                       "KPIF_Akwanga OSS", "KPIF_Karu OSS", "KPIF Obio-Akpor KP OSS",
-                       "Initiative for Advancement of Humanity (IAH)",
-                       "Karu KP one stop shop", "Lafia KP One Stop Shop",
-                       "Bonny KP One Stop Shop")
+  # ### by == "key_gen pop"
+  # if (by == "population" || by == "pop") {
+  #   kp_sites <- c("Anawim OSS", "KPIF_Gwarinpa OSS", "Gwagwalada KP One Stop Shop",
+  #                      "Gwarinpa One Stop Shop", "MABUSHI One Stop Shop",
+  #                      "Nyanya One Stop Shop", "YOUTHRISE One Stop Shop",
+  #                      "International Center for Advocacy on Rights to Health",
+  #                      "KPIF_Akwanga OSS", "KPIF_Karu OSS", "KPIF Obio-Akpor KP OSS",
+  #                      "Initiative for Advancement of Humanity (IAH)",
+  #                      "Karu KP one stop shop", "Lafia KP One Stop Shop",
+  #                      "Bonny KP One Stop Shop")
+  #
+  #   dat <- dplyr::mutate(data,
+  #                        population = dplyr::if_else(facility %in% kp_sites,
+  #                                             "KP",
+  #                                             "Gen_pop"))
+  #
+  #   if (level == "ip" || level == "country") {
+  #     dt <- janitor::adorn_totals(tidyr::pivot_wider(
+  #       dplyr::count(dat, ip, population, .drop = TRUE),
+  #       names_from = population,
+  #       values_from = n
+  #     ),
+  #     where = "col"
+  #     )
+  #   } else if (level == "state") {
+  #     dt <- janitor::adorn_totals(tidyr::pivot_wider(
+  #       dplyr::count(dat, ip, state, population, .drop = TRUE),
+  #       names_from = population,
+  #       values_from = n
+  #     ),
+  #     where = c("row", "col")
+  #     )
+  #   } else if (level == "lga") {
+  #     dt <- janitor::adorn_totals(tidyr::pivot_wider(
+  #       dplyr::count(dat, ip, state, lga, population, .drop = TRUE),
+  #       names_from = population,
+  #       values_from = n
+  #     ),
+  #     where = "col"
+  #     )
+  #   } else if (level == "facility") {
+  #     dt <- janitor::adorn_totals(tidyr::pivot_wider(
+  #       dplyr::count(dat, ip, state, facility, population, .drop = TRUE),
+  #       names_from = population,
+  #       values_from = n
+  #     ),
+  #     where = "col"
+  #     )
+  #   }
+  # }
+  #
 
-    dat <- dplyr::mutate(data,
-                         population = dplyr::if_else(facility %in% kp_sites,
-                                              "KP",
-                                              "Gen_pop"))
 
-    if (level == "ip" || level == "country") {
-      dt <- janitor::adorn_totals(tidyr::pivot_wider(
-        dplyr::count(dat, ip, population, .drop = TRUE),
-        names_from = population,
-        values_from = n
-      ),
-      where = "col"
-      )
-    } else if (level == "state") {
-      dt <- janitor::adorn_totals(tidyr::pivot_wider(
-        dplyr::count(dat, ip, state, population, .drop = TRUE),
-        names_from = population,
-        values_from = n
-      ),
-      where = c("row", "col")
-      )
-    } else if (level == "lga") {
-      dt <- janitor::adorn_totals(tidyr::pivot_wider(
-        dplyr::count(dat, ip, state, lga, population, .drop = TRUE),
-        names_from = population,
-        values_from = n
-      ),
-      where = "col"
-      )
-    } else if (level == "facility") {
-      dt <- janitor::adorn_totals(tidyr::pivot_wider(
-        dplyr::count(dat, ip, state, facility, population, .drop = TRUE),
-        names_from = population,
-        values_from = n
-      ),
-      where = "col"
-      )
-    }
-  }
-
-
-
-    ### by == "current_age"
+  ### by == "current_age"
   if (by == "age" || by == "current_age" || by == "current age") {
     age <- dplyr::case_when(
       dplyr::between(data$current_age, 0, 1) ~ "<1",

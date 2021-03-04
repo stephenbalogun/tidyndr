@@ -8,7 +8,6 @@
 #' @param ref Date provided in ISO8601 format ("yyyy-mm-dd"). Used to
 #'    determine clients who are eligible for viral load and should have a
 #'    documented result. The default is the date of analysis.
-#' @param n The cut-off value for classification of viral load result. The default is 1000
 #' @inheritParams tx_appointment
 #'
 #' @return tx_pvls_den
