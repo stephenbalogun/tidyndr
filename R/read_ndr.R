@@ -7,6 +7,7 @@
 #'
 #' @param path Path to the csv file on computer. The file path should be specified in the
 #' format "C:/users/Desktop/yourfile" or something similar.
+#' @param path Path to the csv file on computer.
 #' @param time_stamp The date stamp for the downloaded line-list.
 #' @param cols The column types of the downloaded NDR line-lists. The default sets the columns
 #'  based on the NDR line-list specifications between October 2020 and March 2021.

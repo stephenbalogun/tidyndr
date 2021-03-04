@@ -7,8 +7,7 @@
 read_ndr(path, time_stamp, cols = NULL, quiet = FALSE, ...)
 }
 \arguments{
-\item{path}{Path to the csv file on computer. The file path should be specified in the
-format "C:/users/Desktop/yourfile" or something similar.}
+\item{path}{Path to the csv file on computer.}
 
 \item{time_stamp}{The date stamp for the downloaded line-list.}
 

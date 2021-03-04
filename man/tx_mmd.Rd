@@ -9,8 +9,7 @@ tx_mmd(data, months = .m, states = .s, facilities = .f, status = "calculated")
 \arguments{
 \item{data}{An NDR dataframe imported using the \code{read_ndr()}.}
 
-\item{months}{The number(s) of months of interest of ARV dispensed. The default is to subset active
-clients who had 3 - 6 months of ARV dispensed.}
+\item{months}{The number(s) of months of interest of ARV dispensed. The default is to subset active}
 
 \item{states}{The name(s) of the State(s) of interest. The default utilizes all
 the states in the dataframe. If specifying more than one state, combine the
@@ -24,6 +23,10 @@ facility, combine the facilities using the \code{c()} e.g.
 \item{status}{Determines how the number of active clients is calculated. The options
 are to either to use the NDR \code{current_status_28_days} column ("default") or the
 derived \code{current_status} column ("calculated").}
+
+\item{month}{The number(s) of month of interest of ARV dispensed
+(rounded to the nearest who number). The default is to subset active
+clients who had 3 - 6 months of ARV dispensed.}
 }
 \value{
 tx_mmd
