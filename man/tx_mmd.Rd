@@ -4,13 +4,12 @@
 \alias{tx_mmd}
 \title{Subset active clients based on months of ARV Dispensed}
 \usage{
-tx_mmd(data, month = .m, states = .s, facilities = .f, status = "calculated")
+tx_mmd(data, months = .m, states = .s, facilities = .f, status = "calculated")
 }
 \arguments{
 \item{data}{An NDR dataframe imported using the \code{read_ndr()}.}
 
-\item{month}{The number(s) of month of interest of ARV dispensed
-(rounded to the nearest who number). The default is to subset active
+\item{months}{The number(s) of months of interest of ARV dispensed. The default is to subset active
 clients who had 3 - 6 months of ARV dispensed.}
 
 \item{states}{The name(s) of the State(s) of interest. The default utilizes all
@@ -39,7 +38,7 @@ tx_mmd(ndr_example)
 
 # subset active clients who had 2 or 4 months of ARV dispensed at last encounter
 tx_mmd(ndr_example,
-  month = c(2, 4),
+  months = c(2, 4),
   status = "default"
 )
 }

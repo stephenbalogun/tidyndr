@@ -17,14 +17,15 @@
 #' )
 tx_ml_outcomes <- function(data,
                            outcome) {
-  if (outcome != "dead" && outcome != "transferred out") {
+  if (!outcome %in% c("dead", "transferred out", "transfer out")) {
     rlang::abort("Outcome should be either `dead` or `transferred out`.
                  Check you spellings and your CAPS!")
   }
 
   switch(outcome,
     "dead" = dplyr::filter(data, patient_has_died == TRUE),
-    "transferred out" = dplyr::filter(data, patient_transferred_out == TRUE)
+    "transferred out" = dplyr::filter(data, patient_transferred_out == TRUE),
+    "transfer out" = dplyr::filter(data, patient_transferred_out == TRUE)
   )
 }
 

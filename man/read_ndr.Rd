@@ -2,17 +2,13 @@
 % Please edit documentation in R/read_ndr.R
 \name{read_ndr}
 \alias{read_ndr}
-\title{Read NDR "csv" file
-
-Import your NDR patient-level line-list downloaded as ".csv" format from the
-NDR front-end into R in a nicely formatted table. The function also creates two
-additional variables - \code{date_ltfu} and \code{current_status} for ease of referencing
-during analysis.}
+\title{Read NDR "csv" file}
 \usage{
 read_ndr(path, time_stamp, cols = NULL, quiet = FALSE, ...)
 }
 \arguments{
-\item{path}{Path to the csv file on computer.}
+\item{path}{Path to the csv file on computer. The file path should be specified in the
+format "C:/users/Desktop/yourfile" or something similar.}
 
 \item{time_stamp}{The date stamp for the downloaded line-list.}
 
@@ -30,8 +26,6 @@ behind the hood.}
 read_ndr
 }
 \description{
-Read NDR "csv" file
-
 Import your NDR patient-level line-list downloaded as ".csv" format from the
 NDR front-end into R in a nicely formatted table. The function also creates two
 additional variables - \code{date_ltfu} and \code{current_status} for ease of referencing

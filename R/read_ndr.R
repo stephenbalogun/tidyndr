@@ -1,4 +1,4 @@
-#' @title Read NDR "csv" file
+#' Read NDR "csv" file
 #'
 #' Import your NDR patient-level line-list downloaded as ".csv" format from the
 #' NDR front-end into R in a nicely formatted table. The function also creates two
