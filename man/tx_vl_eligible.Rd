@@ -29,9 +29,9 @@ all the facilities contained in the dataframe. If specifying more than one
 facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}
 
-\item{status}{Determines how the number of active clients is calculated. The options
-are to either to use the NDR \code{current_status_28_days} column ("default") or the
-derived \code{current_status} column ("calculated").}
+\item{status}{Determines how the number of active clients is calculated.
+The options are to either to use the NDR current_status_28_days column
+or the derived current_status column ("calculated").}
 
 \item{sample}{Logical (TRUE or FALSE) indicating wheter all clients eligible for
 viral load test should be filtered irrespective of their eligibility for sample

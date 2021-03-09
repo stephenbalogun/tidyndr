@@ -4,8 +4,11 @@
 #'    on treatment using the `current_status_28_days` column. You can specify
 #'    the state(s) and/or facilit(ies) of interest using the \code{region} or
 #'    \code{site} arguments.
+#' @param status Determines how the number of active clients is calculated.
+#'  The options are to either to use the NDR current_status_28_days column
+#'  or the derived current_status column ("calculated").
+#' @inheritParams tx_new
 #'
-#' @inheritParams tx_appointment
 #'
 #' @importFrom magrittr %>%
 #'
@@ -37,11 +40,11 @@ tx_curr <- function(data,
 
   .f <- unique(data$facility)
 
-  if (!any(states %in% unique(data$state))) {
+  if (!all(states %in% unique(data$state))) {
     rlang::abort("state(s) is/are not contained in the supplied data. Check the spelling and/or case.")
   }
 
-  if (!any(facilities %in% unique(subset(data, state %in% states)$facility))) {
+  if (!all(facilities %in% unique(subset(data, state %in% states)$facility))) {
     rlang::abort("facilit(ies) is/are not found in the data or state supplied.
                  Check that the facility is correctly spelt and located in the state.")
   }

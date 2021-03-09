@@ -1,7 +1,7 @@
 test_that("tx_ml subsets only inactive clients within a period", {
   expect_identical(
     tx_ml(
-      ndr_example,
+      new_data = ndr_example,
       from = lubridate::ymd("2020-10-01"),
       to = lubridate::ymd("2021-01-31")
     ),

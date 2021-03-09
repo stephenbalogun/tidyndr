@@ -120,7 +120,7 @@ Generates the line-list of all clients who are still active on treatment. It has
 
 * `data`, `states` and `facilities` - see `data` for [`tx_new`](#tx_new) above.
 
-* `status` - the column to be used to determine the tx_curr. Can be one of two - 'calculated' or 'default'. The 'calculated' (default) used the derived `current_status` column while the 'default' uses the NDR `current_status_28_days` column. 
+* `status` - the column to be used to determine the tx_curr. Can be one of two - 'calculated' or 'default'. The 'calculated' used the derived `current_status` column while the 'default' uses the NDR `current_status_28_days` column. 
 
 ```{r, tx_curr}
 ## generate current clients using the calculated `current_status` column
@@ -136,16 +136,24 @@ This generates the line-list of clients who were active at the beginning of the 
 
 * `data`, `from`, `to`, `states`, `facilities` - see [`tx_new`](#tx_new) documentation above.
 
-```{r, tx_ml}
+```{r, tx_ml, eval = FALSE}
 ## generate the line-list of clients who were active at the beginning of October 2020 
 ## (beginning of FY21) but became inactive at the end of December 2020.
-tx_ml(ndr_example,
+tx_ml(new_data = ndr_example,
       from = "2020-10-01",
       to = "2020-12-31")
 
+## if data from two periods are available, you can supply these to determine the `tx_ml"
+
+file_path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
+ndr_old <- read_ndr(file_path, time_stamp = "2021-02-15")
+ndr_new <- ndr_example
+tx_ml(old_data = ndr_old,
+      new_data = ndr_new)
+
 ## generate the line-list of clients who have become inactive for "State 1" and "State 2" 
 ## since the beginning of October 2021.
-tx_ml(ndr_example,
+tx_ml(new_data = ndr_example,
       states = c("State 1", "State 2"))
 ```
 
@@ -155,9 +163,9 @@ For the inactive clients generated, you might be interested in subsetting those 
 * `data` - see `data` under [`tx_new()`](#tx_new) above.
 * `outcome` - one of "dead", "transfer out" (or "transferred out").
 
-```{r, tx_ml_outcomes}
+```{r, tx_ml_outcomes, eval = FALSE}
 ## generate the line-list of all clients who became inactive this Fiscal Year
-ml_example <- tx_ml(ndr_example)
+ml_example <- tx_ml(new_data = ndr_example)
 
 ## subset inactive clients who were transferred out
 tx_ml_outcomes(ml_example, outcome = "transferred out")
@@ -316,7 +324,7 @@ A very powerful function that allows you to summarise your generated line-list d
 
 ```{r, disaggregate}
 ## generate list of inactive clients
-inactives <- tx_ml(ndr_example)
+inactives <- tx_ml(new_data = ndr_example)
 
 ## disaggregate inactive clients by gender at state level
 disaggregate(inactives,

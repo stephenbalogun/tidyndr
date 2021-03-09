@@ -21,7 +21,7 @@ outcome of interest ("dead" or "transfer out"). It should be use after
 \code{tx_ml()}.
 }
 \examples{
-tx_ml_outcomes(tx_ml(ndr_example),
+tx_ml_outcomes(tx_ml(new_data = ndr_example),
   outcome = "dead"
 )
 }

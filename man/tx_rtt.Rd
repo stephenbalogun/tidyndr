@@ -22,9 +22,9 @@ all the facilities contained in the dataframe. If specifying more than one
 facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}
 
-\item{status}{Determines how the number of active clients is calculated. The options
-are to either to use the NDR \code{current_status_28_days} column ("default") or the
-derived \code{current_status} column ("calculated").}
+\item{status}{Determines how the number of active clients is calculated.
+The options are to either to use the NDR current_status_28_days column
+or the derived current_status column ("calculated").}
 }
 \value{
 tx_rtt
@@ -35,11 +35,12 @@ the \code{old_data} argument but have now become active in the data supplied
 to the \code{new_data} argument.
 }
 \examples{
-file_path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
-ndr_old <- read_ndr(file_path, time_stamp = "2021-02-15")
-ndr_new <- ndr_example
-tx_rtt(ndr_old, ndr_new)
+## not run ##
+# file_path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
+# ndr_old <- read_ndr(file_path, time_stamp = "2021-02-15")
+# ndr_new <- ndr_example
+# tx_rtt(ndr_old, ndr_new)
 
-# Determine RTT for a particular state
-tx_rtt(ndr_old, ndr_new, states = "State 1")
+## Determine RTT for a particular state
+# tx_rtt(ndr_old, ndr_new, states = "State 1")
 }

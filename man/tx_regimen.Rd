@@ -26,16 +26,18 @@ all the facilities contained in the dataframe. If specifying more than one
 facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}
 
-\item{status}{Determines how the number of active clients is calculated. The options
-are to either to use the NDR \code{current_status_28_days} column ("default") or the
-derived \code{current_status} column ("calculated").}
+\item{status}{Determines how the number of active clients is calculated.
+The options are to either to use the NDR current_status_28_days column
+or the derived current_status column ("calculated").}
 }
 \value{
 tx_regimen
 }
 \description{
 Generates the line-list of clients on first-line regimen who are on the choice
-combination regimen for their age or weight.
+combination regimen for their age or weight. The NDR does not currently report
+'weight' so the function uses 'age' to approximate the choice-regimen for the
+clients.
 }
 \examples{
 tx_regimen(ndr_example)

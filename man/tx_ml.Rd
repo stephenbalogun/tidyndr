@@ -5,15 +5,21 @@
 \title{Subset clients who became inactive (IIT) within a given period}
 \usage{
 tx_ml(
-  data,
-  from = get("fy_start")(),
-  to = get("Sys.Date")(),
+  old_data = NULL,
+  new_data,
+  from = NULL,
+  to = NULL,
   states = .s,
-  facilities = .f
+  facilities = .f,
+  status = "calculated"
 )
 }
 \arguments{
-\item{data}{An NDR dataframe imported using the `read_ndr().}
+\item{old_data}{The initial dataframe containing the list of clients who
+were previously active.}
+
+\item{new_data}{The current datafame where changes in current treatment
+status will be checked.}
 
 \item{from}{The start date in ISO8601 format (i.e. "yyyy-mm-dd").
 The default is to start at the beginning of the current Fiscal Year (i.e. 1st of October).}
@@ -29,6 +35,10 @@ states using the \code{c()} e.g. \code{c("State 1", "State 2")}.}
 all the facilities contained in the dataframe. If specifying more than one
 facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}
+
+\item{status}{Determines how the number of active clients is calculated.
+The options are to either to use the NDR current_status_28_days column
+or the derived current_status column ("calculated").}
 }
 \value{
 tx_ml
@@ -42,8 +52,17 @@ with \code{tx_ml_outcomes()}, generates inactive clients with a particular
 outcome of interest.
 }
 \examples{
-tx_ml(ndr_example)
+tx_ml(new_data = ndr_example)
 
 # Find clients who were inactive at the end of Q1 of FY21
-tx_ml(ndr_example, to = "2020-12-31")
+tx_ml(new_data = ndr_example, to = "2020-12-31")
+
+## generate line-list of `tx_ml()` using two datasets
+file_path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
+ndr_old <- read_ndr(file_path, time_stamp = "2021-02-15")
+ndr_new <- ndr_example
+tx_ml(
+  old_data = ndr_old,
+  new_data = ndr_new
+)
 }

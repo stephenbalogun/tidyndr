@@ -14,13 +14,15 @@ my_summary <- function(data, l, n) {
       janitor::adorn_totals()
   } else if (l == "facility") {
     data %>%
-      dplyr::count(ip, state, facility, name = n, .drop = TRUE) %>%
+      dplyr::count(ip, state, lga, facility, name = n, .drop = TRUE) %>%
       janitor::adorn_totals()
   } else if (l == "country" | l == "ip") {
     data %>%
-      dplyr::count(ip, name = n, .drop = TRUE)
+      dplyr::count(ip, name = n, .drop = TRUE) %>%
+      janitor::adorn_totals()
   } else if (l == "lga") {
     data %>%
-      dplyr::count(ip, state, lga, name = n, .drop = TRUE)
+      dplyr::count(ip, state, lga, name = n, .drop = TRUE) %>%
+      janitor::adorn_totals()
   }
 }

@@ -58,9 +58,10 @@ read_ndr <- function(path,
     date_lost = last_drug_pickup_date +
       lubridate::days(days_of_arv_refill) +
       lubridate::days(28),
-    current_status = dplyr::if_else(
-      date_lost > lubridate::as_date(time_stamp),
-      "Active", "Inactive"
+    current_status = dplyr::case_when(
+      date_lost >= lubridate::as_date(time_stamp) ~ "Active",
+      date_lost < lubridate::as_date(time_stamp) ~ "Inactive",
+      is.na(time_stamp) ~ "skipped"
     )
   )
 

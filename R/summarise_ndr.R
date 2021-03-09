@@ -87,7 +87,7 @@ summarise_ndr <- function(..., level, names) {
 
   dt <- switch(level,
     "state" = purrr::reduce(df, dplyr::left_join, by = c("ip", "state")),
-    "facility" = purrr::reduce(df, dplyr::left_join, by = c("ip", "state", "facility")),
+    "facility" = purrr::reduce(df, dplyr::left_join, by = c("ip", "state", "lga", "facility")),
     "country" = purrr::reduce(df, dplyr::left_join, by = "ip"),
     "ip" = purrr::reduce(df, dplyr::left_join, by = "ip"),
     "lga" = purrr::reduce(df, dplyr::left_join, by = c("ip", "state", "lga"))

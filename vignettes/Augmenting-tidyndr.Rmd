@@ -1,5 +1,5 @@
 ---
-title: "Extending the functionality of tidyndr"
+title: "Extending tidyndr"
 output: rmarkdown::html_vignette
 description: >
     Here, we focus on discussing indicators that are derived from calculations. The {dplyr} package provides a very useful function `mutate()` that we will be leveraging on to provide our summary statistics.
@@ -22,6 +22,7 @@ While the {tidyndr} package focuses on generating line-list of common PEPFAR ind
 2. `Continuity of Treatment Proxy`
 3. `Viral Load Testing Coverage`
 4. `Viral Load Suppression Coverage`
+5. Duration of ARV Dispensed
 
 
 ```{r setup}
@@ -144,4 +145,23 @@ vl_suppressed <- tx_pvls_num(current_data)
 nrow(vl_suppressed) / nrow(vl_result) * 100
 ```
 
+### Duration of ARV Dispensed
+The months of ARV dispensed is sometimes disaggregated into "<3 months", "3 - 5 months", "6+ months". To calculate these we execute a similar line of code as below:
 
+```{r, arv_duration}
+less_than_three <- tx_mmd(ndr_example, months = c(0, 1, 2))
+
+three_to_five <- tx_mmd(ndr_example, months = c(3, 4, 5))
+
+six_plus <- tx_mmd(ndr_example, months = c(6:12))
+
+summarise_ndr(less_than_three,
+              three_to_five,
+              six_plus,
+              level = "state",
+              names = c(
+                "< 3months",
+                "3-5months",
+                "6+ months"
+              ))
+```

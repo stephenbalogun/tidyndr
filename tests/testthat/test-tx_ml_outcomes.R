@@ -1,9 +1,9 @@
 test_that("tx_ml_outcome works", {
   expect_identical(
     tx_ml(
-      ndr_example,
-      lubridate::ymd("2020-10-01"),
-      lubridate::ymd("2021-01-31")
+      new_data = ndr_example,
+      from = lubridate::ymd("2020-10-01"),
+      to = lubridate::ymd("2021-01-31")
     ) %>%
       tx_ml_outcomes("dead"),
     ndr_example %>%

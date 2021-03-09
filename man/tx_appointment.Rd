@@ -10,8 +10,7 @@ tx_appointment(
   from = get("fy_start")(),
   to = get("Sys.Date")(),
   states = .s,
-  facilities = .f,
-  status = "calculated"
+  facilities = .f
 )
 }
 \arguments{
@@ -31,10 +30,6 @@ states using the \code{c()} e.g. \code{c("State 1", "State 2")}.}
 all the facilities contained in the dataframe. If specifying more than one
 facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}
-
-\item{status}{Determines how the number of active clients is calculated. The options
-are to either to use the NDR \code{current_status_28_days} column ("default") or the
-derived \code{current_status} column ("calculated").}
 }
 \value{
 tx_appointment
@@ -56,7 +51,6 @@ tx_appointment(ndr_example,
 tx_appointment(ndr_example,
   from = "2021-03-01",
   to = "2021-03-31",
-  status = "default"
 )
 
 # Determine clients with medication refill in January 2021 for a particular facility

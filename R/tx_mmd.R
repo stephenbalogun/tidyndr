@@ -8,7 +8,8 @@
 #' @param data An NDR dataframe imported using the `read_ndr()`.
 #' @param months The number(s) of months of interest of ARV dispensed. The default is to subset active
 #'    clients who had 3 - 6 months of ARV dispensed.
-#' @inheritParams tx_appointment
+#' @inheritParams tx_new
+#' @inheritParams tx_curr
 #'
 #' @return tx_mmd
 #' @export
@@ -35,11 +36,11 @@ tx_mmd <- function(data,
   }
 
 
-  if (!any(states %in% unique(data$state))) {
+  if (!all(states %in% unique(data$state))) {
     rlang::abort("state(s) is/are not contained in the supplied data. Check the spelling and/or case.")
   }
 
-  if (!any(facilities %in% unique(subset(data, state %in% states)$facility))) {
+  if (!all(facilities %in% unique(subset(data, state %in% states)$facility))) {
     rlang::abort("facilit(ies) is/are not found in the data or state supplied.
                  Check that the facility is correctly spelt and located in the state.")
   }

@@ -44,21 +44,26 @@ tx_new <- function(data,
 
   .f <- unique(data$facility)
 
-  if (!any(states %in% unique(data$state))) {
+  if (!all(states %in% unique(data$state))) {
     rlang::abort("state(s) is/are not contained in the supplied data. Check the spelling and/or case.")
   }
 
-  if (!any(facilities %in% unique(subset(data, state %in% states)$facility))) {
+  if (!all(facilities %in% unique(subset(data, state %in% states)$facility))) {
     rlang::abort("facilit(ies) is/are not found in the data or state supplied.
                  Check that the facility is correctly spelt and located in the state.")
   }
 
   if (is.na(lubridate::as_date(from)) || is.na(lubridate::as_date(to))) {
-    rlang::abort("The supplied date is not in 'yyyy-mm-dd' format.")
+    rlang::abort("The supplied date is not in the right format. Did you remember to
+                 enter the date in 'yyyy-mm-dd' or forget the quotation marks?")
   }
 
   if (lubridate::as_date(from) > Sys.Date() || lubridate::as_date(to) > Sys.Date()) {
     rlang::abort("The date arguments cannot be in the future!!")
+  }
+
+  if (lubridate::as_date(from) > lubridate::as_date(to)) {
+    rlang::abort("The 'to' date cannot be before the 'from' date!!")
   }
 
 

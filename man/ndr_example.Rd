@@ -70,6 +70,6 @@ Repository. Two additional variables are added for easy referencing during analy
 These variables are: \code{date_ltfu} and \code{current_status} based on the calculated \code{date_ltfu}.
 }
 \note{
-for more information, kindly visit \url{http://www.ndr.shieldnigeriaproject.com/}
+for more information, kindly visit \url{https://ndr.shieldnigeriaproject.com/}
 }
 \keyword{datasets}

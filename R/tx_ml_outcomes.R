@@ -12,7 +12,7 @@
 #' @export
 #'
 #' @examples
-#' tx_ml_outcomes(tx_ml(ndr_example),
+#' tx_ml_outcomes(tx_ml(new_data = ndr_example),
 #'   outcome = "dead"
 #' )
 tx_ml_outcomes <- function(data,

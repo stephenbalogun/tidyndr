@@ -8,19 +8,21 @@
 #'    have been previously inactive.
 #' @param new_data The current datafame where changes in current treatment
 #'    status will be checked.
-#' @inheritParams tx_appointment
+#' @inheritParams tx_new
+#' @inheritParams tx_curr
 #'
 #' @return tx_rtt
 #' @export
 #'
 #' @examples
-#' file_path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
-#' ndr_old <- read_ndr(file_path, time_stamp = "2021-02-15")
-#' ndr_new <- ndr_example
-#' tx_rtt(ndr_old, ndr_new)
+#' ## not run ##
+#' # file_path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
+#' # ndr_old <- read_ndr(file_path, time_stamp = "2021-02-15")
+#' # ndr_new <- ndr_example
+#' # tx_rtt(ndr_old, ndr_new)
 #'
-#' # Determine RTT for a particular state
-#' tx_rtt(ndr_old, ndr_new, states = "State 1")
+#' ## Determine RTT for a particular state
+#' # tx_rtt(ndr_old, ndr_new, states = "State 1")
 tx_rtt <- function(old_data,
                    new_data,
                    states = .s,
@@ -35,11 +37,11 @@ tx_rtt <- function(old_data,
   #   rlang::abort("old_data is more recent than new_data. Did you swtich the position of the two datasets?")
   # }
 
-  if (!any(states %in% unique(new_data$state))) {
+  if (!all(states %in% unique(new_data$state))) {
     rlang::abort("state(s) is/are not contained in the supplied data. Check the spelling and/or case.")
   }
 
-  if (!any(facilities %in% unique(subset(new_data, state %in% states)$facility))) {
+  if (!all(facilities %in% unique(subset(new_data, state %in% states)$facility))) {
     rlang::abort("facilit(ies) is/are not found in the data or state supplied.
                  Check that the facility is correctly spelt and located in the state.")
   }
@@ -81,5 +83,6 @@ tx_rtt <- function(old_data,
 
 utils::globalVariables(c(
   "patient_identifier",
-  "current_status"
+  "current_status",
+  "current_status_28_days"
 ))

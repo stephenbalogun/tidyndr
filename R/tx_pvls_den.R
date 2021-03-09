@@ -8,7 +8,8 @@
 #' @param ref Date provided in ISO8601 format ("yyyy-mm-dd"). Used to
 #'    determine clients who are eligible for viral load and should have a
 #'    documented result. The default is the date of analysis.
-#' @inheritParams tx_appointment
+#' @inheritParams tx_new
+#' @inheritParams tx_curr
 #'
 #' @return tx_pvls_den
 #' @export
@@ -29,11 +30,11 @@ tx_pvls_den <- function(data,
   .s <- unique(data$state)
   .f <- unique(data$facility)
 
-  if (!any(states %in% unique(data$state))) {
+  if (!all(states %in% unique(data$state))) {
     rlang::abort("state(s) is not contained in the supplied data. Check the spelling and/or case.")
   }
 
-  if (!any(facilities %in% unique(subset(data, state %in% states)$facility))) {
+  if (!all(facilities %in% unique(subset(data, state %in% states)$facility))) {
     rlang::abort("facilit(ies) is/are not found in the data or state supplied.
                  Check that the facility is correctly spelt and located in the state.")
   }
@@ -52,7 +53,7 @@ tx_pvls_den <- function(data,
     "calculated" = dplyr::filter(
       data,
       current_status == "Active",
-      lubridate::as_date(ref) - art_start_date >=
+      lubridate::as_date(ref) - art_start_date >
         lubridate::period(6, "months"),
       dplyr::if_else(
         current_age < 20,
@@ -69,7 +70,7 @@ tx_pvls_den <- function(data,
     "default" = dplyr::filter(
       data,
       current_status_28_days == "Active",
-      lubridate::as_date(ref) - art_start_date >=
+      lubridate::as_date(ref) - art_start_date >
         lubridate::period(6, "months"),
       dplyr::if_else(
         current_age < 20,

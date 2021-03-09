@@ -1,11 +1,14 @@
 #' Subset Clients Based on their Current ART Regimen
 #'
 #' Generates the line-list of clients on first-line regimen who are on the choice
-#' combination regimen for their age or weight.
+#' combination regimen for their age or weight. The NDR does not currently report
+#' 'weight' so the function uses 'age' to approximate the choice-regimen for the
+#' clients.
 #'
 #' @param data An NDR dataframe imported using the `read_ndr()
 #' @param age_band a numeric vector of length 2 `c(min_age, max_age)`.
-#' @inheritParams tx_appointment
+#' @inheritParams tx_new
+#' @inheritParams tx_curr
 #'
 #' @return tx_regimen
 #' @export
@@ -34,11 +37,11 @@ tx_regimen <- function(data,
     rlang::abort("The age_band argument requires that you supply min and max values.")
   }
 
-  if (!any(states %in% unique(data$state))) {
+  if (!all(states %in% unique(data$state))) {
     rlang::abort("state(s) is/are not contained in the supplied data. Check the spelling and/or case.")
   }
 
-  if (!any(facilities %in% unique(subset(data, state %in% states)$facility))) {
+  if (!all(facilities %in% unique(subset(data, state %in% states)$facility))) {
     rlang::abort("facilit(ies) is/are not found in the data or state supplied.
                  Check that the facility is correctly spelt and located in the state.")
   }

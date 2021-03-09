@@ -6,7 +6,6 @@
 #' suppressed.
 #'
 #' @param n the value below which viral load result is adjudged to be suppressed.
-#' @inheritParams tx_appointment
 #' @inheritParams tx_pvls_den
 #'
 #' @return tx_pvls_num
@@ -32,11 +31,11 @@ tx_pvls_num <- function(data,
   .s <- unique(data$state)
   .f <- unique(data$facility)
 
-  if (!any(states %in% unique(data$state))) {
+  if (!all(states %in% unique(data$state))) {
     rlang::abort("state(s) is not contained in the supplied data. Check the spelling and/or case.")
   }
 
-  if (!any(facilities %in% unique(subset(data, state %in% states)$facility))) {
+  if (!all(facilities %in% unique(subset(data, state %in% states)$facility))) {
     rlang::abort("facilit(ies) is/are not found in the data or state supplied.
                  Check that the facility is correctly spelt and located in the state.")
   }

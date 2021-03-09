@@ -56,7 +56,7 @@ library(tidyndr)
 
 ### read_ndr
 
-`read_ndr()` reads the downloaded "csv" file into [`R`](https:://cran.r-project.org) using [`vroom::vroom()`](https://vroom.r-lib.org/) behind the scene and passing appropriate column types to the `col_types` argument. It also formats the variable names using the [`snakecase`](https://en.wikipedia.org/wiki/Snake_case) style.
+`read_ndr()` reads the downloaded ".csv" file into [`R`](https:://cran.r-project.org) using [`vroom::vroom()`](https://vroom.r-lib.org/) behind the scene and passing appropriate column types to the `col_types` argument. It also formats the variable names using the [`snakecase`](https://en.wikipedia.org/wiki/Snake_case) style.
 
 ```{r read_ndr}
 ## read from a local file path (not run)
