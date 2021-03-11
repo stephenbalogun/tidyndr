@@ -50,7 +50,7 @@ The `read_ndr()` function  allows you to import your line-list in a nicely confi
 1.	Reads your `.csv` file.  
 2.	Formats the data type for each of the column variables as necessary (converts all date variables to dates and categorical variables to factors).
 3.	Converts all column names to [snake case](https://en.wikipedia.org/wiki/Snake_case) format.    
-4.	Adds to new columns to your data - `date_lost` (calculated by adding  28days to the sum of `last_drug_pick_up_date` and the `days_of_arv_refill`), and `current_status` (calculated by classifying the patient as “active” or “inactive” using the value of the `time_stamp` argument as a reference.   
+4.	Adds three new columns to your data - `date_lost` (calculated by adding  28 days to the sum of `last_drug_pickup_date` and the `days_of_arv_refill`), `appointment_date` (calculated by adding the number of `days_of_arv_refill` to the `last_drug_pickup_date`, and `current_status` (calculated by classifying the patient as “active” or “inactive” using the value of the `time_stamp` argument as a reference.   
 
 The `read_ndr()` has 5 arguments that can be specified. The first arguments two are always required:  
 
@@ -63,7 +63,7 @@ The `read_ndr()` has 5 arguments that can be specified. The first arguments two 
 * `quiet` - when this is set to FALSE (the default) it prints the names of the two columns added. 
 * `...` - these are other arguments that can be passed to `vroom::vroom()`.
 
-```{r, read_ndr, eval=FALSE}
+```{r, read_ndr, eval = FALSE}
 
 ## import file from the computer. This uses the example file that comes with the {tidyndr} package.
 
@@ -328,11 +328,11 @@ inactives <- tx_ml(new_data = ndr_example)
 
 ## disaggregate inactive clients by gender at state level
 disaggregate(inactives,
-             by = "gender")
+             by = "sex")
 
 ## disaggregate inactive clients by "age group" at country level
 disaggregate(inactives,
-             by = "current age",
+             by = "current_age",
              level = "country")
 
 ```

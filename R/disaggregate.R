@@ -6,11 +6,7 @@
 #'
 #' @param data Data containing the indicator to be disaggregated.
 #' @param by The variable of interest to be used for the disaggregation. The
-#' options are any of: \code{"sex"}, \code{"age"} and \code{"pregnancy status"}.
-#' To improve the user experience, the \code{by} parameter accepts any of
-#' \code{"current_age"} and \code{"current age"} as substitutes for \code{"age"},
-#' \code{"gender"} as substitute for \code{"sex"} and
-#' \code{"pregnancy_status"} as substitute for \code{"pregnancy status"}.
+#' options are any of: \code{"sex"}, \code{"current_age"} and \code{"pregnancy_status"}.
 #' @param level The level at which the disaggregation should be performed.
 #' The options are "ip" (or "country"), "state", "lga" or "facility". The default
 #' value is "state".
@@ -21,15 +17,14 @@
 #' @examples
 #' ### Disaggregate "TX_NEW" clients into age categories for each state
 #' new_clients <- tx_new(ndr_example)
-#' disaggregate(new_clients, by = "age") # default value of level is "state"
+#' disaggregate(new_clients, by = "current_age") # default value of level is "state"
 #'
 #' ### Disaggregate "TX_CURR" by gender for each facility
 #' curr_clients <- tx_curr(ndr_example)
 #' disaggregate(curr_clients, by = "sex", level = "facility")
 disaggregate <- function(data, by, level = "state") {
   if (!any(by %in% c(
-    "gender", "sex", "age", "current_age", "current age",
-    "pregnancy status", "pregnancy_status"
+    "sex", "current_age", "pregnancy_status"
   ))) {
     rlang::abort("the value supplied to the `by` parameter is invalid. Please check! \nDid you make a spelling mistake or capitalise the first letter?")
   }
@@ -43,7 +38,7 @@ disaggregate <- function(data, by, level = "state") {
   }
 
   ### by == "sex"
-  if (by == "sex" || by == "gender") {
+  if (by == "sex") {
     gender <- forcats::fct_collapse(data$sex,
       "Male" = "M",
       "Female" = "F",
@@ -93,7 +88,7 @@ disaggregate <- function(data, by, level = "state") {
 
 
   ### by == "pregnancy status"
-  if (by == "pregnancy status" || by == "pregnancy_status") {
+  if (by == "pregnancy_status") {
     preg_status <- forcats::fct_collapse(data$pregnancy_status,
       pregnant = "P",
       breastfeeding = "BF",
@@ -101,7 +96,13 @@ disaggregate <- function(data, by, level = "state") {
       other_level = "missing_or_unknown"
     )
 
-    dat <- dplyr::mutate(data, pregnancy_status = preg_status)
+    dat <- dplyr::filter(
+      dplyr::mutate(
+        data,
+        pregnancy_status = preg_status
+      ),
+      sex == "F", current_age > 10
+    )
 
     if (level == "ip" || level == "country") {
       dt <- janitor::adorn_totals(tidyr::pivot_wider(
@@ -140,7 +141,7 @@ disaggregate <- function(data, by, level = "state") {
 
 
   ### by == "current_age"
-  if (by == "age" || by == "current_age" || by == "current age") {
+  if (by == "current_age") {
     age <- dplyr::case_when(
       data$current_age < 1 ~ "<1",
       dplyr::between(data$current_age, 1, 4) ~ "1-4",

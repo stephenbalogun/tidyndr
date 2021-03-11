@@ -26,17 +26,18 @@ read_ndr
 }
 \description{
 Import your NDR patient-level line-list downloaded as ".csv" format from the
-NDR front-end into R in a nicely formatted table. The function also creates two
-additional variables - \code{date_ltfu} and \code{current_status} for ease of referencing
+NDR front-end into R in a nicely formatted table. The function also creates three
+additional variables - \code{date_ltfu}, \code{appointment_date} and \code{current_status} for ease of referencing
 during analysis.
 }
 \examples{
+## Not run:
 # Read \code{ndr_example.csv} from a path
-file_path <- system.file("extdata", "ndr_example.csv", package = "tidyndr")
-read_ndr(file_path, time_stamp = "2021-02-15")
+# file_path <- system.file("extdata", "ndr_example.csv", package = "tidyndr")
+# read_ndr(file_path, time_stamp = "2021-02-15")
 
 ## Not run:
 # Read using a link to the NDR csv file on the internet
-file_path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
-read_ndr(file_path, time_stamp = "2021-02-15")
+# file_path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
+# read_ndr(file_path, time_stamp = "2021-02-15")
 }

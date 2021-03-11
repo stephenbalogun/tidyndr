@@ -52,7 +52,7 @@ tx_mmd <- function(data,
   switch(status,
     "calculated" = dplyr::filter(
       dplyr::mutate(data,
-        months_dispensed = round(days_of_arv_refill / 30, 0)
+        months_dispensed = floor(days_of_arv_refill / 30)
       ),
       current_status == "Active",
       months_dispensed %in% months,
@@ -61,7 +61,7 @@ tx_mmd <- function(data,
     ),
     "default" = dplyr::filter(
       dplyr::mutate(data,
-        months_dispensed = round(days_of_arv_refill / 30, 0)
+        months_dispensed = floor(days_of_arv_refill / 30)
       ),
       current_status_28_days == "Active",
       months_dispensed %in% months,

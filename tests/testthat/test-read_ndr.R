@@ -64,6 +64,8 @@ test_that("read_ndr() reads-in NDR '.csv' patient-level line-list", {
             date_lost = last_drug_pickup_date +
               lubridate::days(days_of_arv_refill) +
               lubridate::days(28),
+            appointment_date = last_drug_pickup_date +
+              lubridate::days(days_of_arv_refill),
             current_status = dplyr::if_else(
               date_lost >
                 lubridate::as_date("2021-02-15"),

@@ -63,5 +63,5 @@ path <- "C:/Users/stephenbalogun/Documents/My R/example_files/ndr_example.csv"
 write_csv(ndr_example, path, na = "")
 
 #### read the ndr_example (n = 50, 000) for package as .rda file
-ndr_example <- tidyndr::read_ndr(path)
+ndr_example <- tidyndr::read_ndr(path, time_stamp = "2021-02-20")
 usethis::use_data(ndr_example, overwrite = TRUE)

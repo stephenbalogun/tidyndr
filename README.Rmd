@@ -14,14 +14,14 @@ knitr::opts_chunk$set(
 )
 ```
 
-# dplyr <a href=''><img src='man/figures/logo.svg' align="right" height="139" /></a>
+<a href='https://github.com/stephenbalogun/tidyndr/tree/master/man/figures/logo.svg'><img src='man/figures/logo.svg' align="right" height="139" /></a>
 
 <!-- badges: start -->
 [![R build status](https://github.com/stephenbalogun/tidyndr/workflows/R-CMD-check/badge.svg)](https://github.com/stephenbalogun/tidyndr/actions?workflow=R-CMD-check)
 [![Codecov test coverage](https://codecov.io/gh/stephenbalogun/tidyndr/branch/master/graph/badge.svg)](https://codecov.io/gh/stephenbalogun/tidyndr?branch=master)
 <!-- badges: end -->
 
-The goal of {tidyndr} is to provide specialized, simple and easy to use functions that wrap around existing functions in `R` for manipulation of the [NDR](http://ndr.shieldnigeriaproject.com) patient line-list file allowing the user to focus on the tasks to be completed rather than the formula details.  
+The goal of {tidyndr} is to provide specialized, simple and easy to use functions that wrap around existing functions in `R` for manipulation of the [NDR](https://ndr.shieldnigeriaproject.com/) patient line-list file allowing the user to focus on the tasks to be completed rather than the formula details.  
 
 The functions presented are similar to the [PEPFAR MER indicators](https://datim.zendesk.com/hc/en-us/articles/360000084446-MER-Indicator-Reference-Guides) and are currently grouped into three categories:
 
@@ -56,7 +56,7 @@ library(tidyndr)
 
 ### read_ndr
 
-`read_ndr()` reads the downloaded ".csv" file into [`R`](https:://cran.r-project.org) using [`vroom::vroom()`](https://vroom.r-lib.org/) behind the scene and passing appropriate column types to the `col_types` argument. It also formats the variable names using the [`snakecase`](https://en.wikipedia.org/wiki/Snake_case) style.
+`read_ndr()` reads the downloaded ".csv" file into [`R`](https://cran.r-project.org) using [`vroom::vroom()`](https://vroom.r-lib.org/) behind the scene and passing appropriate column types to the `col_types` argument. It also formats the variable names using the [`snakecase`](https://en.wikipedia.org/wiki/Snake_case) style.
 
 ```{r read_ndr}
 ## read from a local file path (not run)
@@ -100,8 +100,8 @@ ndr_example %>%
                  facilities = "Facility 1")
 
 ## Generate list of clients who were active at the beginning of FY21 but became inactive at the end of Q1 of FY21.
-ndr_example %>%
-  tx_ml(from = "2020-10-01",
+  tx_ml(new_data = ndr_example,
+        from = "2020-10-01",
         to = "2020-12-31")
 ```
 
@@ -154,7 +154,7 @@ You might want to generate a summary table of all the indicators you have pulled
 ```{r, summarise_ndr}
 new <- tx_new(ndr_example)  ## generates line-list of TX_NEW for the FY
 curr <- tx_curr(ndr_example) ## generates line-list of currently active clients
-ml <- tx_ml(ndr_example) ## generates line-list of clients who were active at the beginning of the FY but currently inactive
+ml <- tx_ml(new_data = ndr_example) ## generates line-list of clients who were active at the beginning of the FY but currently inactive
 
 summarise_ndr(new, curr, ml,
               level = "state",

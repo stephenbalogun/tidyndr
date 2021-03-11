@@ -1,8 +1,8 @@
 #' Read NDR "csv" file
 #'
 #' Import your NDR patient-level line-list downloaded as ".csv" format from the
-#' NDR front-end into R in a nicely formatted table. The function also creates two
-#' additional variables - `date_ltfu` and `current_status` for ease of referencing
+#' NDR front-end into R in a nicely formatted table. The function also creates three
+#' additional variables - `date_ltfu`, `appointment_date` and `current_status` for ease of referencing
 #' during analysis.
 #'
 #' @param path Path to the csv file on computer. The file path should be specified in the
@@ -21,14 +21,15 @@
 #' @export
 #'
 #' @examples
+#' ## Not run:
 #' # Read \code{ndr_example.csv} from a path
-#' file_path <- system.file("extdata", "ndr_example.csv", package = "tidyndr")
-#' read_ndr(file_path, time_stamp = "2021-02-15")
+#' # file_path <- system.file("extdata", "ndr_example.csv", package = "tidyndr")
+#' # read_ndr(file_path, time_stamp = "2021-02-15")
 #'
 #' ## Not run:
 #' # Read using a link to the NDR csv file on the internet
-#' file_path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
-#' read_ndr(file_path, time_stamp = "2021-02-15")
+#' # file_path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
+#' # read_ndr(file_path, time_stamp = "2021-02-15")
 read_ndr <- function(path,
                      time_stamp,
                      cols = NULL,
@@ -58,6 +59,8 @@ read_ndr <- function(path,
     date_lost = last_drug_pickup_date +
       lubridate::days(days_of_arv_refill) +
       lubridate::days(28),
+    appointment_date = last_drug_pickup_date +
+      lubridate::days(days_of_arv_refill),
     current_status = dplyr::case_when(
       date_lost >= lubridate::as_date(time_stamp) ~ "Active",
       date_lost < lubridate::as_date(time_stamp) ~ "Inactive",
@@ -66,7 +69,7 @@ read_ndr <- function(path,
   )
 
   if (quiet == FALSE) {
-    message("\nTwo new variables created: \n[1] `date_lost` \n[2] `current_status \n")
+    message("\nThree new variables created: \n[1] `date_lost` \n[2] `appointment_date \n[2] `current_status\n")
   }
   df
 }

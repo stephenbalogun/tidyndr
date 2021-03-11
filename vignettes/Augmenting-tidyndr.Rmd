@@ -18,10 +18,10 @@ set.seed(1014)
 
 While the {tidyndr} package focuses on generating line-list of common PEPFAR indicators and providing summaries for these, a few indicators are derived from mathematical calculation of existing indicators. These indicators include:  
 
-1. `TX NEW NEW` 
-2. `Continuity of Treatment Proxy`
-3. `Viral Load Testing Coverage`
-4. `Viral Load Suppression Coverage`
+1. TX_NET_NEW 
+2. Continuity of Treatment (Retention) Proxy
+3. Viral Load Testing Coverage
+4. Viral Load Suppression Coverage
 5. Duration of ARV Dispensed
 
 
@@ -31,7 +31,7 @@ library(dplyr)
 ```
 
 
-### TX NET NEW
+### TX_NET_NEW
 This indicator measures the increase (or decrease) in the number of clients on ART over a period of time. It is calculated by substracting the number of active clients in a previous period from the number of active clients from the current period.  
 
 $tx\_net\_new\ =\ tx\_curr\ current\ period - tx\_curr\ previous\ period$
@@ -73,7 +73,7 @@ print(tx_net_new)
 
 
 
-### Continuity of Treatment Proxy
+### Continuity of Treatment (Retention) Proxy
 Previously called "Retention Proxy". It measures how many of the clients who started the period of interest remained on treatment at the end of that period. It is generally calculated using two different formulas:   
 
   

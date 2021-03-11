@@ -3,7 +3,7 @@ Tidyndr
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# dplyr <a href=''><img src='man/figures/logo.svg' align="right" height="139" /></a>
+<a href='https://github.com/stephenbalogun/tidyndr/tree/master/man/figures/logo.svg'><img src='man/figures/logo.svg' align="right" height="139" /></a>
 
 <!-- badges: start -->
 
@@ -15,7 +15,7 @@ coverage](https://codecov.io/gh/stephenbalogun/tidyndr/branch/master/graph/badge
 
 The goal of {tidyndr} is to provide specialized, simple and easy to use
 functions that wrap around existing functions in `R` for manipulation of
-the [NDR](http://ndr.shieldnigeriaproject.com) patient line-list file
+the [NDR](https://ndr.shieldnigeriaproject.com/) patient line-list file
 allowing the user to focus on the tasks to be completed rather than the
 formula details.
 
@@ -64,7 +64,7 @@ library(tidyndr)
 ### read\_ndr
 
 `read_ndr()` reads the downloaded “.csv” file into
-[`R`](https:://cran.r-project.org) using
+[`R`](https://cran.r-project.org) using
 [`vroom::vroom()`](https://vroom.r-lib.org/) behind the scene and
 passing appropriate column types to the `col_types` argument. It also
 formats the variable names using the
@@ -144,7 +144,7 @@ tx_new(ndr_example)
 ## Subset "TX_CURR" for a state
 ndr_example %>%
   tx_curr(states = "State 1")
-#> # A tibble: 3,705 x 51
+#> # A tibble: 3,726 x 51
 #>    ip     state lga   facility datim_code sex   patient_identif~ hospital_number
 #>    <fct>  <fct> <fct> <fct>    <fct>      <fct> <chr>            <chr>          
 #>  1 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 1001       0001           
@@ -157,7 +157,7 @@ ndr_example %>%
 #>  8 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 10014      0005           
 #>  9 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 10022      0007           
 #> 10 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 10027      00013          
-#> # ... with 3,695 more rows, and 43 more variables: date_of_birth <date>,
+#> # ... with 3,716 more rows, and 43 more variables: date_of_birth <date>,
 #> #   age_at_art_initiation <dbl>, current_age <dbl>, art_start_date <date>,
 #> #   art_start_date_source <fct>, last_drug_pickup_date <date>,
 #> #   last_drug_pickup_date_q1 <date>, last_drug_pickup_date_q2 <date>,
@@ -184,20 +184,20 @@ ndr_example %>%
   tx_appointment(from = "2021-01-01",
                  to = "2021-01-31",
                  facilities = "Facility 1")
-#> # A tibble: 108 x 51
+#> # A tibble: 413 x 51
 #>    ip     state lga   facility datim_code sex   patient_identif~ hospital_number
 #>    <fct>  <fct> <fct> <fct>    <fct>      <fct> <chr>            <chr>          
-#>  1 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 20016      0004           
-#>  2 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 300337     00054          
-#>  3 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 100396     00058          
-#>  4 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 300882     000129         
-#>  5 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 200708     000108         
-#>  6 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 200739     000112         
-#>  7 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 100556     00086          
-#>  8 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 3001038    000150         
-#>  9 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 3001043    000153         
-#> 10 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 100635     000101         
-#> # ... with 98 more rows, and 43 more variables: date_of_birth <date>,
+#>  1 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 2003       0002           
+#>  2 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 3008       0003           
+#>  3 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 20016      0004           
+#>  4 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 30026      0007           
+#>  5 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 10016      0003           
+#>  6 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 20064      00010          
+#>  7 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 200122     00020          
+#>  8 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 200131     00021          
+#>  9 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 100131     00019          
+#> 10 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 200256     00045          
+#> # ... with 403 more rows, and 43 more variables: date_of_birth <date>,
 #> #   age_at_art_initiation <dbl>, current_age <dbl>, art_start_date <date>,
 #> #   art_start_date_source <fct>, last_drug_pickup_date <date>,
 #> #   last_drug_pickup_date_q1 <date>, last_drug_pickup_date_q2 <date>,
@@ -220,8 +220,8 @@ ndr_example %>%
 #> #   current_status <chr>
 
 ## Generate list of clients who were active at the beginning of FY21 but became inactive at the end of Q1 of FY21.
-ndr_example %>%
-  tx_ml(from = "2020-10-01",
+  tx_ml(new_data = ndr_example,
+        from = "2020-10-01",
         to = "2020-12-31")
 #> # A tibble: 2,593 x 51
 #>    ip     state lga   facility datim_code sex   patient_identif~ hospital_number
@@ -276,7 +276,7 @@ who are due for a viral load test out of all those who are eligible.
 ## Generate list of clients who are eligible for VL (i.e. expected to have a documented VL result)
 ndr_example %>%
   tx_vl_eligible()
-#> # A tibble: 13,796 x 51
+#> # A tibble: 13,941 x 51
 #>    ip     state lga   facility datim_code sex   patient_identif~ hospital_number
 #>    <fct>  <fct> <fct> <fct>    <fct>      <fct> <chr>            <chr>          
 #>  1 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 1001       0001           
@@ -289,7 +289,7 @@ ndr_example %>%
 #>  8 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 1005       0004           
 #>  9 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 3009       0004           
 #> 10 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 2009       0001           
-#> # ... with 13,786 more rows, and 43 more variables: date_of_birth <date>,
+#> # ... with 13,931 more rows, and 43 more variables: date_of_birth <date>,
 #> #   age_at_art_initiation <dbl>, current_age <dbl>, art_start_date <date>,
 #> #   art_start_date_source <fct>, last_drug_pickup_date <date>,
 #> #   last_drug_pickup_date_q1 <date>, last_drug_pickup_date_q2 <date>,
@@ -316,7 +316,7 @@ ndr_example %>%
   tx_vl_eligible("2021-03-31",
                  states = "State 2",
                  sample = TRUE)
-#> # A tibble: 2,334 x 51
+#> # A tibble: 2,360 x 51
 #>    ip     state lga   facility datim_code sex   patient_identif~ hospital_number
 #>    <fct>  <fct> <fct> <fct>    <fct>      <fct> <chr>            <chr>          
 #>  1 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 20012      0001           
@@ -329,7 +329,7 @@ ndr_example %>%
 #>  8 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 20034      00012          
 #>  9 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 20035      00013          
 #> 10 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 20037      00015          
-#> # ... with 2,324 more rows, and 43 more variables: date_of_birth <date>,
+#> # ... with 2,350 more rows, and 43 more variables: date_of_birth <date>,
 #> #   age_at_art_initiation <dbl>, current_age <dbl>, art_start_date <date>,
 #> #   art_start_date_source <fct>, last_drug_pickup_date <date>,
 #> #   last_drug_pickup_date_q1 <date>, last_drug_pickup_date_q2 <date>,
@@ -362,7 +362,7 @@ no_of_vl_eligible <- tx_vl_eligible(ndr_example,
 vl_coverage <- scales::percent(no_of_vl_results / no_of_vl_eligible)
 
 print(vl_coverage)
-#> [1] "61%"
+#> [1] "59%"
 ```
 
 For all the ‘Treatment’ and ‘Viral Suppression’ indicators (except
@@ -378,20 +378,20 @@ ndr_example %>%
                  to = "2021-03-31",
                  states = c("State 1", "State 3")) %>%
   tx_vl_eligible(sample = TRUE)
-#> # A tibble: 2,426 x 51
+#> # A tibble: 2,519 x 51
 #>    ip     state lga   facility datim_code sex   patient_identif~ hospital_number
 #>    <fct>  <fct> <fct> <fct>    <fct>      <fct> <chr>            <chr>          
 #>  1 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 1001       0001           
 #>  2 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 3006       0002           
-#>  3 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 10011      0002           
-#>  4 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 30031      00010          
-#>  5 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 30034      00011          
-#>  6 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 30044      0002           
-#>  7 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 30045      00018          
-#>  8 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 30049      00021          
-#>  9 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 30065      00030          
-#> 10 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 10050      0001           
-#> # ... with 2,416 more rows, and 43 more variables: date_of_birth <date>,
+#>  3 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 30027      0009           
+#>  4 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 10011      0002           
+#>  5 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 30031      00010          
+#>  6 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 30034      00011          
+#>  7 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 30044      0002           
+#>  8 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 30045      00018          
+#>  9 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 30049      00021          
+#> 10 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 30065      00030          
+#> # ... with 2,509 more rows, and 43 more variables: date_of_birth <date>,
 #> #   age_at_art_initiation <dbl>, current_age <dbl>, art_start_date <date>,
 #> #   art_start_date_source <fct>, last_drug_pickup_date <date>,
 #> #   last_drug_pickup_date_q1 <date>, last_drug_pickup_date_q2 <date>,
@@ -426,7 +426,7 @@ give to each of your summary column.
 ``` r
 new <- tx_new(ndr_example)  ## generates line-list of TX_NEW for the FY
 curr <- tx_curr(ndr_example) ## generates line-list of currently active clients
-ml <- tx_ml(ndr_example) ## generates line-list of clients who were active at the beginning of the FY but currently inactive
+ml <- tx_ml(new_data = ndr_example) ## generates line-list of clients who were active at the beginning of the FY but currently inactive
 
 summarise_ndr(new, curr, ml,
               level = "state",
@@ -434,10 +434,10 @@ summarise_ndr(new, curr, ml,
 #> # A tibble: 4 x 5
 #>   ip      state   tx_new tx_curr tx_ml
 #>   <chr>   <chr>    <int>   <int> <int>
-#> 1 IP_name State 1    662    3705  2560
-#> 2 IP_name State 2   1239    5031  3991
-#> 3 IP_name State 3   3338    7881  3149
-#> 4 Total   -         5239   16617  9701
+#> 1 IP_name State 1    662    3726  2658
+#> 2 IP_name State 2   1239    5058  4170
+#> 3 IP_name State 3   3338    7912  3316
+#> 4 Total   -         5239   16696 10145
 ```
 
 The `disaggregate()` allows you to summarise an indicator of interest
@@ -452,13 +452,13 @@ new_clients <- tx_new(ndr_example)  ## generates line-list of TX_NEW for the FY
 
 disaggregate(new_clients,
              by = "age")
-#> # A tibble: 4 x 15
-#>   ip     state  `<1` `1-4` `5-9` `10-14` `15-19` `20-24` `25-29` `30-34` `35-39`
-#>   <chr>  <chr> <int> <int> <int>   <int>   <int>   <int>   <int>   <int>   <int>
-#> 1 IP_na~ Stat~     1     3     2       1      19      78     167     169      94
-#> 2 IP_na~ Stat~     1     2     3       5      10     145     317     349     174
-#> 3 IP_na~ Stat~     2     8    12      10     131     436     702     703     474
-#> 4 Total  -         4    13    17      16     160     659    1186    1221     742
+#> # A tibble: 4 x 14
+#>   ip      state   `1-4` `5-9` `10-14` `15-19` `20-24` `25-29` `30-34` `35-39`
+#>   <chr>   <chr>   <int> <int>   <int>   <int>   <int>   <int>   <int>   <int>
+#> 1 IP_name State 1     4     2       1      19      78     167     169      94
+#> 2 IP_name State 2     3     3       5      10     145     317     349     174
+#> 3 IP_name State 3    10    12      10     131     436     702     703     474
+#> 4 Total   -          17    17      16     160     659    1186    1221     742
 #> # ... with 4 more variables: 40-44 <int>, 45-49 <int>, 50+ <int>, Total <dbl>
 
 ## disaggregate 'TX_CURR' by sex
@@ -469,8 +469,8 @@ ndr_example %>%
 #> # A tibble: 4 x 6
 #>   ip      state    Male Female unknown Total
 #>   <chr>   <chr>   <int>  <int>   <int> <dbl>
-#> 1 IP_name State 1  1091   2614       0  3705
-#> 2 IP_name State 2  1595   3435       1  5031
-#> 3 IP_name State 3  3380   4501       0  7881
-#> 4 Total   -        6066  10550       1 16617
+#> 1 IP_name State 1  1102   2624       0  3726
+#> 2 IP_name State 2  1606   3451       1  5058
+#> 3 IP_name State 3  3386   4526       0  7912
+#> 4 Total   -        6094  10601       1 16696
 ```

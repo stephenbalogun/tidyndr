@@ -59,7 +59,7 @@ tx_appointment <- function(data,
   dplyr::filter(
     data,
     dplyr::between(
-      date_lost - 28,
+      appointment_date,
       lubridate::as_date(from),
       lubridate::as_date(to)
     ),

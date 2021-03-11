@@ -55,14 +55,16 @@ outcome of interest.
 tx_ml(new_data = ndr_example)
 
 # Find clients who were inactive at the end of Q1 of FY21
-tx_ml(new_data = ndr_example, to = "2020-12-31")
+tx_ml(new_data = ndr_example,
+to = "2020-12-31")
 
+## not run:
 ## generate line-list of `tx_ml()` using two datasets
-file_path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
-ndr_old <- read_ndr(file_path, time_stamp = "2021-02-15")
-ndr_new <- ndr_example
-tx_ml(
-  old_data = ndr_old,
-  new_data = ndr_new
-)
+# file_path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
+# ndr_old <- read_ndr(file_path, time_stamp = "2021-02-15")
+# ndr_new <- ndr_example
+# tx_ml(
+#   old_data = ndr_old,
+#   new_data = ndr_new
+# )
 }

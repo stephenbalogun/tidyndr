@@ -58,6 +58,7 @@ A data frame with 50000 rows and 48 variables:
 \item{x49}{column missing column name and containing negligible entries}
 \item{current_status}{TRUE or FALSE indicating whether the client is active or not based on the calculated date of LTFU}
 \item{date_lost}{The calculated expected LTFU date based on the last_drug_pick_up_date, days_of_arv_refill and 28 days missed appointment date}
+\item{appointment_date}{The calculated expected next date of medication refill based on the last_drug_pick_up_date and days_of_arv_refill}
 }
 }
 \usage{
