@@ -82,8 +82,9 @@ path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr
 
 ndr_example <- read_ndr(path, time_stamp = "2021-02-20")
 #> 
-#> Two new variables created: 
+#> Three new variables created: 
 #> [1] `date_lost` 
+#> [2] `appointment_date 
 #> [2] `current_status
 ```
 
@@ -106,7 +107,7 @@ The functions included in this group are:
 ## Subset "TX_NEW"
 tx_new(ndr_example)
 #> Warning: One or more parsing issues, see `problems()` for details
-#> # A tibble: 5,239 x 51
+#> # A tibble: 5,239 x 52
 #>    ip     state lga   facility datim_code sex   patient_identif~ hospital_number
 #>    <fct>  <fct> <fct> <fct>    <fct>      <fct> <chr>            <chr>          
 #>  1 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 1004       0003           
@@ -119,7 +120,7 @@ tx_new(ndr_example)
 #>  8 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 30037      00013          
 #>  9 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 30039      00014          
 #> 10 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 30047      00019          
-#> # ... with 5,229 more rows, and 43 more variables: date_of_birth <date>,
+#> # ... with 5,229 more rows, and 44 more variables: date_of_birth <date>,
 #> #   age_at_art_initiation <dbl>, current_age <dbl>, art_start_date <date>,
 #> #   art_start_date_source <fct>, last_drug_pickup_date <date>,
 #> #   last_drug_pickup_date_q1 <date>, last_drug_pickup_date_q2 <date>,
@@ -139,12 +140,12 @@ tx_new(ndr_example)
 #> #   patient_deceased_date <date>, patient_transferred_out <lgl>,
 #> #   transferred_out_date <date>, patient_transferred_in <lgl>,
 #> #   transferred_in_date <date>, x49 <chr>, date_lost <date>,
-#> #   current_status <chr>
+#> #   appointment_date <date>, current_status <chr>
 
 ## Subset "TX_CURR" for a state
 ndr_example %>%
   tx_curr(states = "State 1")
-#> # A tibble: 3,726 x 51
+#> # A tibble: 3,726 x 52
 #>    ip     state lga   facility datim_code sex   patient_identif~ hospital_number
 #>    <fct>  <fct> <fct> <fct>    <fct>      <fct> <chr>            <chr>          
 #>  1 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 1001       0001           
@@ -157,7 +158,7 @@ ndr_example %>%
 #>  8 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 10014      0005           
 #>  9 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 10022      0007           
 #> 10 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 10027      00013          
-#> # ... with 3,716 more rows, and 43 more variables: date_of_birth <date>,
+#> # ... with 3,716 more rows, and 44 more variables: date_of_birth <date>,
 #> #   age_at_art_initiation <dbl>, current_age <dbl>, art_start_date <date>,
 #> #   art_start_date_source <fct>, last_drug_pickup_date <date>,
 #> #   last_drug_pickup_date_q1 <date>, last_drug_pickup_date_q2 <date>,
@@ -177,14 +178,14 @@ ndr_example %>%
 #> #   patient_deceased_date <date>, patient_transferred_out <lgl>,
 #> #   transferred_out_date <date>, patient_transferred_in <lgl>,
 #> #   transferred_in_date <date>, x49 <chr>, date_lost <date>,
-#> #   current_status <chr>
+#> #   appointment_date <date>, current_status <chr>
 
 ## Generate line-list of clients with medication refill in January 2021 for a facility (Facility 1)
 ndr_example %>%
   tx_appointment(from = "2021-01-01",
                  to = "2021-01-31",
                  facilities = "Facility 1")
-#> # A tibble: 413 x 51
+#> # A tibble: 413 x 52
 #>    ip     state lga   facility datim_code sex   patient_identif~ hospital_number
 #>    <fct>  <fct> <fct> <fct>    <fct>      <fct> <chr>            <chr>          
 #>  1 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 2003       0002           
@@ -197,7 +198,7 @@ ndr_example %>%
 #>  8 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 200131     00021          
 #>  9 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 100131     00019          
 #> 10 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 200256     00045          
-#> # ... with 403 more rows, and 43 more variables: date_of_birth <date>,
+#> # ... with 403 more rows, and 44 more variables: date_of_birth <date>,
 #> #   age_at_art_initiation <dbl>, current_age <dbl>, art_start_date <date>,
 #> #   art_start_date_source <fct>, last_drug_pickup_date <date>,
 #> #   last_drug_pickup_date_q1 <date>, last_drug_pickup_date_q2 <date>,
@@ -217,13 +218,13 @@ ndr_example %>%
 #> #   patient_deceased_date <date>, patient_transferred_out <lgl>,
 #> #   transferred_out_date <date>, patient_transferred_in <lgl>,
 #> #   transferred_in_date <date>, x49 <chr>, date_lost <date>,
-#> #   current_status <chr>
+#> #   appointment_date <date>, current_status <chr>
 
 ## Generate list of clients who were active at the beginning of FY21 but became inactive at the end of Q1 of FY21.
   tx_ml(new_data = ndr_example,
         from = "2020-10-01",
         to = "2020-12-31")
-#> # A tibble: 2,593 x 51
+#> # A tibble: 2,593 x 52
 #>    ip     state lga   facility datim_code sex   patient_identif~ hospital_number
 #>    <fct>  <fct> <fct> <fct>    <fct>      <fct> <chr>            <chr>          
 #>  1 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 1007       0003           
@@ -236,7 +237,7 @@ ndr_example %>%
 #>  8 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 10065      00011          
 #>  9 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 200118     00047          
 #> 10 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 10073      00023          
-#> # ... with 2,583 more rows, and 43 more variables: date_of_birth <date>,
+#> # ... with 2,583 more rows, and 44 more variables: date_of_birth <date>,
 #> #   age_at_art_initiation <dbl>, current_age <dbl>, art_start_date <date>,
 #> #   art_start_date_source <fct>, last_drug_pickup_date <date>,
 #> #   last_drug_pickup_date_q1 <date>, last_drug_pickup_date_q2 <date>,
@@ -256,7 +257,7 @@ ndr_example %>%
 #> #   patient_deceased_date <date>, patient_transferred_out <lgl>,
 #> #   transferred_out_date <date>, patient_transferred_in <lgl>,
 #> #   transferred_in_date <date>, x49 <chr>, date_lost <date>,
-#> #   current_status <chr>
+#> #   appointment_date <date>, current_status <chr>
 ```
 
 ### Viral Suppression Indicators
@@ -276,7 +277,7 @@ who are due for a viral load test out of all those who are eligible.
 ## Generate list of clients who are eligible for VL (i.e. expected to have a documented VL result)
 ndr_example %>%
   tx_vl_eligible()
-#> # A tibble: 13,941 x 51
+#> # A tibble: 13,941 x 52
 #>    ip     state lga   facility datim_code sex   patient_identif~ hospital_number
 #>    <fct>  <fct> <fct> <fct>    <fct>      <fct> <chr>            <chr>          
 #>  1 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 1001       0001           
@@ -289,7 +290,7 @@ ndr_example %>%
 #>  8 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 1005       0004           
 #>  9 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 3009       0004           
 #> 10 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 2009       0001           
-#> # ... with 13,931 more rows, and 43 more variables: date_of_birth <date>,
+#> # ... with 13,931 more rows, and 44 more variables: date_of_birth <date>,
 #> #   age_at_art_initiation <dbl>, current_age <dbl>, art_start_date <date>,
 #> #   art_start_date_source <fct>, last_drug_pickup_date <date>,
 #> #   last_drug_pickup_date_q1 <date>, last_drug_pickup_date_q2 <date>,
@@ -309,14 +310,14 @@ ndr_example %>%
 #> #   patient_deceased_date <date>, patient_transferred_out <lgl>,
 #> #   transferred_out_date <date>, patient_transferred_in <lgl>,
 #> #   transferred_in_date <date>, x49 <chr>, date_lost <date>,
-#> #   current_status <chr>
+#> #   appointment_date <date>, current_status <chr>
 
 ## Generate list of clients that will be expected to have a viral load test done in Q2 of FY21 for "State 2"
 ndr_example %>%
   tx_vl_eligible("2021-03-31",
                  states = "State 2",
                  sample = TRUE)
-#> # A tibble: 2,360 x 51
+#> # A tibble: 2,360 x 52
 #>    ip     state lga   facility datim_code sex   patient_identif~ hospital_number
 #>    <fct>  <fct> <fct> <fct>    <fct>      <fct> <chr>            <chr>          
 #>  1 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 20012      0001           
@@ -329,7 +330,7 @@ ndr_example %>%
 #>  8 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 20034      00012          
 #>  9 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 20035      00013          
 #> 10 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 20037      00015          
-#> # ... with 2,350 more rows, and 43 more variables: date_of_birth <date>,
+#> # ... with 2,350 more rows, and 44 more variables: date_of_birth <date>,
 #> #   age_at_art_initiation <dbl>, current_age <dbl>, art_start_date <date>,
 #> #   art_start_date_source <fct>, last_drug_pickup_date <date>,
 #> #   last_drug_pickup_date_q1 <date>, last_drug_pickup_date_q2 <date>,
@@ -349,7 +350,7 @@ ndr_example %>%
 #> #   patient_deceased_date <date>, patient_transferred_out <lgl>,
 #> #   transferred_out_date <date>, patient_transferred_in <lgl>,
 #> #   transferred_in_date <date>, x49 <chr>, date_lost <date>,
-#> #   current_status <chr>
+#> #   appointment_date <date>, current_status <chr>
 
 ### Calculate the Viral Load Coverage for State 3
 no_of_vl_results <- tx_pvls_den(ndr_example,
@@ -378,7 +379,7 @@ ndr_example %>%
                  to = "2021-03-31",
                  states = c("State 1", "State 3")) %>%
   tx_vl_eligible(sample = TRUE)
-#> # A tibble: 2,519 x 51
+#> # A tibble: 2,519 x 52
 #>    ip     state lga   facility datim_code sex   patient_identif~ hospital_number
 #>    <fct>  <fct> <fct> <fct>    <fct>      <fct> <chr>            <chr>          
 #>  1 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 1001       0001           
@@ -391,7 +392,7 @@ ndr_example %>%
 #>  8 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 30045      00018          
 #>  9 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 30049      00021          
 #> 10 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 30065      00030          
-#> # ... with 2,509 more rows, and 43 more variables: date_of_birth <date>,
+#> # ... with 2,509 more rows, and 44 more variables: date_of_birth <date>,
 #> #   age_at_art_initiation <dbl>, current_age <dbl>, art_start_date <date>,
 #> #   art_start_date_source <fct>, last_drug_pickup_date <date>,
 #> #   last_drug_pickup_date_q1 <date>, last_drug_pickup_date_q2 <date>,
@@ -411,7 +412,7 @@ ndr_example %>%
 #> #   patient_deceased_date <date>, patient_transferred_out <lgl>,
 #> #   transferred_out_date <date>, patient_transferred_in <lgl>,
 #> #   transferred_in_date <date>, x49 <chr>, date_lost <date>,
-#> #   current_status <chr>
+#> #   appointment_date <date>, current_status <chr>
 ```
 
 ### Summarising your Indicators
@@ -451,7 +452,7 @@ is supplied to the `level` parameter.
 new_clients <- tx_new(ndr_example)  ## generates line-list of TX_NEW for the FY
 
 disaggregate(new_clients,
-             by = "age")
+             by = "current_age")
 #> # A tibble: 4 x 14
 #>   ip      state   `1-4` `5-9` `10-14` `15-19` `20-24` `25-29` `30-34` `35-39`
 #>   <chr>   <chr>   <int> <int>   <int>   <int>   <int>   <int>   <int>   <int>
@@ -474,3 +475,10 @@ ndr_example %>%
 #> 3 IP_name State 3  3386   4526       0  7912
 #> 4 Total   -        6094  10601       1 16696
 ```
+
+## Code of Conduct
+
+Please note that the tidyndr project is released with a [Contributor
+Code of
+Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms.
