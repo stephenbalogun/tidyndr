@@ -1,12 +1,12 @@
 Package: tidyndr
 Title: Analysis of the Nigeria National Data Repository (NDR)
-Version: 0.0.0.9000
+Version: 1.0.0
 Authors@R: 
     c(person(given = "Stephen",
            family = "Balogun",
            role = c("aut", "cre"),
            email = "stephentaiyebalogun@gmail.com",
-           comment = c(ORCID = "0000-0002-9928-3703")),
+           comment = c(ORCID = "https://orcid.org/0000-0002-9928-3703")),
            person(given = "Scholastica",
            family = "Olanrewaju",
            role = "ctb"),
@@ -20,7 +20,7 @@ Authors@R:
            family = "Abone",
            role = "ctb"))
 Description: The goal is to simplify routine analysis of the Nigeria National  Data Repository (NDR) using the PEPFAR Monitoring, Evaluation, and Reporting (MER) indictors. It is designed to import in to R patient-level line-list downloaded as 'csv' file from the front-end of the NDR.
-License: GPL (>= 3) + file LICENSE
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
