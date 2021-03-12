@@ -1,6 +1,6 @@
 Package: tidyndr
 Title: Analysis of the Nigeria National Data Repository (NDR)
-Version: 1.0.0
+Version: 0.1.0
 Authors@R: 
     c(person(given = "Stephen",
            family = "Balogun",
