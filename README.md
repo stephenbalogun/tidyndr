@@ -3,7 +3,7 @@ Tidyndr
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-<a href='https://github.com/stephenbalogun/tidyndr/tree/master/man/figures/logo.svg'><img src='man/figures/logo.svg' align="right" height="139" /></a>
+<a href='https://github.com/stephenbalogun/tidyndr/tree/master/man/figures/logo.svg'><img src="man/figures/logo.svg" align="right" height="139"/></a>
 
 <!-- badges: start -->
 
@@ -11,6 +11,7 @@ Tidyndr
 status](https://github.com/stephenbalogun/tidyndr/workflows/R-CMD-check/badge.svg)](https://github.com/stephenbalogun/tidyndr/actions?workflow=R-CMD-check)
 [![Codecov test
 coverage](https://codecov.io/gh/stephenbalogun/tidyndr/branch/master/graph/badge.svg)](https://codecov.io/gh/stephenbalogun/tidyndr?branch=master)
+
 <!-- badges: end -->
 
 The goal of {tidyndr} is to provide specialized, simple and easy to use
@@ -277,7 +278,7 @@ who are due for a viral load test out of all those who are eligible.
 ## Generate list of clients who are eligible for VL (i.e. expected to have a documented VL result)
 ndr_example %>%
   tx_vl_eligible()
-#> # A tibble: 13,941 x 52
+#> # A tibble: 14,028 x 52
 #>    ip     state lga   facility datim_code sex   patient_identif~ hospital_number
 #>    <fct>  <fct> <fct> <fct>    <fct>      <fct> <chr>            <chr>          
 #>  1 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 1001       0001           
@@ -290,7 +291,7 @@ ndr_example %>%
 #>  8 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 1005       0004           
 #>  9 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 3009       0004           
 #> 10 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 2009       0001           
-#> # ... with 13,931 more rows, and 44 more variables: date_of_birth <date>,
+#> # ... with 14,018 more rows, and 44 more variables: date_of_birth <date>,
 #> #   age_at_art_initiation <dbl>, current_age <dbl>, art_start_date <date>,
 #> #   art_start_date_source <fct>, last_drug_pickup_date <date>,
 #> #   last_drug_pickup_date_q1 <date>, last_drug_pickup_date_q2 <date>,
@@ -363,7 +364,7 @@ no_of_vl_eligible <- tx_vl_eligible(ndr_example,
 vl_coverage <- scales::percent(no_of_vl_results / no_of_vl_eligible)
 
 print(vl_coverage)
-#> [1] "59%"
+#> [1] "58%"
 ```
 
 For all the ‘Treatment’ and ‘Viral Suppression’ indicators (except
@@ -379,7 +380,7 @@ ndr_example %>%
                  to = "2021-03-31",
                  states = c("State 1", "State 3")) %>%
   tx_vl_eligible(sample = TRUE)
-#> # A tibble: 2,519 x 52
+#> # A tibble: 2,565 x 52
 #>    ip     state lga   facility datim_code sex   patient_identif~ hospital_number
 #>    <fct>  <fct> <fct> <fct>    <fct>      <fct> <chr>            <chr>          
 #>  1 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 1001       0001           
@@ -391,8 +392,8 @@ ndr_example %>%
 #>  7 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 30044      0002           
 #>  8 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 30045      00018          
 #>  9 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 30049      00021          
-#> 10 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 30065      00030          
-#> # ... with 2,509 more rows, and 44 more variables: date_of_birth <date>,
+#> 10 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 10022      0007           
+#> # ... with 2,555 more rows, and 44 more variables: date_of_birth <date>,
 #> #   age_at_art_initiation <dbl>, current_age <dbl>, art_start_date <date>,
 #> #   art_start_date_source <fct>, last_drug_pickup_date <date>,
 #> #   last_drug_pickup_date_q1 <date>, last_drug_pickup_date_q2 <date>,
@@ -435,10 +436,10 @@ summarise_ndr(new, curr, ml,
 #> # A tibble: 4 x 5
 #>   ip      state   tx_new tx_curr tx_ml
 #>   <chr>   <chr>    <int>   <int> <int>
-#> 1 IP_name State 1    662    3726  2658
-#> 2 IP_name State 2   1239    5058  4170
-#> 3 IP_name State 3   3338    7912  3316
-#> 4 Total   -         5239   16696 10145
+#> 1 IP_name State 1    662    3726  2845
+#> 2 IP_name State 2   1239    5058  4494
+#> 3 IP_name State 3   3338    7912  3612
+#> 4 Total   -         5239   16696 10952
 ```
 
 The `disaggregate()` allows you to summarise an indicator of interest

@@ -14,31 +14,34 @@ knitr::opts_chunk$set(
 )
 ```
 
-<a href='https://github.com/stephenbalogun/tidyndr/tree/master/man/figures/logo.svg'><img src='man/figures/logo.svg' align="right" height="139" /></a>
+<a href='https://github.com/stephenbalogun/tidyndr/tree/master/man/figures/logo.svg'><img src="man/figures/logo.svg" align="right" height="139"/></a>
 
 <!-- badges: start -->
-[![R build status](https://github.com/stephenbalogun/tidyndr/workflows/R-CMD-check/badge.svg)](https://github.com/stephenbalogun/tidyndr/actions?workflow=R-CMD-check)
-[![Codecov test coverage](https://codecov.io/gh/stephenbalogun/tidyndr/branch/master/graph/badge.svg)](https://codecov.io/gh/stephenbalogun/tidyndr?branch=master)
+
+[![R build status](https://github.com/stephenbalogun/tidyndr/workflows/R-CMD-check/badge.svg)](https://github.com/stephenbalogun/tidyndr/actions?workflow=R-CMD-check) [![Codecov test coverage](https://codecov.io/gh/stephenbalogun/tidyndr/branch/master/graph/badge.svg)](https://codecov.io/gh/stephenbalogun/tidyndr?branch=master)
+
 <!-- badges: end -->
 
-The goal of {tidyndr} is to provide specialized, simple and easy to use functions that wrap around existing functions in `R` for manipulation of the [NDR](https://ndr.shieldnigeriaproject.com/) patient line-list file allowing the user to focus on the tasks to be completed rather than the formula details.  
+The goal of {tidyndr} is to provide specialized, simple and easy to use functions that wrap around existing functions in `R` for manipulation of the [NDR](https://ndr.shieldnigeriaproject.com/) patient line-list file allowing the user to focus on the tasks to be completed rather than the formula details.
 
 The functions presented are similar to the [PEPFAR MER indicators](https://datim.zendesk.com/hc/en-us/articles/360000084446-MER-Indicator-Reference-Guides) and are currently grouped into three categories:
 
-* The `read_ndr` function for reading the patient-level line-list downloaded from the front-end of the NDR in 'csv' format. 
+-   The `read_ndr` function for reading the patient-level line-list downloaded from the front-end of the NDR in 'csv' format.
 
-* The PEPFAR treatment group of indicators that can be performed on the NDR           line-list.
+-   The PEPFAR treatment group of indicators that can be performed on the NDR line-list.
 
-* The 'Viral Load' indicators (`tx_vl_eligible()`, `tx_pvls_den()` `tx_pvls_num()` and `tx_vl_unsuppressed()`).  
+-   The 'Viral Load' indicators (`tx_vl_eligible()`, `tx_pvls_den()` `tx_pvls_num()` and `tx_vl_unsuppressed()`).
 
-The summary functions (`summarise_ndr()` and `disaggregrate()`) provides a tabular summary for the tasks that have been completed using any of the functions above.   
+The summary functions (`summarise_ndr()` and `disaggregrate()`) provides a tabular summary for the tasks that have been completed using any of the functions above.
 
 ## Installation
 
 <!-- You can install the released version of tidyndr from [CRAN](https://CRAN.R-project.org) with: -->
 
 <!-- ``` r -->
+
 <!-- install.packages("tidyndr") -->
+
 <!-- ``` -->
 
 This package is currently not available on [CRAN](https://CRAN.R-project.org) but you can install the development version from [GitHub](https://github.com/) with:
@@ -48,6 +51,7 @@ This package is currently not available on [CRAN](https://CRAN.R-project.org) bu
 devtools::install_github("stephenbalogun/tidyndr",
 build_vignette = TRUE)
 ```
+
 ## Usage
 
 ```{r load_library}
@@ -75,15 +79,15 @@ ndr_example <- read_ndr(path, time_stamp = "2021-02-20")
 
 The functions included in this group are:
 
-* `tx_new()`  
+-   `tx_new()`
 
-* `tx_curr()`  
+-   `tx_curr()`
 
-* `tx_ml()` and `tx_ml_outcomes()`
+-   `tx_ml()` and `tx_ml_outcomes()`
 
-* `tx_rtt()` 
+-   `tx_rtt()`
 
-* Other supporting functions are: `tx_mmd()`, `tx_regimen()` and `tx_appointment()`
+-   Other supporting functions are: `tx_mmd()`, `tx_regimen()` and `tx_appointment()`
 
 ```{r tx_indicators}
 ## Subset "TX_NEW"
@@ -104,7 +108,6 @@ ndr_example %>%
         from = "2020-10-01",
         to = "2020-12-31")
 ```
-
 
 ### Viral Suppression Indicators
 
@@ -145,11 +148,9 @@ ndr_example %>%
   tx_vl_eligible(sample = TRUE)
 ```
 
-
 ### Summarising your Indicators
 
 You might want to generate a summary table of all the indicators you have pulled out. The `summarise_ndr()` (or `summarize_ndr()`) allows you to do this with ease. It accepts all the line-lists you are interested in creating a summary table for, the level at which you want the summary to be created (country/ip, state or facility), and the names you want to give to each of your summary column.
-
 
 ```{r, summarise_ndr}
 new <- tx_new(ndr_example)  ## generates line-list of TX_NEW for the FY
@@ -161,9 +162,7 @@ summarise_ndr(new, curr, ml,
               names = c("tx_new", "tx_curr", "tx_ml"))
 ```
 
-
 The `disaggregate()` allows you to summarise an indicator of interest into finer details based on "age", "sex" or "pregnancy status". These are supplied to the `by` parameter of the function. The default disaggregates the variable of interest at the level of "states" but can also do this at "country/ip", "lga" or "facility" level when any of this is supplied to the `level` parameter.
-
 
 ```{r, disagg}
 new_clients <- tx_new(ndr_example)  ## generates line-list of TX_NEW for the FY
@@ -179,6 +178,5 @@ ndr_example %>%
 ```
 
 ## Code of Conduct
-  
-Please note that the tidyndr project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
 
+Please note that the tidyndr project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.

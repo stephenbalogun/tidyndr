@@ -8,6 +8,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+
 ```{r, echo = FALSE, message = FALSE}
 knitr::opts_chunk$set(collapse = T, comment = "#>")
 options(tibble.print_min = 4L, tibble.print_max = 4L)
@@ -15,53 +16,52 @@ library(tidyndr)
 set.seed(1014)
 ```
 
-> *“To measure is to know.” “If you cannot measure it, you cannot improve it.”*
-> 
+> *"To measure is to know. If you cannot measure it, you cannot improve it."*
+>
 > \- Lord Kelvin
 
-The [Nigeria National Data Repository (NDR)](http://ndr.shieldnigeriaproject.com/) houses the de-identified patient-level information for the HIV program in Nigeria. Perhaps the most versatile feature of the repository is that it allows users with login access to download this patient-level information, analyze, and make informed decisions to improve the response of their program towards achieving the [UNAIDS](https://www.unaids.org/en) **three 95s** targets. 
+The [Nigeria National Data Repository (NDR)](http://ndr.shieldnigeriaproject.com/) houses the de-identified patient-level information for the HIV program in Nigeria. Perhaps the most versatile feature of the repository is that it allows users with login access to download this patient-level information, analyze, and make informed decisions to improve the response of their program towards achieving the [UNAIDS](https://www.unaids.org/en) **three 95s** targets.
 
+Analysis of the de-identified patient-level information is traditionally conducted in Microsoft Excel. While this provides a great platform, it has some downsides which include:
 
-Analysis of the de-identified patient-level information is traditionally conducted in Microsoft Excel. While this provides a great platform, it has some downsides which include:  
+1.  The software must be installed on the user's computer.\
+2.  The user must be familiar with the formula for calculation of the indicator of interest.\
+3.  Because of the point-and-click nature of the analysis, it is error-prone. Sometimes these errors go unnoticed by the users giving a rather false result.\
+4.  Performing the same analysis periodically can be quite tedious and time-consuming as the analysis is usually done afresh every time.
 
-1.	The software must be installed on the user’s computer.   
-2.	The user must be familiar with the formula for calculation of the indicator of interest.  
-3.	Because of the point-and-click nature of the analysis, it is error-prone. Sometimes these errors go unnoticed by the users giving a rather false result.  
-4.	Performing the same analysis periodically can be quite tedious and time-consuming as the analysis is usually done afresh every time.  
+The aim of the {tidyndr} package is to eliminate these hurdles by providing the user with an application that can be conducted on a free and open-source software, allows the user to focus on the task to be performed and not the formular, remove user-defined errors, and allow for easy automation of routine activities.
 
+The {tidyndr} functions are grouped into four categories for performing related actions.
 
-The aim of the {tidyndr} package is to eliminate these hurdles by providing the user with an application that can be conducted on a free and open-source software, allows the user to focus on the task to be performed and not the formular, remove user-defined errors, and allow for easy automation of routine activities.  
+1.  Importing functions\
+2.  Treatment functions\
+3.  Viral Load functions\
+4.  Summary functions
 
-The {tidyndr} functions are grouped into four categories for performing related actions.  
-
-1.	Importing functions  
-2.	Treatment functions  
-3.	Viral Load functions  
-4.	Summary functions  
-
-
-```r{eval=FALSE}
+``` {.{.{.{.{.{.{.r{eval=false}}}}}}}}
 library(tidyndr)
 ```
 
 ## Importing your NDR line-list
-The `read_ndr()` function  allows you to import your line-list in a nicely configured format for data analysis. It:  
 
-1.	Reads your `.csv` file.  
-2.	Formats the data type for each of the column variables as necessary (converts all date variables to dates and categorical variables to factors).
-3.	Converts all column names to [snake case](https://en.wikipedia.org/wiki/Snake_case) format.    
-4.	Adds three new columns to your data - `date_lost` (calculated by adding  28 days to the sum of `last_drug_pickup_date` and the `days_of_arv_refill`), `appointment_date` (calculated by adding the number of `days_of_arv_refill` to the `last_drug_pickup_date`, and `current_status` (calculated by classifying the patient as “active” or “inactive” using the value of the `time_stamp` argument as a reference.   
+The `read_ndr()` function allows you to import your line-list in a nicely configured format for data analysis. It:
 
-The `read_ndr()` has 5 arguments that can be specified. The first arguments two are always required:  
+1.  Reads your `.csv` file.\
+2.  Formats the data type for each of the column variables as necessary (converts all date variables to dates and categorical variables to factors).
+3.  Converts all column names to [snake case](https://en.wikipedia.org/wiki/Snake_case) format.\
+4.  Adds three new columns to your data - `date_lost` (calculated by adding 28 days to the sum of `last_drug_pickup_date` and the `days_of_arv_refill`), `appointment_date` (calculated by adding the number of `days_of_arv_refill` to the `last_drug_pickup_date`, and `current_status` (calculated by classifying the patient as "active" or "inactive" using the value of the `time_stamp` argument as a reference.
 
-* `path`    -   this specifies the location of the NDR line-list to be imported.  You can do this either by specifying the "absolute" file path or a "relative" file path. See `?file.path()` and `?read_ndr()` for more details. The line-list must be exactly as downloaded from the NDR.  
+The `read_ndr()` has 5 arguments that can be specified. The first arguments two are always required:
 
-* `time_stamp`    -   this is the reference date for the NDR line-list. It is used to derive the `current_status` of clients based on the last drug pickup date and the number of days of ARV refill. The value for this argument should be specified in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) "yyyy-mm-dd" format. I recommend that you download the NDR line-list on Monday and specify this date as the previous Friday. That way, you are almost certain that all the data available on the NDR were as at the preceeding week and upload of data from the new week has not commenced.  
+-   `path` - this specifies the location of the NDR line-list to be imported. You can do this either by specifying the "absolute" file path or a "relative" file path. See `?file.path()` and `?read_ndr()` for more details. The line-list must be exactly as downloaded from the NDR.
 
-* `cols` - when the value to this argument is absent, `read_ndr()` uses the column specification for NDR column modifications that occurred between October 2020 and March 2021. NDR column specifications before October 2020 are not accounted for by the default function so these will have to be specified manually. See `?vroom::cols()` for more details.  
+-   `time_stamp` - this is the reference date for the NDR line-list. It is used to derive the `current_status` of clients based on the last drug pickup date and the number of days of ARV refill. The value for this argument should be specified in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) "yyyy-mm-dd" format. I recommend that you download the NDR line-list on Monday and specify this date as the previous Friday. That way, you are almost certain that all the data available on the NDR were as at the preceeding week and upload of data from the new week has not commenced.
 
-* `quiet` - when this is set to FALSE (the default) it prints the names of the two columns added. 
-* `...` - these are other arguments that can be passed to `vroom::vroom()`.
+-   `cols` - when the value to this argument is absent, `read_ndr()` uses the column specification for NDR column modifications that occurred between October 2020 and March 2021. NDR column specifications before October 2020 are not accounted for by the default function so these will have to be specified manually. See `?vroom::cols()` for more details.
+
+-   `quiet` - when this is set to FALSE (the default) it prints the names of the two columns added.
+
+-   `...` - these are other arguments that can be passed to `vroom::vroom()`.
 
 ```{r, read_ndr, eval = FALSE}
 
@@ -82,26 +82,27 @@ ndr_example <- read_ndr(file_path,
                         quiet = TRUE)
 ```
 
+## Treatment functions
 
-## Treatment functions 
-These group of indicators are based on the [PEPFAR MER](https://datim.zendesk.com/hc/en-us/articles/360000084446-MER-Indicator-Reference-Guides) treatment indicators and their supporting indicators. They include: 
+These group of indicators are based on the [PEPFAR MER](https://datim.zendesk.com/hc/en-us/articles/360000084446-MER-Indicator-Reference-Guides) treatment indicators and their supporting indicators. They include:
 
-1. [`tx_new()`](#tx_new)  
-2. [`tx_curr()`](#tx_curr) 
-3. [`tx_ml()`](#tx_ml)
-4. [`tx_ml_outcomes()`](#tx_ml_outcomes)
-5. [`tx_rtt()`](#tx_rtt)
-6. [`tx_appointment()`](#tx_appointment)
-7. [`tx_mmd()`](#tx_mmd)  
+1.  [`tx_new()`](#tx_new)\
+2.  [`tx_curr()`](#tx_curr)
+3.  [`tx_ml()`](#tx_ml)
+4.  [`tx_ml_outcomes()`](#tx_ml_outcomes)
+5.  [`tx_rtt()`](#tx_rtt)
+6.  [`tx_appointment()`](#tx_appointment)
+7.  [`tx_mmd()`](#tx_mmd)
 
-### `tx_new()`
+### `tx_new()` {#tx_new}
 
-This generates the line-list of clients who started ART within a period. It can be supplied 5 different arguments with the first one being the only compulsory one: 
+This generates the line-list of clients who started ART within a period. It can be supplied 5 different arguments with the first one being the only compulsory one:
 
-* `data` - the NDR line-list imported using the `read_ndr()`.  
-* `from` - the start date for generating the requested line-list. This defaults to the                beginning of the Fiscal Year. When this is supplied, it must in in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.
-3. `to` - the end date for generating the requested line-list. This defaults to all             clients who started ART after the `from` date.
-4. `states` and `facilities` - the particular state(s) of interest. When this is not supplied,it calculates the new clients for all states and facilities contained in the data.
+-   `data` - the NDR line-list imported using the `read_ndr()`.\
+-   `from` - the start date for generating the requested line-list. This defaults to the beginning of the Fiscal Year. When this is supplied, it must in in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.
+
+3.  `to` - the end date for generating the requested line-list. This defaults to all clients who started ART after the `from` date.
+4.  `states` and `facilities` - the particular state(s) of interest. When this is not supplied,it calculates the new clients for all states and facilities contained in the data.
 
 ```{r, tx_new}
 ## generate tx_new clients for the FY for all states in the data
@@ -115,12 +116,13 @@ tx_new(ndr_example,
        states = "State 1")
 ```
 
-### `tx_curr()`
-Generates the line-list of all clients who are still active on treatment. It has 4 different parameters with only the first one as the compulsory argument to be specified. The parameters are:  
+### `tx_curr()` {#tx_curr}
 
-* `data`, `states` and `facilities` - see `data` for [`tx_new`](#tx_new) above.
+Generates the line-list of all clients who are still active on treatment. It has 4 different parameters with only the first one as the compulsory argument to be specified. The parameters are:
 
-* `status` - the column to be used to determine the tx_curr. Can be one of two - 'calculated' or 'default'. The 'calculated' used the derived `current_status` column while the 'default' uses the NDR `current_status_28_days` column. 
+-   `data`, `states` and `facilities` - see `data` for [`tx_new`](#tx_new) above.
+
+-   `status` - the column to be used to determine the tx_curr. Can be one of two - 'calculated' or 'default'. The 'calculated' used the derived `current_status` column while the 'default' uses the NDR `current_status_28_days` column.
 
 ```{r, tx_curr}
 ## generate current clients using the calculated `current_status` column
@@ -131,10 +133,11 @@ tx_curr(ndr_example,
         status = "default")
 ```
 
-### `tx_ml()`
-This generates the line-list of clients who were active at the beginning of the reference date and have now become inactive at the `to` date specified. The default is to generate the line-list of all clients who became inactive in the current Fiscal Year (i.e. were active at the beginning of the FY but have now become inactive). It accepts 5 arguments listed below: 
+### `tx_ml()` {#tx_ml}
 
-* `data`, `from`, `to`, `states`, `facilities` - see [`tx_new`](#tx_new) documentation above.
+This generates the line-list of clients who were active at the beginning of the reference date and have now become inactive at the `to` date specified. The default is to generate the line-list of all clients who became inactive in the current Fiscal Year (i.e. were active at the beginning of the FY but have now become inactive). It accepts 5 arguments listed below:
+
+-   `data`, `from`, `to`, `states`, `facilities` - see [`tx_new`](#tx_new) documentation above.
 
 ```{r, tx_ml, eval = FALSE}
 ## generate the line-list of clients who were active at the beginning of October 2020 
@@ -157,11 +160,12 @@ tx_ml(new_data = ndr_example,
       states = c("State 1", "State 2"))
 ```
 
-### `tx_ml_outcomes`
+### `tx_ml_outcomes` {#tx_ml_outcomes}
+
 For the inactive clients generated, you might be interested in subsetting those with specific final outcomes of interest. Currently, the NDR recognizes only two final outcomes ("dead" and "transferred out"). These are the ones that are subsettable using the `tx_ml_outcomes()` function. This function takes only two argument:
 
-* `data` - see `data` under [`tx_new()`](#tx_new) above.
-* `outcome` - one of "dead", "transfer out" (or "transferred out").
+-   `data` - see `data` under [`tx_new()`](#tx_new) above.
+-   `outcome` - one of "dead", "transfer out" (or "transferred out").
 
 ```{r, tx_ml_outcomes, eval = FALSE}
 ## generate the line-list of all clients who became inactive this Fiscal Year
@@ -171,13 +175,14 @@ ml_example <- tx_ml(new_data = ndr_example)
 tx_ml_outcomes(ml_example, outcome = "transferred out")
 ```
 
-### `tx_rtt`
+### `tx_rtt` {#tx_rtt}
+
 You can filter for clients who were previously inactive but have returned to treatment and are still active at the end of the period of interest. This is the only function where you will be needing two different sets of data - the first data contains the inactive clients while the second data is where their change in status will be checked. The acceptable arguments to `tx_rtt` include:
 
-* `old_data` - the dataset including the list of inactive clients.   
-* `new_data` - a more recent dataset where change in ART status will be evaluated.  
-* `states`, and `facilities` - see [`tx_new`](#tx_new) above.  
-*  `status` - see [`tx_curr`](#tx_curr) above.
+-   `old_data` - the dataset including the list of inactive clients.\
+-   `new_data` - a more recent dataset where change in ART status will be evaluated.\
+-   `states`, and `facilities` - see [`tx_new`](#tx_new) above.\
+-   `status` - see [`tx_curr`](#tx_curr) above.
 
 ```{r, tx_rtt}
 ## location of the old line-list that contains the list of inactive clients
@@ -190,14 +195,13 @@ new_data <- ndr_example
 tx_rtt(old_data, new_data)
 ```
 
+### `tx_appointment` {#tx_appointment}
 
+Sometimes, you are interested in knowing the number of **Active** clients who are due for medication refill/drug pick up within a period of thime. This can help you to plan for the visits, forcast medications and also identify active clients who have missed their appointment. The `tx_appointment()` is one of the supporting treatment indicators that helps in this regard. It takes 6 arguments viz:
 
-### `tx_appointment `
-Sometimes, you are interested in knowing the number of **Active** clients who are due for medication refill/drug pick up within a period of thime. This can help you to plan for the visits, forcast medications and also identify active clients who have missed their appointment. The `tx_appointment()` is one of the supporting treatment indicators that helps in this regard. It takes 6 arguments viz: 
+-   `data`, `from`, `to`, `states` and `facilities` - kindly see [`tx_new()`](#tx_new) documentation above.
 
-* `data`, `from`, `to`, `states` and `facilities` - kindly see [`tx_new()`](#tx_new) documentation above.   
-
-* `status` - please refer to the previous documentation for [`tx_curr()`](#tx_curr).
+-   `status` - please refer to the previous documentation for [`tx_curr()`](#tx_curr).
 
 ```{r, tx_appt}
 ## generate list of clients with medication appointment in Q2 of FY21
@@ -209,12 +213,13 @@ q2_appt <- tx_appointment(ndr_example,
 nrow(q2_appt)
 ```
 
-### `tx_mmd` 
-Knowing the number of months of medications dispensed during the last medication refill allows you to calculate the number of **active** clients who are on MMD (Multi-month Dispensing), i.e. clients who were given between 3 months and 6 months medication during the last clinic visit. You might also be interested in know the details of clients who did not have MMD, or who had more than 6 months medication refill (some of which might be due to data entry errors). The arguments that can be supplied to this function include:  
+### `tx_mmd` {#tx_mmd}
 
-* `data`, `states`, and `facilities` - see [`tx_new()`](#tx_new) above.  
-* `status` - see [`tx_curr()`](#tx_curr) documentation above.  
-* `months`- the number of months of ARV medications dispensed during the last clinic visit. The default filters active clients who had between 3 and 6 months of ARV but you can change this to generate the list of clients who had more than 6 months medications dispensed for example.  
+Knowing the number of months of medications dispensed during the last medication refill allows you to calculate the number of **active** clients who are on MMD (Multi-month Dispensing), i.e. clients who were given between 3 months and 6 months medication during the last clinic visit. You might also be interested in know the details of clients who did not have MMD, or who had more than 6 months medication refill (some of which might be due to data entry errors). The arguments that can be supplied to this function include:
+
+-   `data`, `states`, and `facilities` - see [`tx_new()`](#tx_new) above.\
+-   `status` - see [`tx_curr()`](#tx_curr) documentation above.\
+-   `months`- the number of months of ARV medications dispensed during the last clinic visit. The default filters active clients who had between 3 and 6 months of ARV but you can change this to generate the list of clients who had more than 6 months medications dispensed for example.
 
 ```{r, tx_mmd}
 tx_mmd(ndr_example)
@@ -229,20 +234,22 @@ tx_mmd(ndr_example,
 ```
 
 ## Viral Load Indicators
-The viral load group of indicators allows you to be able to generate the list of clients who are eligible for viral load; have a viral load result within the last one year (for adults of 20 years and above) or 6 months (for paediatrics and adolescents); and are virally suppressed. These indicators include:    
 
-1. [`tx_vl_eligible()`](#tx_vl_eligible)  
-2. [`tx_pvls_den()`](#tx_pvls_den)  
-3. [`tx_pvls_num()`](#tx_pvls_num)  
-4. [`tx_vl_unsuppressed()`](#tx_vl_suppressed)  
+The viral load group of indicators allows you to be able to generate the list of clients who are eligible for viral load; have a viral load result within the last one year (for adults of 20 years and above) or 6 months (for paediatrics and adolescents); and are virally suppressed. These indicators include:
 
-### `tx_vl_eligible`
-Two groups of clients are eligible for routine viral load test - clients who have been on ARV medication for at least 6 months and have not had a viral load result, and clients whose last viral load result is more than 12 months ago (for adults) and more than 6 months ago (for paediatrics and adolescents). `tx_vl_eligible()` generates this line-list using a combination of the 6 arguments below that can be provided:  
+1.  [`tx_vl_eligible()`](#tx_vl_eligible)\
+2.  [`tx_pvls_den()`](#tx_pvls_den)\
+3.  [`tx_pvls_num()`](#tx_pvls_num)\
+4.  [`tx_vl_unsuppressed()`](#tx_vl_suppressed)
 
-* `data`, `states` and `facilities` -  see [`tx_new`](#tx_new) documentation above.  
-* `status` - please see the documentation for `status` under [`tx_curr`](#tx_curr) above.   
-* `ref` - the reference date for when the eligibility period should be determined. This should be provided in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format. When this is not supplied, it assumes you would like to know the clients who are eligible for viral load test as at the day of analysis.  
-* `sample` - one of two (TRUE or FALSE) to determine if only those who are eligible for viral load sample collection within the period of interest (sample = TRUE) or those eligible for viral load test results (sample = FALSE).  
+### `tx_vl_eligible` {#tx_vl_eligible}
+
+Two groups of clients are eligible for routine viral load test - clients who have been on ARV medication for at least 6 months and have not had a viral load result, and clients whose last viral load result is more than 12 months ago (for adults) and more than 6 months ago (for paediatrics and adolescents). `tx_vl_eligible()` generates this line-list using a combination of the 6 arguments below that can be provided:
+
+-   `data`, `states` and `facilities` - see [`tx_new`](#tx_new) documentation above.\
+-   `status` - please see the documentation for `status` under [`tx_curr`](#tx_curr) above.\
+-   `ref` - the reference date for when the eligibility period should be determined. This should be provided in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format. When this is not supplied, it assumes you would like to know the clients who are eligible for viral load test as at the day of analysis.\
+-   `sample` - one of two (TRUE or FALSE) to determine if only those who are eligible for viral load sample collection within the period of interest (sample = TRUE) or those eligible for viral load test results (sample = FALSE).
 
 ```{r, tx_vl_eligible}
 ## list of clients who are eligible for VL sample collection by the end of March 2021
@@ -255,7 +262,8 @@ tx_vl_eligible(ndr_example,
                ref = "2021-03-31")
 ```
 
-### `tx_pvls_den`  
+### `tx_pvls_den` {#tx_pvls_den}
+
 This determines clients who have a documented viral load result and are not due for a repeat viral load test. It helps you to know what the viral load coverage (the number of those who have a VL result / the number of those eligible [when sample is set to FALSE]). It accepts arguments all the arguments that can be supplied to [`tx_vl_eligible`](#tx_vl_eligible) above.
 
 ```{r, tx_pvls_den}
@@ -268,12 +276,12 @@ tx_pvls_den(ndr_example,
             ref = "2021-03-31")
 ```
 
+### `tx_pvls_num` {#tx_pvls_num}
 
-### `tx_pvls_num`
-This determines the number of clients whose viral load test results are below a particular limit among those with a documented viral load result, thus are sadi to be virally suppressed. It helps you to know how many clients are doing well on their current medication. It accepts the following arguments:   
+This determines the number of clients whose viral load test results are below a particular limit among those with a documented viral load result, thus are sadi to be virally suppressed. It helps you to know how many clients are doing well on their current medication. It accepts the following arguments:
 
-* `data`, `ref`, `states`, `facilities` and `status` - kindly see the documentation for [`tx_vl_eligible()`](#tx_vl_eligible) above.  
-* `n` - the reference at which viral load values below are said to be suppressed. The default is 1000.
+-   `data`, `ref`, `states`, `facilities` and `status` - kindly see the documentation for [`tx_vl_eligible()`](#tx_vl_eligible) above.\
+-   `n` - the reference at which viral load values below are said to be suppressed. The default is 1000.
 
 ```{r, tx_pvls_num}
 ## clients whose last viral load result is within the last 1 year for adults (>= 20 years) 
@@ -286,10 +294,11 @@ tx_pvls_num(ndr_example,
 ```
 
 ### `tx_vl_unsuppressed`
-This determines the number of clients whose viral load test results are above a particular limit among those with a documented viral load result. It accepts the following arguments:   
 
-* `data`, `ref`, `states`, `facilities` and `status` - kindly see the documentation for [`tx_vl_eligible()`](#tx_vl_eligible) above.  
-* `n` - the reference at which viral load values equal to or abov are said to be unsuppressed. The default is 1000.
+This determines the number of clients whose viral load test results are above a particular limit among those with a documented viral load result. It accepts the following arguments:
+
+-   `data`, `ref`, `states`, `facilities` and `status` - kindly see the documentation for [`tx_vl_eligible()`](#tx_vl_eligible) above.\
+-   `n` - the reference at which viral load values equal to or abov are said to be unsuppressed. The default is 1000.
 
 ```{r, tx_vl_unsuppressed}
 ## clients whose last viral load result is within the last 1 year for adults (>= 20 years) 
@@ -297,17 +306,18 @@ This determines the number of clients whose viral load test results are above a 
 tx_vl_unsuppressed(ndr_example)
 ```
 
-
 ## Summary Indicators
-Summary indicators provide aggregates for a particular indicator of interest. {tidyndr} provides two aggregate functions. These are:  
-1. [`summarise_ndr()`](#summrise_ndr)  
-2. [`disaggregate()`](#disaggregate) 
 
-### `summarise_ndr`
-All the previous functions generates patient-level line-lists. You will most often be interested in a tabular summary of the information provided. This is the work of `summarise_ndr()` (and its partner `summarize_ndr()`). It takes all the line-lists that you might have generated, and display a summary table with one column for each of your generated line-lists. `summarise_ndr()` accepts three arguments:   
-* `...` - these are the names assigned to each of the line-lists that you have generated.  
-* `level` - specifies the level at which the summary should be performed. The options are "facility", "lga", "state" or "country" ("ip"). The default level is "state".  
-* `names` - the names to be assigned to each of the summary columns created.  See `?summarise_ndr` for more details.   
+Summary indicators provide aggregates for a particular indicator of interest. {tidyndr} provides two aggregate functions. These are:\
+1. [`summarise_ndr()`](#summrise_ndr)\
+2. [`disaggregate()`](#disaggregate)
+
+### `summarise_ndr` {#summarise_ndr}
+
+All the previous functions generates patient-level line-lists. You will most often be interested in a tabular summary of the information provided. This is the work of `summarise_ndr()` (and its partner `summarize_ndr()`). It takes all the line-lists that you might have generated, and display a summary table with one column for each of your generated line-lists. `summarise_ndr()` accepts three arguments:\
+\* `...` - these are the names assigned to each of the line-lists that you have generated.\
+\* `level` - specifies the level at which the summary should be performed. The options are "facility", "lga", "state" or "country" ("ip"). The default level is "state".\
+\* `names` - the names to be assigned to each of the summary columns created. See `?summarise_ndr` for more details.
 
 ```{r, summarise_ndr}
 curr <- tx_curr(ndr_example) # generate active clients and assign to "curr"
@@ -317,10 +327,11 @@ new <- tx_new(ndr_example) # generate TX_NEW for the FY and assign to "new"
 summarise_ndr(curr, new, level = "state", names = c("curr", "tx_new"))
 ```
 
-### `disaggregate`
-A very powerful function that allows you to summarise your generated line-list disaggregated based on a particular variable. The disaggregation options currently available are "age (or current age)", "sex (or gender)", or "pregnancy status". It accepts 3 arguments:  
-* `data` - see [`tx_new()`](#tx_new) documentation above.  
-* `by` and `level` - see the documentation for [`summarise_ndr()`](#summarise_ndr) above.   
+### `disaggregate` {#disaggregate}
+
+A very powerful function that allows you to summarise your generated line-list disaggregated based on a particular variable. The disaggregation options currently available are "age (or current age)", "sex (or gender)", or "pregnancy status". It accepts 3 arguments:\
+\* `data` - see [`tx_new()`](#tx_new) documentation above.\
+\* `by` and `level` - see the documentation for [`summarise_ndr()`](#summarise_ndr) above.
 
 ```{r, disaggregate}
 ## generate list of inactive clients
@@ -336,4 +347,3 @@ disaggregate(inactives,
              level = "country")
 
 ```
-
