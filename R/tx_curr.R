@@ -1,16 +1,13 @@
-#' Subset clients who are currently on treatment
+#' Subset Clients who are Currently on Treatment
 #'
 #' \code{tx_curr} pulls up the line-list of clients who are active
-#'    on treatment using the `current_status_28_days` column. You can specify
+#'    on treatment using the calculated `current_status` column. You can specify
 #'    the state(s) and/or facilit(ies) of interest using the \code{region} or
 #'    \code{site} arguments.
 #' @param status Determines how the number of active clients is calculated.
 #'  The options are to either to use the NDR current_status_28_days column
 #'  or the derived current_status column ("calculated").
 #' @inheritParams tx_new
-#'
-#'
-#' @importFrom magrittr %>%
 #'
 #' @return tx_curr
 #' @export
@@ -38,7 +35,7 @@ tx_curr <- function(data,
                     status = "calculated") {
   .s <- unique(data$state)
 
-  .f <- unique(data$facility)
+  .f <- unique(subset(data, state %in% states)$facility)
 
   if (!all(states %in% unique(data$state))) {
     rlang::abort("state(s) is/are not contained in the supplied data. Check the spelling and/or case.")

@@ -29,7 +29,7 @@ tx_rtt <- function(old_data,
                    facilities = .f,
                    status = "calculated") {
   .s <- unique(new_data$state)
-  .f <- unique(new_data$facility)
+  .f <- unique(subset(new_data, state %in% states)$facility)
 
 
   # if (max(old_data$art_start_date, na.rm = TRUE) >

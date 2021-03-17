@@ -1,10 +1,10 @@
 #' Subset Clients who are Eligible for Viral Load
 #'
-#' Generates the line-list of clients who have been (or would have been) on ARv
+#' Generates the line-list of clients who have been (or would have been) on ARV
 #' medications for at least 6 months from the reference date. The default
 #' reference date is the date of analysis.
 #'
-#' @param sample Logical (TRUE or FALSE) indicating wheter all clients eligible for
+#' @param sample Logical (TRUE or FALSE) indicating whether all clients eligible for
 #' viral load test should be filtered irrespective of their eligibility for sample
 #' collection or only those due for sample collection.
 #' @inheritParams tx_pvls_den
@@ -33,7 +33,7 @@ tx_vl_eligible <- function(data,
                            status = "calculated",
                            sample = FALSE) {
   .s <- unique(data$state)
-  .f <- unique(data$facility)
+  .f <- unique(subset(data, state %in% states)$facility)
 
   if (!all(states %in% unique(data$state))) {
     rlang::abort("state(s) is/are not contained in the supplied data. Check the spelling and/or case.")

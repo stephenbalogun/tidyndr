@@ -1,9 +1,9 @@
 #' Line-list of 50,000 Simulated Clients Provided in the NDR Format.
 #'
-#' A dataset containing clients details that were randomly generated to simulate
+#' A dataset containing clients' details that were randomly generated to simulate
 #' the NDR patient line-list downloaded from the front-end of the Nigeria National Data
-#' Repository. Two additional variables are added for easy referencing during analysis.
-#' These variables are: `date_ltfu` and `current_status` based on the calculated `date_ltfu`.
+#' Repository. Three additional variables are added for easy referencing during analysis.
+#' These variables are: `date_ltfu`, `appointment_date` and `current_status`.
 #'
 #' @format A data frame with 50000 rows and 48 variables:
 #' \describe{

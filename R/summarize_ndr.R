@@ -1,17 +1,17 @@
-#' Count the number of outcomes based on a specified level
+#' Count the Number of Outcomes Based on a Specified Level
 #'
-#' The \code{summarise_ndr()} function counts the number of occurrence of
+#' The \code{summarize_ndr()} function counts the number of occurrence of
 #' specified level for each of the supplied dataframe. It then combines the
 #' given dataframes into a single table. It also adds a "Total" roll that
 #' adds all the rows for each of the numeric columns.
 #'
-#' @param ... Dataframes to be summarised.
+#' @param ... Dataframes to be summarized.
 #' @param level The level at which the summary should be performed. The options
 #' are "ip" (or "country"), "state", "lga" or "facility".
 #' @param names The names to be passed to the summary columns created in
 #' the output
 #'
-#' @return summarise_ndr
+#' @return summarize_ndr
 #' @export
 #'
 #' @examples

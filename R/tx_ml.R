@@ -1,4 +1,4 @@
-#' Subset clients who became inactive (IIT) within a given period
+#' Subset Clients who Became Inactive (IIT) Within a Given Period
 #'
 #' \code{tx_ml} Generates clients who have become inactive over a specified
 #' period of time. The default is to generate all clients who became inactive
@@ -21,8 +21,10 @@
 #' tx_ml(new_data = ndr_example)
 #'
 #' # Find clients who were inactive at the end of Q1 of FY21
-#' tx_ml(new_data = ndr_example,
-#' to = "2020-12-31")
+#' tx_ml(
+#'   new_data = ndr_example,
+#'   to = "2020-12-31"
+#' )
 #'
 #' ## not run:
 #' ## generate line-list of `tx_ml()` using two datasets
@@ -42,7 +44,7 @@ tx_ml <- function(old_data = NULL,
                   status = "calculated") {
   .s <- unique(new_data$state)
 
-  .f <- unique(new_data$facility)
+  .f <- unique(subset(new_data, state %in% states)$facility)
 
 
   if (!all(states %in% unique(new_data$state))) {

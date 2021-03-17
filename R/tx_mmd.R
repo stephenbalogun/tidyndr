@@ -29,7 +29,7 @@ tx_mmd <- function(data,
                    status = "calculated") {
   .m <- c(3, 4, 5, 6)
   .s <- unique(data$state)
-  .f <- unique(data$facility)
+  .f <- unique(subset(data, state %in% states)$facility)
 
   if (!is.numeric(months) || any(months < 0)) {
     rlang::abort("The number of months supplied must be numeric, and not a negative number.")

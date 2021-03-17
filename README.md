@@ -14,15 +14,15 @@ coverage](https://codecov.io/gh/stephenbalogun/tidyndr/branch/master/graph/badge
 
 <!-- badges: end -->
 
-The goal of {tidyndr} is to provide specialized, simple and easy to use
-functions that wrap around existing functions in `R` for manipulation of
-the [NDR](https://ndr.shieldnigeriaproject.com/) patient line-list file
-allowing the user to focus on the tasks to be completed rather than the
-formula details.
+The goal of {tidyndr} is to provide a specialized, simple and easy to
+use functions that wrap around existing functions in `R` for
+manipulation of the [NDR](https://ndr.shieldnigeriaproject.com/) patient
+line-list file allowing the user to focus on the tasks to be completed
+rather than the code/formula details.
 
 The functions presented are similar to the [PEPFAR MER
 indicators](https://datim.zendesk.com/hc/en-us/articles/360000084446-MER-Indicator-Reference-Guides)
-and are currently grouped into three categories:
+and are currently grouped into four categories:
 
 -   The `read_ndr` function for reading the patient-level line-list
     downloaded from the front-end of the NDR in ‘csv’ format.
@@ -33,9 +33,9 @@ and are currently grouped into three categories:
 -   The ‘Viral Load’ indicators (`tx_vl_eligible()`, `tx_pvls_den()`
     `tx_pvls_num()` and `tx_vl_unsuppressed()`).
 
-The summary functions (`summarise_ndr()` and `disaggregrate()`) provides
-a tabular summary for the tasks that have been completed using any of
-the functions above.
+-   The summary functions (`summarise_ndr()` and `disaggregrate()`)
+    provides a tabular summary for the tasks that have been completed
+    using any of the functions above.
 
 ## Installation
 

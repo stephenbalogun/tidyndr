@@ -1,7 +1,7 @@
-#' Subset rows of inactive clients with specific outcome
+#' Subset rows of Inactive Clients with Specific Outcome
 #'
 #' \code{tx_ml_outcomes} generates the line-list of clients based on the
-#' outcome of interest ("dead" or "transfer out"). It should be use after
+#' outcome of interest ("dead" or "transfer out"). It should be used after
 #' \code{tx_ml()}.
 #'
 #' @param data An ndr dataframe imported using the `read_ndr()

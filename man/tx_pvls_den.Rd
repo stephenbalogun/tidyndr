@@ -2,7 +2,7 @@
 % Please edit documentation in R/tx_pvls_den.R
 \name{tx_pvls_den}
 \alias{tx_pvls_den}
-\title{Subset clients who have a documented viral load result}
+\title{Subset Clients who have a Documented Viral Load Result}
 \usage{
 tx_pvls_den(
   data,
@@ -38,7 +38,7 @@ tx_pvls_den
 \description{
 Generate the line-list of clients whose date of last viral load result is not
 more than one year (for adults 20 years and above) and 6 months (for
-paediatrics and adolescents) from the specified reference date.
+pediatrics and adolescents) from the specified reference date.
 }
 \examples{
 tx_pvls_den(ndr_example, status = "default")

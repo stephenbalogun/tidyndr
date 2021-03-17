@@ -1,4 +1,4 @@
-#' Subset clients starting ART within a particular period.
+#' Subset Clients Starting ART Within a Particular Period.
 #'
 #' Generates the line-list of clients who commenced ARV within the specified
 #' period of interest. The default is to generate the list for all clients who
@@ -42,7 +42,7 @@ tx_new <- function(data,
                    facilities = .f) {
   .s <- unique(data$state)
 
-  .f <- unique(data$facility)
+  .f <- unique(subset(data, state %in% states)$facility)
 
   if (!all(states %in% unique(data$state))) {
     rlang::abort("state(s) is/are not contained in the supplied data. Check the spelling and/or case.")

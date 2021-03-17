@@ -2,7 +2,7 @@
 % Please edit documentation in R/tx_ml_outcomes.R
 \name{tx_ml_outcomes}
 \alias{tx_ml_outcomes}
-\title{Subset rows of inactive clients with specific outcome}
+\title{Subset rows of Inactive Clients with Specific Outcome}
 \usage{
 tx_ml_outcomes(data, outcome)
 }
@@ -17,7 +17,7 @@ tx_ml_outcomes
 }
 \description{
 \code{tx_ml_outcomes} generates the line-list of clients based on the
-outcome of interest ("dead" or "transfer out"). It should be use after
+outcome of interest ("dead" or "transfer out"). It should be used after
 \code{tx_ml()}.
 }
 \examples{

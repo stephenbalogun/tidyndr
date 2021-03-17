@@ -2,7 +2,7 @@
 #'
 #' Generate the line-list of clients whose date of last viral load result is not
 #' more than one year (for adults 20 years and above) and 6 months (for
-#' paediatrics and adolescents) from the specified reference date and are virally
+#' pediatrics and adolescents) from the specified reference date and are virally
 #' suppressed.
 #'
 #' @param n the value below which viral load result is adjudged to be suppressed.
@@ -29,7 +29,7 @@ tx_pvls_num <- function(data,
                         status = "calculated",
                         n = 1000) {
   .s <- unique(data$state)
-  .f <- unique(data$facility)
+  .f <- unique(subset(data, state %in% states)$facility)
 
   if (!all(states %in% unique(data$state))) {
     rlang::abort("state(s) is not contained in the supplied data. Check the spelling and/or case.")

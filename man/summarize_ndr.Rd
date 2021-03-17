@@ -2,12 +2,12 @@
 % Please edit documentation in R/summarize_ndr.R
 \name{summarize_ndr}
 \alias{summarize_ndr}
-\title{Count the number of outcomes based on a specified level}
+\title{Count the Number of Outcomes Based on a Specified Level}
 \usage{
 summarize_ndr(..., level, names)
 }
 \arguments{
-\item{...}{Dataframes to be summarised.}
+\item{...}{Dataframes to be summarized.}
 
 \item{level}{The level at which the summary should be performed. The options
 are "ip" (or "country"), "state", "lga" or "facility".}
@@ -16,10 +16,10 @@ are "ip" (or "country"), "state", "lga" or "facility".}
 the output}
 }
 \value{
-summarise_ndr
+summarize_ndr
 }
 \description{
-The \code{summarise_ndr()} function counts the number of occurrence of
+The \code{summarize_ndr()} function counts the number of occurrence of
 specified level for each of the supplied dataframe. It then combines the
 given dataframes into a single table. It also adds a "Total" roll that
 adds all the rows for each of the numeric columns.

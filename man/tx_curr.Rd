@@ -2,7 +2,7 @@
 % Please edit documentation in R/tx_curr.R
 \name{tx_curr}
 \alias{tx_curr}
-\title{Subset clients who are currently on treatment}
+\title{Subset Clients who are Currently on Treatment}
 \usage{
 tx_curr(data, states = .s, facilities = .f, status = "calculated")
 }
@@ -27,7 +27,7 @@ tx_curr
 }
 \description{
 \code{tx_curr} pulls up the line-list of clients who are active
-on treatment using the \code{current_status_28_days} column. You can specify
+on treatment using the calculated \code{current_status} column. You can specify
 the state(s) and/or facilit(ies) of interest using the \code{region} or
 \code{site} arguments.
 }

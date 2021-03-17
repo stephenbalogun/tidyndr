@@ -1,4 +1,4 @@
-#' Count the number of outcomes based on a specified level
+#' Count the Number of Outcomes Based on a Specified Level
 #'
 #' The \code{summarise_ndr()} function counts the number of occurrence of
 #' specified level for each of the supplied dataframe. It then combines the

@@ -2,7 +2,7 @@
 % Please edit documentation in R/tx_vl_unsuppressed.R
 \name{tx_vl_unsuppressed}
 \alias{tx_vl_unsuppressed}
-\title{Determine Clients who are Virally Suppressed}
+\title{Determine Clients who are not Virally Suppressed}
 \usage{
 tx_vl_unsuppressed(
   data,
@@ -40,8 +40,8 @@ tx_vl_unsuppressed
 }
 \description{
 Generate the line-list of clients whose date of last viral load result is not
-more than one year (for adults 20 years and above) and 6 months (for
-paediatrics and adolescents) from the specified reference date and are virally
+not more than one year (for adults 20 years and above) and 6 months (for
+pediatrics and adolescents) from the specified reference date and are not virally
 suppressed.
 }
 \examples{

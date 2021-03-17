@@ -2,7 +2,7 @@
 % Please edit documentation in R/summarise_ndr.R
 \name{summarise_ndr}
 \alias{summarise_ndr}
-\title{Count the number of outcomes based on a specified level}
+\title{Count the Number of Outcomes Based on a Specified Level}
 \usage{
 summarise_ndr(..., level, names)
 }

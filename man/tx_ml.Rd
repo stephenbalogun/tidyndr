@@ -2,7 +2,7 @@
 % Please edit documentation in R/tx_ml.R
 \name{tx_ml}
 \alias{tx_ml}
-\title{Subset clients who became inactive (IIT) within a given period}
+\title{Subset Clients who Became Inactive (IIT) Within a Given Period}
 \usage{
 tx_ml(
   old_data = NULL,

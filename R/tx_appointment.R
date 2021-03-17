@@ -1,5 +1,5 @@
-#' Subset rows of clients who have clinic appointment/medication pick-up within
-#' a particular period
+#' Subset Rows of Clients who have Clinic Appointment/Medication Pick-up within
+#' a Particular Period
 #'
 #' \code{tx_appointment} generates the line-list of clients who have clinic
 #' appointment/medication refill for the specified state(s) and/or facilit(ies).
@@ -37,7 +37,7 @@ tx_appointment <- function(data,
                            facilities = .f) {
   .s <- unique(data$state)
 
-  .f <- unique(data$facility)
+  .f <- unique(subset(data, state %in% states)$facility)
 
   if (!all(states %in% unique(data$state))) {
     rlang::abort("state(s) is/are not contained in the supplied data. Check the spelling and/or case.")

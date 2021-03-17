@@ -2,8 +2,8 @@
 % Please edit documentation in R/tx_appointment.R
 \name{tx_appointment}
 \alias{tx_appointment}
-\title{Subset rows of clients who have clinic appointment/medication pick-up within
-a particular period}
+\title{Subset Rows of Clients who have Clinic Appointment/Medication Pick-up within
+a Particular Period}
 \usage{
 tx_appointment(
   data,

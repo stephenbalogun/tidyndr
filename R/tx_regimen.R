@@ -27,7 +27,7 @@ tx_regimen <- function(data,
                        status = "calculated") {
   age_range <- c(0, Inf)
   .s <- unique(data$state)
-  .f <- unique(data$facility)
+  .f <- unique(subset(data, state %in% states)$facility)
 
   if (!rlang::is_double(age_band) && !rlang::is_null(age_band)) {
     rlang::abort("age_band is not of the class numeric. Did you quote any of the values?")

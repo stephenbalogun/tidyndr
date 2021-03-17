@@ -2,7 +2,7 @@
 % Please edit documentation in R/tx_new.R
 \name{tx_new}
 \alias{tx_new}
-\title{Subset clients starting ART within a particular period.}
+\title{Subset Clients Starting ART Within a Particular Period.}
 \usage{
 tx_new(
   data,

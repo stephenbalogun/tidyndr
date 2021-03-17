@@ -41,7 +41,7 @@ tx_pvls_num
 \description{
 Generate the line-list of clients whose date of last viral load result is not
 more than one year (for adults 20 years and above) and 6 months (for
-paediatrics and adolescents) from the specified reference date and are virally
+pediatrics and adolescents) from the specified reference date and are virally
 suppressed.
 }
 \examples{

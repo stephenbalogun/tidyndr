@@ -65,10 +65,10 @@ A data frame with 50000 rows and 48 variables:
 ndr_example
 }
 \description{
-A dataset containing clients details that were randomly generated to simulate
+A dataset containing clients' details that were randomly generated to simulate
 the NDR patient line-list downloaded from the front-end of the Nigeria National Data
-Repository. Two additional variables are added for easy referencing during analysis.
-These variables are: \code{date_ltfu} and \code{current_status} based on the calculated \code{date_ltfu}.
+Repository. Three additional variables are added for easy referencing during analysis.
+These variables are: \code{date_ltfu}, \code{appointment_date} and \code{current_status}.
 }
 \note{
 for more information, kindly visit \url{https://ndr.shieldnigeriaproject.com/}

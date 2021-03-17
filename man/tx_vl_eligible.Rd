@@ -33,7 +33,7 @@ facility, combine the facilities using the \code{c()} e.g.
 The options are to either to use the NDR current_status_28_days column
 or the derived current_status column ("calculated").}
 
-\item{sample}{Logical (TRUE or FALSE) indicating wheter all clients eligible for
+\item{sample}{Logical (TRUE or FALSE) indicating whether all clients eligible for
 viral load test should be filtered irrespective of their eligibility for sample
 collection or only those due for sample collection.}
 }
@@ -41,7 +41,7 @@ collection or only those due for sample collection.}
 tx_vl_eligible
 }
 \description{
-Generates the line-list of clients who have been (or would have been) on ARv
+Generates the line-list of clients who have been (or would have been) on ARV
 medications for at least 6 months from the reference date. The default
 reference date is the date of analysis.
 }

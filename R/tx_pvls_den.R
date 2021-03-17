@@ -1,8 +1,8 @@
-#' Subset clients who have a documented viral load result
+#' Subset Clients who have a Documented Viral Load Result
 #'
 #' Generate the line-list of clients whose date of last viral load result is not
 #' more than one year (for adults 20 years and above) and 6 months (for
-#' paediatrics and adolescents) from the specified reference date.
+#' pediatrics and adolescents) from the specified reference date.
 #'
 #' @param data An NDR dataframe imported using the `read_ndr().
 #' @param ref Date provided in ISO8601 format ("yyyy-mm-dd"). Used to
@@ -28,7 +28,7 @@ tx_pvls_den <- function(data,
                         facilities = .f,
                         status = "calculated") {
   .s <- unique(data$state)
-  .f <- unique(data$facility)
+  .f <- unique(subset(data, state %in% states)$facility)
 
   if (!all(states %in% unique(data$state))) {
     rlang::abort("state(s) is not contained in the supplied data. Check the spelling and/or case.")
