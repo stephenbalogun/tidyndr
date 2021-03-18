@@ -17,9 +17,8 @@ knitr::opts_chunk$set(
 <a href='https://github.com/stephenbalogun/tidyndr/tree/master/man/figures/logo.svg'><img src="man/figures/logo.svg" align="right" height="139"/></a>
 
 <!-- badges: start -->
-
-[![R build status](https://github.com/stephenbalogun/tidyndr/workflows/R-CMD-check/badge.svg)](https://github.com/stephenbalogun/tidyndr/actions?workflow=R-CMD-check) [![Codecov test coverage](https://codecov.io/gh/stephenbalogun/tidyndr/branch/master/graph/badge.svg)](https://codecov.io/gh/stephenbalogun/tidyndr?branch=master)
-
+[![R-CMD-check](https://github.com/stephenbalogun/tidyndr/workflows/R-CMD-check/badge.svg)](https://github.com/stephenbalogun/tidyndr/actions) [![Codecov test coverage](https://codecov.io/gh/stephenbalogun/tidyndr/branch/master/graph/badge.svg)](https://codecov.io/gh/stephenbalogun/tidyndr?branch=master)
+<!-- [![R build status](https://github.com/stephenbalogun/tidyndr/workflows/R-CMD-check/badge.svg)](https://github.com/stephenbalogun/tidyndr/actions?workflow=R-CMD-check)  -->
 <!-- badges: end -->
 
 The goal of {tidyndr} is to provide a specialized, simple and easy to use functions that wrap around existing functions in `R` for manipulation of the [NDR](https://ndr.shieldnigeriaproject.com/) patient line-list file allowing the user to focus on the tasks to be completed rather than the code/formula details.
