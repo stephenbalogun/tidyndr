@@ -55,8 +55,10 @@ outcome of interest.
 tx_ml(new_data = ndr_example)
 
 # Find clients who were inactive at the end of Q1 of FY21
-tx_ml(new_data = ndr_example,
-to = "2020-12-31")
+tx_ml(
+  new_data = ndr_example,
+  to = "2020-12-31"
+)
 
 ## not run:
 ## generate line-list of `tx_ml()` using two datasets
