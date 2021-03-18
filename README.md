@@ -10,7 +10,6 @@ Tidyndr
 [![R-CMD-check](https://github.com/stephenbalogun/tidyndr/workflows/R-CMD-check/badge.svg)](https://github.com/stephenbalogun/tidyndr/actions)
 [![Codecov test
 coverage](https://codecov.io/gh/stephenbalogun/tidyndr/branch/master/graph/badge.svg)](https://codecov.io/gh/stephenbalogun/tidyndr?branch=master)
-<!-- [![R build status](https://github.com/stephenbalogun/tidyndr/workflows/R-CMD-check/badge.svg)](https://github.com/stephenbalogun/tidyndr/actions?workflow=R-CMD-check)  -->
 <!-- badges: end -->
 
 The goal of {tidyndr} is to provide a specialized, simple and easy to
