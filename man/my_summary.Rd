@@ -14,6 +14,9 @@ my_summary(data, l, n)
 
 \item{n}{The name assignment to the summary operator}
 }
+\value{
+No return value, called for side effects
+}
 \description{
 Utils-summarise-ndr
 }

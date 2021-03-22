@@ -6,6 +6,9 @@
 \usage{
 current_cols()
 }
+\value{
+No return value, called for side effects
+}
 \description{
 Specify the variable types for each of the NDR columns.
 }

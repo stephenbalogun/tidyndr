@@ -7,6 +7,7 @@
 #'
 #' @export
 #' @keywords internal
+#' @return No return value, called for side effects
 my_summary <- function(data, l, n) {
   if (l == "state") {
     data %>%

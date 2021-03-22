@@ -4,7 +4,7 @@
 #'
 #' @export
 #' @keywords internal
-#'
+#' @return No return value, called for side effects
 fy_start <- function() {
   lubridate::as_date(
     ifelse(lubridate::month(Sys.Date()) < 10,

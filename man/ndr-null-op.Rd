@@ -12,6 +12,9 @@ x \%||\% y
 
 \item{y}{value to be used with x is null}
 }
+\value{
+No return value, called for side effects
+}
 \description{
 Borrowed NULL
 }

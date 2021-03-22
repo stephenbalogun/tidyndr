@@ -6,6 +6,9 @@
 \usage{
 fy_start()
 }
+\value{
+No return value, called for side effects
+}
 \description{
 Sets the date of some functions to begin at 1st of October.
 }

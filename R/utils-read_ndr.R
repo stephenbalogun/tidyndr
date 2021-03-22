@@ -3,6 +3,7 @@
 #' Specify the variable types for each of the NDR columns.
 #'
 #' @export
+#' @return No return value, called for side effects
 #' @keywords internal
 current_cols <- function() {
   vroom::cols_only(

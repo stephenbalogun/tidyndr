@@ -5,6 +5,7 @@
 #'
 #' @name ndr-null-op
 #' @export
+#' @return No return value, called for side effects
 #' @keywords internal
 `%||%` <- function(x, y) {
   if (rlang::is_null(x)) {
