@@ -29,7 +29,7 @@
 #' # generate the TX_NEW for a specific state (State 1)
 #' tx_new(ndr_example, states = "State 1")
 #'
-#' ## Determine the TX_NEW for Quarter 1 of FY21 for State 2
+#' # Determine the TX_NEW for Quarter 1 of FY21 for State 2
 #' tx_new(ndr_example,
 #'   from = "2020-10-01",
 #'   to = "2020-12-31",
