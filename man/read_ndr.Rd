@@ -32,13 +32,15 @@ additional variables - \code{date_ltfu}, \code{appointment_date} and \code{curre
 during analysis.
 }
 \examples{
-## Not run:
 # Read \code{ndr_example.csv} from a path
-\donttest{file_path <- system.file("extdata", "ndr_example.csv", package = "tidyndr")
-read_ndr(file_path, time_stamp = "2021-02-15")}
+\donttest{
+file_path <- system.file("extdata", "ndr_example.csv", package = "tidyndr")
+read_ndr(file_path, time_stamp = "2021-02-15")
+}
 
-## Not run:
 # Read using a link to the NDR csv file on the internet
-# file_path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
-# read_ndr(file_path, time_stamp = "2021-02-15")
+\donttest{
+file_path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
+read_ndr(file_path, time_stamp = "2021-02-15")
+}
 }

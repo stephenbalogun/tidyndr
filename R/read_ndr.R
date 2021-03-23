@@ -20,15 +20,17 @@
 #' @export
 #'
 #' @examples
-#' ## Not run:
 #' # Read \code{ndr_example.csv} from a path
-#' # file_path <- system.file("extdata", "ndr_example.csv", package = "tidyndr")
-#' # read_ndr(file_path, time_stamp = "2021-02-15")
+#' \donttest{
+#' file_path <- system.file("extdata", "ndr_example.csv", package = "tidyndr")
+#' read_ndr(file_path, time_stamp = "2021-02-15")
+#' }
 #'
-#' ## Not run:
 #' # Read using a link to the NDR csv file on the internet
-#' # file_path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
-#' # read_ndr(file_path, time_stamp = "2021-02-15")
+#' \donttest{
+#' file_path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
+#' read_ndr(file_path, time_stamp = "2021-02-15")
+#' }
 read_ndr <- function(path,
                      time_stamp,
                      cols = NULL,

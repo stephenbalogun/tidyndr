@@ -15,14 +15,17 @@
 #' @export
 #'
 #' @examples
-#' ## not run ##
-#' # file_path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
-#' # ndr_old <- read_ndr(file_path, time_stamp = "2021-02-15")
-#' # ndr_new <- ndr_example
-#' # tx_rtt(ndr_old, ndr_new)
+#' \donttest{
+#' file_path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
+#' ndr_old <- read_ndr(file_path, time_stamp = "2021-02-15")
+#' ndr_new <- ndr_example
+#' tx_rtt(ndr_old, ndr_new)
+#' }
 #'
 #' ## Determine RTT for a particular state
-#' # tx_rtt(ndr_old, ndr_new, states = "State 1")
+#' \donttest{
+#' tx_rtt(ndr_old, ndr_new, states = "State 1")
+#' }
 tx_rtt <- function(old_data,
                    new_data,
                    states = .s,

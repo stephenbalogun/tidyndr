@@ -26,15 +26,16 @@
 #'   to = "2020-12-31"
 #' )
 #'
-#' ## not run:
 #' ## generate line-list of `tx_ml()` using two datasets
-#' # file_path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
-#' # ndr_old <- read_ndr(file_path, time_stamp = "2021-02-15")
-#' # ndr_new <- ndr_example
-#' # tx_ml(
-#' #   old_data = ndr_old,
-#' #   new_data = ndr_new
-#' # )
+#' \donttest{
+#' file_path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
+#' ndr_old <- read_ndr(file_path, time_stamp = "2021-02-15")
+#' ndr_new <- ndr_example
+#' tx_ml(
+#'   old_data = ndr_old,
+#'   new_data = ndr_new
+#' )
+#' }
 tx_ml <- function(old_data = NULL,
                   new_data,
                   from = NULL,
