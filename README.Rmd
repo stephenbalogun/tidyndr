@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/stephenbalogun/tidyndr/workflows/R-CMD-check/badge.svg)](https://github.com/stephenbalogun/tidyndr/actions) [![Codecov test coverage](https://codecov.io/gh/stephenbalogun/tidyndr/branch/master/graph/badge.svg)](https://codecov.io/gh/stephenbalogun/tidyndr?branch=master)
+[![CRAN status](https://www.r-pkg.org/badges/version/tidyndr)](https://CRAN.R-project.org/package=tidyndr)
 <!-- badges: end -->
 
 The goal of {tidyndr} is to provide a specialized, simple and easy to use functions that wrap around existing functions in `R` for manipulation of the [NDR](https://ndr.shieldnigeriaproject.com/) patient line-list file allowing the user to focus on the tasks to be completed rather than the code/formula details.
@@ -34,15 +35,15 @@ The functions presented are similar to the [PEPFAR MER indicators](https://datim
 
 ## Installation
 
-<!-- You can install the released version of tidyndr from [CRAN](https://CRAN.R-project.org) with: -->
+You can install the released version of tidyndr from [CRAN](https://CRAN.R-project.org) with:
 
-<!-- ``` r -->
+``` r
 
-<!-- install.packages("tidyndr") -->
+install.packages("tidyndr")
 
-<!-- ``` -->
+```
 
-This package is currently not available on [CRAN](https://CRAN.R-project.org) but you can install the development version from [GitHub](https://github.com/) with:
+Or the development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")

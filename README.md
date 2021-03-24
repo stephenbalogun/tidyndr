@@ -8,6 +8,8 @@ Tidyndr
 [![R-CMD-check](https://github.com/stephenbalogun/tidyndr/workflows/R-CMD-check/badge.svg)](https://github.com/stephenbalogun/tidyndr/actions)
 [![Codecov test
 coverage](https://codecov.io/gh/stephenbalogun/tidyndr/branch/master/graph/badge.svg)](https://codecov.io/gh/stephenbalogun/tidyndr?branch=master)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/tidyndr)](https://CRAN.R-project.org/package=tidyndr)
 <!-- badges: end -->
 
 The goal of {tidyndr} is to provide a specialized, simple and easy to
@@ -35,14 +37,14 @@ and are currently grouped into four categories:
 
 ## Installation
 
-<!-- You can install the released version of tidyndr from [CRAN](https://CRAN.R-project.org) with: -->
-<!-- ``` r -->
-<!-- install.packages("tidyndr") -->
-<!-- ``` -->
+You can install the released version of tidyndr from
+[CRAN](https://CRAN.R-project.org) with:
 
-This package is currently not available on
-[CRAN](https://CRAN.R-project.org) but you can install the development
-version from [GitHub](https://github.com/) with:
+``` r
+install.packages("tidyndr")
+```
+
+Or the development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
@@ -274,7 +276,7 @@ who are due for a viral load test out of all those who are eligible.
 ## Generate list of clients who are eligible for VL (i.e. expected to have a documented VL result)
 ndr_example %>%
   tx_vl_eligible()
-#> # A tibble: 14,068 x 52
+#> # A tibble: 14,160 x 52
 #>    ip     state lga   facility datim_code sex   patient_identif~ hospital_number
 #>    <fct>  <fct> <fct> <fct>    <fct>      <fct> <chr>            <chr>          
 #>  1 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 1001       0001           
@@ -287,7 +289,7 @@ ndr_example %>%
 #>  8 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 1005       0004           
 #>  9 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 3009       0004           
 #> 10 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 2009       0001           
-#> # ... with 14,058 more rows, and 44 more variables: date_of_birth <date>,
+#> # ... with 14,150 more rows, and 44 more variables: date_of_birth <date>,
 #> #   age_at_art_initiation <dbl>, current_age <dbl>, art_start_date <date>,
 #> #   art_start_date_source <fct>, last_drug_pickup_date <date>,
 #> #   last_drug_pickup_date_q1 <date>, last_drug_pickup_date_q2 <date>,
@@ -360,7 +362,7 @@ no_of_vl_eligible <- tx_vl_eligible(ndr_example,
 vl_coverage <- scales::percent(no_of_vl_results / no_of_vl_eligible)
 
 print(vl_coverage)
-#> [1] "58%"
+#> [1] "56%"
 ```
 
 For all the ‘Treatment’ and ‘Viral Suppression’ indicators (except
@@ -376,7 +378,7 @@ ndr_example %>%
                  to = "2021-03-31",
                  states = c("State 1", "State 3")) %>%
   tx_vl_eligible(sample = TRUE)
-#> # A tibble: 2,593 x 52
+#> # A tibble: 2,643 x 52
 #>    ip     state lga   facility datim_code sex   patient_identif~ hospital_number
 #>    <fct>  <fct> <fct> <fct>    <fct>      <fct> <chr>            <chr>          
 #>  1 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 1001       0001           
@@ -389,7 +391,7 @@ ndr_example %>%
 #>  8 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 30045      00018          
 #>  9 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 30049      00021          
 #> 10 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 10022      0007           
-#> # ... with 2,583 more rows, and 44 more variables: date_of_birth <date>,
+#> # ... with 2,633 more rows, and 44 more variables: date_of_birth <date>,
 #> #   age_at_art_initiation <dbl>, current_age <dbl>, art_start_date <date>,
 #> #   art_start_date_source <fct>, last_drug_pickup_date <date>,
 #> #   last_drug_pickup_date_q1 <date>, last_drug_pickup_date_q2 <date>,
@@ -432,10 +434,10 @@ summarise_ndr(new, curr, ml,
 #> # A tibble: 4 x 5
 #>   ip      state   tx_new tx_curr tx_ml
 #>   <chr>   <chr>    <int>   <int> <int>
-#> 1 IP_name State 1    662    3726  2923
-#> 2 IP_name State 2   1239    5058  4606
-#> 3 IP_name State 3   3338    7912  3710
-#> 4 Total   -         5239   16696 11240
+#> 1 IP_name State 1    662    3726  3081
+#> 2 IP_name State 2   1239    5058  4910
+#> 3 IP_name State 3   3338    7912  4005
+#> 4 Total   -         5239   16696 11997
 ```
 
 The `disaggregate()` allows you to summarise an indicator of interest
