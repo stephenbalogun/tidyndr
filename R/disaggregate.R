@@ -16,7 +16,7 @@
 #'
 #' @examples
 #' ### Disaggregate "TX_NEW" clients into age categories for each state
-#' new_clients <- tx_new(ndr_example)
+#' new_clients <- tx_new(ndr_example, from = "2021-01-01", to = "2021-03-31")
 #' disaggregate(new_clients, by = "current_age") # default value of level is "state"
 #'
 #' ### Disaggregate "TX_CURR" by gender for each facility
@@ -154,9 +154,12 @@ disaggregate <- function(data, by, level = "state") {
       dplyr::between(data$current_age, 35, 39) ~ "35-39",
       dplyr::between(data$current_age, 40, 44) ~ "40-44",
       dplyr::between(data$current_age, 45, 49) ~ "45-49",
-      data$current_age >= 50 ~ "50+",
-      data$current_age < 0 ~ "neg_age",
-      is.na(data$current_age) ~ "missing"
+      dplyr::between(data$current_age, 50, 54) ~ "50-54",
+      dplyr::between(data$current_age, 55, 59) ~ "55-59",
+      dplyr::between(data$current_age, 60, 64) ~ "60-64",
+      data$current_age >= 65 ~ "65+", data$current_age <
+        0 ~ "neg_age", is.na(data$current_age) ~
+      "missing"
     )
 
     dat <- dplyr::mutate(data, current_age = age)

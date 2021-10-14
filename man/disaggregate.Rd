@@ -26,7 +26,7 @@ where appropriate.
 }
 \examples{
 ### Disaggregate "TX_NEW" clients into age categories for each state
-new_clients <- tx_new(ndr_example)
+new_clients <- tx_new(ndr_example, from = "2021-01-01", to = "2021-03-31")
 disaggregate(new_clients, by = "current_age") # default value of level is "state"
 
 ### Disaggregate "TX_CURR" by gender for each facility
