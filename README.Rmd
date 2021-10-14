@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 <!-- <a href='https://github.com/stephenbalogun/tidyndr/tree/master/man/figures/logo.svg'><img src="man/figures/logo.svg" align="right" height="139"/></a> -->
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/stephenbalogun/tidyndr/workflows/R-CMD-check/badge.svg)](https://github.com/stephenbalogun/tidyndr/actions) [![Codecov test coverage](https://codecov.io/gh/stephenbalogun/tidyndr/branch/master/graph/badge.svg)](https://codecov.io/gh/stephenbalogun/tidyndr?branch=master)
+[![R-CMD-check](https://github.com/stephenbalogun/tidyndr/workflows/R-CMD-check/badge.svg)](https://github.com/stephenbalogun/tidyndr/actions) [![Codecov test coverage](https://codecov.io/gh/stephenbalogun/tidyndr/branch/master/graph/badge.svg)](https://app.codecov.io/gh/stephenbalogun/tidyndr?branch=master/)
 [![CRAN status](https://www.r-pkg.org/badges/version/tidyndr)](https://CRAN.R-project.org/package=tidyndr)
 <!-- badges: end -->
 
@@ -164,7 +164,7 @@ summarise_ndr(new, curr, ml,
 The `disaggregate()` allows you to summarise an indicator of interest into finer details based on "age", "sex" or "pregnancy status". These are supplied to the `by` parameter of the function. The default disaggregates the variable of interest at the level of "states" but can also do this at "country/ip", "lga" or "facility" level when any of this is supplied to the `level` parameter.
 
 ```{r, disagg}
-new_clients <- tx_new(ndr_example)  ## generates line-list of TX_NEW for the FY
+new_clients <- tx_new(ndr_example, from = "2021-01-01", to = "2021-03-31")  ## generates line-list of TX_NEW for the FY
 
 disaggregate(new_clients,
              by = "current_age")
