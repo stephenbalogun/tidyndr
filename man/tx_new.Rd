@@ -4,16 +4,10 @@
 \alias{tx_new}
 \title{Subset Clients Starting ART Within a Particular Period.}
 \usage{
-tx_new(
-  data,
-  from = get("fy_start")(),
-  to = get("Sys.Date")(),
-  states = .s,
-  facilities = .f
-)
+tx_new(data, from = NULL, to = NULL, states = NULL, facilities = NULL)
 }
 \arguments{
-\item{data}{An NDR dataframe imported using the `read_ndr().}
+\item{data}{An NDR dataframe imported using the \code{read_ndr()}.}
 
 \item{from}{The start date in ISO8601 format (i.e. "yyyy-mm-dd").
 The default is to start at the beginning of the current Fiscal Year (i.e. 1st of October).}
@@ -31,7 +25,7 @@ facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}
 }
 \value{
-tx_new
+TX_NEW clients in the period of interest
 }
 \description{
 Generates the line-list of clients who commenced ARV within the specified

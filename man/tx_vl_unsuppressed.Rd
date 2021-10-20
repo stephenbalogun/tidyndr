@@ -6,9 +6,9 @@
 \usage{
 tx_vl_unsuppressed(
   data,
-  ref = get("Sys.Date")(),
-  states = .s,
-  facilities = .f,
+  ref = NULL,
+  states = NULL,
+  facilities = NULL,
   status = "calculated",
   n = 1000
 )

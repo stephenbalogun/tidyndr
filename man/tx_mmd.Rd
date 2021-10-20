@@ -4,7 +4,13 @@
 \alias{tx_mmd}
 \title{Subset active clients based on months of ARV Dispensed}
 \usage{
-tx_mmd(data, months = .m, states = .s, facilities = .f, status = "calculated")
+tx_mmd(
+  data,
+  months = NULL,
+  states = NULL,
+  facilities = NULL,
+  status = "calculated"
+)
 }
 \arguments{
 \item{data}{An NDR dataframe imported using the \code{read_ndr()}.}

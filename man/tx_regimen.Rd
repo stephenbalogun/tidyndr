@@ -7,8 +7,8 @@
 tx_regimen(
   data,
   age_band = NULL,
-  states = .s,
-  facilities = .f,
+  states = NULL,
+  facilities = NULL,
   status = "calculated"
 )
 }

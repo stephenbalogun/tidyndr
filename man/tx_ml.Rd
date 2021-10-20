@@ -5,21 +5,21 @@
 \title{Subset Clients who Became Inactive (IIT) Within a Given Period}
 \usage{
 tx_ml(
-  old_data = NULL,
   new_data,
+  old_data = NULL,
   from = NULL,
   to = NULL,
-  states = .s,
-  facilities = .f,
+  states = NULL,
+  facilities = NULL,
   status = "calculated"
 )
 }
 \arguments{
-\item{old_data}{The initial dataframe containing the list of clients who
-were previously active.}
-
 \item{new_data}{The current datafame where changes in current treatment
 status will be checked.}
+
+\item{old_data}{The initial dataframe containing the list of clients who
+were previously active.}
 
 \item{from}{The start date in ISO8601 format (i.e. "yyyy-mm-dd").
 The default is to start at the beginning of the current Fiscal Year (i.e. 1st of October).}
@@ -52,11 +52,12 @@ with \code{tx_ml_outcomes()}, generates inactive clients with a particular
 outcome of interest.
 }
 \examples{
-tx_ml(new_data = ndr_example)
+tx_ml(new_data = ndr_example, from = "2020-10-01", to = "2020-10-31")
 
 # Find clients who were inactive at the end of Q1 of FY21
 tx_ml(
   new_data = ndr_example,
+  from = "2020-10-01",
   to = "2020-12-31"
 )
 
@@ -67,7 +68,9 @@ ndr_old <- read_ndr(file_path, time_stamp = "2021-02-15")
 ndr_new <- ndr_example
 tx_ml(
   old_data = ndr_old,
-  new_data = ndr_new
+  new_data = ndr_new,
+  from = "2021-01-01",
+  to = "2021-02-28"
 )
 }
 }

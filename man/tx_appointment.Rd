@@ -7,14 +7,15 @@ a Particular Period}
 \usage{
 tx_appointment(
   data,
-  from = get("fy_start")(),
-  to = get("Sys.Date")(),
-  states = .s,
-  facilities = .f
+  from = NULL,
+  to = NULL,
+  states = NULL,
+  facilities = NULL,
+  active = FALSE
 )
 }
 \arguments{
-\item{data}{An NDR dataframe imported using the `read_ndr().}
+\item{data}{An NDR dataframe imported using the \code{read_ndr()}.}
 
 \item{from}{The start date in ISO8601 format (i.e. "yyyy-mm-dd").
 The default is to start at the beginning of the current Fiscal Year (i.e. 1st of October).}
@@ -30,6 +31,8 @@ states using the \code{c()} e.g. \code{c("State 1", "State 2")}.}
 all the facilities contained in the dataframe. If specifying more than one
 facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}
+
+\item{active}{TRUE or FALSE. To determine whether the appointment should be for only active patients or irrespective of their status.}
 }
 \value{
 tx_appointment

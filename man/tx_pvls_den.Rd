@@ -6,9 +6,9 @@
 \usage{
 tx_pvls_den(
   data,
-  ref = get("Sys.Date")(),
-  states = .s,
-  facilities = .f,
+  ref = NULL,
+  states = NULL,
+  facilities = NULL,
   status = "calculated"
 )
 }

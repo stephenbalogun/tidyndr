@@ -4,14 +4,20 @@
 \alias{tx_rtt}
 \title{Subset Rows of Previously Inactive Clients Who are Now Active}
 \usage{
-tx_rtt(old_data, new_data, states = .s, facilities = .f, status = "calculated")
+tx_rtt(
+  new_data,
+  old_data,
+  states = NULL,
+  facilities = NULL,
+  status = "calculated"
+)
 }
 \arguments{
-\item{old_data}{The initial dataframe containing the list of clients who
-have been previously inactive.}
-
 \item{new_data}{The current datafame where changes in current treatment
 status will be checked.}
+
+\item{old_data}{The initial dataframe containing the list of clients who
+have been previously inactive.}
 
 \item{states}{The name(s) of the State(s) of interest. The default utilizes all
 the states in the dataframe. If specifying more than one state, combine the
@@ -37,9 +43,9 @@ to the \code{new_data} argument.
 \examples{
 \donttest{
 file_path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
-ndr_old <- read_ndr(file_path, time_stamp = "2021-02-15")
-ndr_new <- ndr_example
-tx_rtt(ndr_old, ndr_new)
+ndr_new <- read_ndr(file_path, time_stamp = "2021-02-15")
+ndr_old <- ndr_example
+tx_rtt(ndr_new, ndr_old)
 }
 
 ## Determine RTT for a particular state
