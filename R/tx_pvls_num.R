@@ -23,13 +23,30 @@
 #' # Determine clients with viral load result less than 400
 #' tx_pvls_num(ndr_example, n = 400)
 tx_pvls_num <- function(data,
-                        ref = get("Sys.Date")(),
-                        states = .s,
-                        facilities = .f,
+                        ref = NULL,
+                        states = NULL,
+                        facilities = NULL,
                         status = "calculated",
                         n = 1000) {
-  .s <- unique(data$state)
-  .f <- unique(subset(data, state %in% states)$facility)
+
+  ref <- lubridate::ymd(ref %||% get("Sys.Date")())
+
+  states <- states %||% unique(data$state)
+
+  facilities <- facilities %||% unique(subset(data, state %in% states)$facility)
+
+  validate_pvls_num(data, ref, states, facilities, status, n)
+
+  get_tx_pvls_num(data, ref, states, facilities, status, n)
+}
+
+
+validate_pvls_num <- function(data,
+                              ref,
+                              states,
+                              facilities,
+                              status,
+                              n) {
 
   if (!all(states %in% unique(data$state))) {
     rlang::abort("state(s) is not contained in the supplied data. Check the spelling and/or case.")
@@ -40,7 +57,7 @@ tx_pvls_num <- function(data,
                  Check that the facility is correctly spelt and located in the state.")
   }
 
-  if (is.na(lubridate::as_date(ref))) {
+  if (is.na(ref)) {
     rlang::abort("The supplied date is not in 'yyyy-mm-dd' format.")
   }
 
@@ -48,48 +65,57 @@ tx_pvls_num <- function(data,
     rlang::abort("`status` can only be one of 'default' or 'calculated'. Check that you did not mispell, include CAPS or forget to quotation marks!")
   }
 
+  if (n < 0) {
+    rlang::abort("n cannot be less than zero")
+  }
 
-
-  switch(status,
-    "calculated" = dplyr::filter(
-      data,
-      current_status == "Active",
-      lubridate::as_date(ref) - art_start_date >=
-        lubridate::period(6, "months"),
-      dplyr::if_else(
-        current_age < 20,
-        lubridate::as_date(ref) -
-          date_of_current_viral_load <=
-          lubridate::period(6, "months"),
-        lubridate::as_date(ref) -
-          date_of_current_viral_load <=
-          lubridate::period(1, "year")
-      ),
-      current_viral_load < n,
-      state %in% states,
-      facility %in% facilities
-    ),
-    "default" = dplyr::filter(
-      data,
-      current_status_28_days == "Active",
-      lubridate::as_date(ref) - art_start_date >=
-        lubridate::period(6, "months"),
-      dplyr::if_else(
-        current_age < 20,
-        lubridate::as_date(ref) -
-          date_of_current_viral_load <=
-          lubridate::period(6, "months"),
-        lubridate::as_date(ref) -
-          date_of_current_viral_load <=
-          lubridate::period(1, "year")
-      ),
-      current_viral_load < n,
-      state %in% states,
-      facility %in% facilities
-    )
-  )
 }
 
+
+get_tx_pvls_num <- function(data, ref, states, facilities, status, n) {
+  switch(status,
+         "calculated" = dplyr::filter(
+           data,
+           current_status == "Active",
+           !patient_has_died %in% TRUE,
+           !patient_transferred_out %in% TRUE,
+           lubridate::as_date(ref) - art_start_date >=
+             lubridate::period(6, "months"),
+           dplyr::if_else(
+             current_age < 20,
+             lubridate::as_date(ref) -
+               date_of_current_viral_load <=
+               lubridate::period(6, "months"),
+             lubridate::as_date(ref) -
+               date_of_current_viral_load <=
+               lubridate::period(1, "year")
+           ),
+           current_viral_load < n,
+           state %in% states,
+           facility %in% facilities
+         ),
+         "default" = dplyr::filter(
+           data,
+           current_status_28_days == "Active",
+           !patient_has_died %in% TRUE,
+           !patient_transferred_out %in% TRUE,
+           lubridate::as_date(ref) - art_start_date >=
+             lubridate::period(6, "months"),
+           dplyr::if_else(
+             current_age < 20,
+             lubridate::as_date(ref) -
+               date_of_current_viral_load <=
+               lubridate::period(6, "months"),
+             lubridate::as_date(ref) -
+               date_of_current_viral_load <=
+               lubridate::period(1, "year")
+           ),
+           current_viral_load < n,
+           state %in% states,
+           facility %in% facilities
+         )
+  )
+}
 
 utils::globalVariables(c(
   "art_start_date",

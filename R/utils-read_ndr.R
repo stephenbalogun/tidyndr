@@ -59,7 +59,7 @@ current_cols <- function() {
   )
 }
 
-### column specifications for NDR line-list between July and Sept 2020
+### column specifications for NDR treatment line-list between July and Sept 2020
 old_cols <- function() {
   vroom::cols_only(
     vroom::col_factor(),
@@ -98,3 +98,116 @@ old_cols <- function() {
     vroom::col_date(format = "%d-%b-%y"),
   )
 }
+
+
+## hts linelist column specifications
+hts_cols <- function() {
+  vroom::cols(
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_character(),
+    vroom::col_character(),
+    vroom::col_character(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_date(format = "%d-%b-%Y"),
+    vroom::col_factor(),
+    vroom::col_date(format = "%d-%b-%Y"),
+    vroom::col_double(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_integer(),
+    vroom::col_integer(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_date(format = "%m/%d/%Y %I:%M:%S %p"),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_date(format = "%d-%b-%Y"),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_integer(),
+    vroom::col_date(format = "%d-%b-%Y"),
+    vroom::col_factor(),
+    vroom::col_date(format = "%m/%d/%Y %I:%M:%S %p"),
+    vroom::col_factor(),
+    vroom::col_date(format = "%m/%d/%Y %I:%M:%S %p"),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_character(),
+    vroom::col_character(),
+    vroom::col_factor(),
+    vroom::col_date(format = "%d-%b-%Y"),
+    vroom::col_date(format = "%d-%b-%Y"),
+    vroom::col_date(format = "%d-%b-%Y"),
+    vroom::col_character()
+  )
+}
+
+
+## recency linelist column specifications
+recency_cols <- function() {
+  vroom::cols(
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_character(),
+    vroom::col_factor(),
+    vroom::col_date(format = "%d-%b-%Y"),
+    vroom::col_double(),
+    vroom::col_factor(),
+    vroom::col_character(),
+    vroom::col_date(format = "%d-%b-%Y"),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_logical(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_date(format = "%d/%m/%Y"),
+    vroom::col_character(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_factor(),
+    vroom::col_double(),
+    vroom::col_date(format = "%d-%m-%Y"),
+    vroom::col_date(format = "%d-%m-%Y"),
+    vroom::col_character(),
+    vroom::col_character(),
+    vroom::col_character()
+  )
+}
+
+
+ndr_types <- function() {
+  c("treatment", "hts", "recency")
+
+}
+

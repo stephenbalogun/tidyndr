@@ -9,11 +9,11 @@
 #'  or the derived current_status column ("calculated").
 #' @inheritParams tx_new
 #'
-#' @return tx_curr
+#' @return TX_CURR
 #' @export
 #'
 #' @examples
-#' # Calculatd active clients using the derived current status
+#' # Calculated active clients using the derived current status
 #' tx_curr(ndr_example)
 #'
 #' # Calculate the active clients using the NDR `current_status_28_days` column
@@ -30,13 +30,21 @@
 #'   facilities = c("Facility 1", "Facility 2")
 #' )
 tx_curr <- function(data,
-                    states = .s,
-                    facilities = .f,
+                    states = NULL,
+                    facilities = NULL,
                     status = "calculated") {
-  .s <- unique(data$state)
 
-  .f <- unique(subset(data, state %in% states)$facility)
+  states <- states %||% unique(data$state)
 
+  facilities <- facilities %||% unique(subset(data, state %in% states)$facility)
+
+  validate_curr(data, states, facilities, status)
+
+  get_tx_curr(data, states, facilities, status)
+}
+
+
+validate_curr <- function(data, states, facilities, status) {
   if (!all(states %in% unique(data$state))) {
     rlang::abort("state(s) is/are not contained in the supplied data. Check the spelling and/or case.")
   }
@@ -49,22 +57,34 @@ tx_curr <- function(data,
   if (!status %in% c("default", "calculated")) {
     rlang::abort("`status` can only be one of 'default' or 'calculated'. Check that you did not mispell, include CAPS or forget to quotation marks!")
   }
+}
 
+get_tx_curr <- function(data,
+                        states,
+                        facilities,
+                        status) {
   switch(status,
     "calculated" = dplyr::filter(
       data,
       current_status == "Active",
+      !patient_has_died %in% TRUE,
+      !patient_transferred_out %in% TRUE,
       state %in% states,
       facility %in% facilities
     ),
     "default" = dplyr::filter(
       data,
       current_status_28_days == "Active",
+      !patient_has_died %in% TRUE,
+      !patient_transferred_out %in% TRUE,
       state %in% states,
       facility %in% facilities
     )
   )
 }
 
-
-utils::globalVariables("current_status")
+utils::globalVariables(
+  c("current_status",
+    "patient_has_died",
+    "patient_transferred_out")
+)

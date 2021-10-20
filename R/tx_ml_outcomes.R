@@ -15,20 +15,31 @@
 #' tx_ml_outcomes(tx_ml(new_data = ndr_example),
 #'   outcome = "dead"
 #' )
-tx_ml_outcomes <- function(data,
-                           outcome) {
+tx_ml_outcomes <- function(data, outcome) {
+
+  validate_ml_outcomes(data, outcome)
+
+  get_tx_ml_outcomes(data, outcome)
+
+}
+
+
+validate_ml_outcomes <- function(data, outcome) {
   if (!outcome %in% c("dead", "transferred out", "transfer out")) {
     rlang::abort("Outcome should be either `dead` or `transferred out`.
                  Check you spellings and your CAPS!")
   }
 
+}
+
+get_tx_ml_outcomes <- function(data, outcome) {
   switch(outcome,
-    "dead" = dplyr::filter(data, patient_has_died == TRUE),
-    "transferred out" = dplyr::filter(data, patient_transferred_out == TRUE),
-    "transfer out" = dplyr::filter(data, patient_transferred_out == TRUE),
-    "transferred out" = dplyr::filter(data, patient_transferred_out == TRUE)
+         "dead" = dplyr::filter(data, patient_has_died == TRUE),
+         "transfer out" = dplyr::filter(data, patient_transferred_out == TRUE),
+         "transferred out" = dplyr::filter(data, patient_transferred_out == TRUE)
   )
 }
+
 
 utils::globalVariables(c(
   "patient_has_died",

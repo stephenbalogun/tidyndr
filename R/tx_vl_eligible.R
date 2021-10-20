@@ -27,14 +27,31 @@
 #'   sample = TRUE
 #' )
 tx_vl_eligible <- function(data,
-                           ref = get("Sys.Date")(),
-                           states = .s,
-                           facilities = .f,
+                           ref = NULL,
+                           states = NULL,
+                           facilities = NULL,
                            status = "calculated",
                            sample = FALSE) {
-  .s <- unique(data$state)
-  .f <- unique(subset(data, state %in% states)$facility)
 
+  ref <- lubridate::ymd(ref %||% get("Sys.Date")())
+
+  states <- states %||% unique(data$state)
+
+  facilities <- facilities %||% unique(subset(data, state %in% states)$facility)
+
+  validate_vl_eligible(data, ref, states, facilities, status, sample)
+
+  get_tx_vl_eligible(data, ref, states, facilities, status, sample)
+
+}
+
+
+validate_vl_eligible <- function(data,
+                                 ref,
+                                 states,
+                                 facilities,
+                                 status,
+                                 sample) {
   if (!all(states %in% unique(data$state))) {
     rlang::abort("state(s) is/are not contained in the supplied data. Check the spelling and/or case.")
   }
@@ -44,7 +61,7 @@ tx_vl_eligible <- function(data,
                  Check that the facility is correctly spelt and located in the state.")
   }
 
-  if (is.na(lubridate::as_date(ref))) {
+  if (is.na(ref)) {
     rlang::abort("The supplied date is not in 'yyyy-mm-dd' format.")
   }
 
@@ -52,67 +69,88 @@ tx_vl_eligible <- function(data,
     rlang::abort("`status` can only be one of 'default' or 'calculated'. Check that you did not mispell, include CAPS or forget to quotation marks!")
   }
 
+
+  if (!sample %in% c(TRUE, FALSE)) {
+    rlang::abort("Sample can only be set to TRUE or FALSE")
+  }
+
+}
+
+get_tx_vl_eligible <- function(data,
+                               ref,
+                               states,
+                               facilities,
+                               status,
+                               sample) {
+
   if (sample) {
     switch(status,
-      "calculated" = dplyr::filter(
-        data,
-        current_status == "Active",
-        lubridate::as_date(ref) - art_start_date >=
-          lubridate::period(6, "months"),
-        dplyr::if_else(
-          current_age < 20,
-          lubridate::as_date(ref) -
-            date_of_current_viral_load >
-            lubridate::period(6, "months"),
-          lubridate::as_date(ref) -
-            date_of_current_viral_load >
-            lubridate::period(1, "year")
-        ) |
-          is.na(date_of_current_viral_load),
-        state %in% states,
-        facility %in% facilities
-      ),
-      "default" = dplyr::filter(
-        data,
-        current_status_28_days == "Active",
-        lubridate::as_date(ref) - art_start_date >=
-          lubridate::period(6, "months"),
-        dplyr::if_else(
-          current_age < 20,
-          lubridate::as_date(ref) -
-            date_of_current_viral_load >
-            lubridate::period(6, "months"),
-          lubridate::as_date(ref) -
-            date_of_current_viral_load >
-            lubridate::period(1, "year")
-        ) |
-          is.na(date_of_current_viral_load),
-        state %in% states,
-        facility %in% facilities
-      )
+           "calculated" = dplyr::filter(
+             data,
+             current_status == "Active",
+             !patient_has_died %in% TRUE,
+             !patient_transferred_out %in% TRUE,
+             ref - art_start_date >=
+               lubridate::period(6, "months"),
+             dplyr::if_else(
+               current_age < 20,
+               ref -
+                 date_of_current_viral_load >
+                 lubridate::period(6, "months"),
+               ref -
+                 date_of_current_viral_load >
+                 lubridate::period(1, "year")
+             ) |
+               is.na(date_of_current_viral_load),
+             state %in% states,
+             facility %in% facilities
+           ),
+           "default" = dplyr::filter(
+             data,
+             current_status_28_days == "Active",
+             !patient_has_died %in% TRUE,
+             !patient_transferred_out %in% TRUE,
+             ref - art_start_date >=
+               lubridate::period(6, "months"),
+             dplyr::if_else(
+               current_age < 20,
+               ref -
+                 date_of_current_viral_load >
+                 lubridate::period(6, "months"),
+               ref -
+                 date_of_current_viral_load >
+                 lubridate::period(1, "year")
+             ) |
+               is.na(date_of_current_viral_load),
+             state %in% states,
+             facility %in% facilities
+           )
     )
   } else {
     switch(status,
-      "calculated" = dplyr::filter(
-        data,
-        current_status == "Active",
-        lubridate::as_date(ref) - art_start_date >=
-          lubridate::period(6, "months"),
-        state %in% states,
-        facility %in% facilities
-      ),
-      "default" = dplyr::filter(
-        data,
-        current_status_28_days == "Active",
-        lubridate::as_date(ref) - art_start_date >=
-          lubridate::period(6, "months"),
-        state %in% states,
-        facility %in% facilities
-      )
+           "calculated" = dplyr::filter(
+             data,
+             current_status == "Active",
+             !patient_has_died %in% TRUE,
+             !patient_transferred_out %in% TRUE,
+             ref - art_start_date >=
+               lubridate::period(6, "months"),
+             state %in% states,
+             facility %in% facilities
+           ),
+           "default" = dplyr::filter(
+             data,
+             current_status_28_days == "Active",
+             !patient_has_died %in% TRUE,
+             !patient_transferred_out %in% TRUE,
+             ref - art_start_date >=
+               lubridate::period(6, "months"),
+             state %in% states,
+             facility %in% facilities
+           )
     )
   }
 }
-
 
 
 utils::globalVariables(c(

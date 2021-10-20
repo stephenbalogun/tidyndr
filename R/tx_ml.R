@@ -18,11 +18,12 @@
 #' @export
 #'
 #' @examples
-#' tx_ml(new_data = ndr_example)
+#' tx_ml(new_data = ndr_example, from = "2020-10-01", to = "2020-10-31")
 #'
 #' # Find clients who were inactive at the end of Q1 of FY21
 #' tx_ml(
 #'   new_data = ndr_example,
+#'   from = "2020-10-01",
 #'   to = "2020-12-31"
 #' )
 #'
@@ -33,20 +34,42 @@
 #' ndr_new <- ndr_example
 #' tx_ml(
 #'   old_data = ndr_old,
-#'   new_data = ndr_new
+#'   new_data = ndr_new,
+#'   from = "2021-01-01",
+#'   to = "2021-02-28"
 #' )
 #' }
-tx_ml <- function(old_data = NULL,
-                  new_data,
+tx_ml <- function(new_data,
+                  old_data = NULL,
                   from = NULL,
                   to = NULL,
-                  states = .s,
-                  facilities = .f,
+                  states = NULL,
+                  facilities = NULL,
                   status = "calculated") {
-  .s <- unique(new_data$state)
 
-  .f <- unique(subset(new_data, state %in% states)$facility)
 
+  from <- lubridate::ymd(from %||% get("fy_start")())
+
+  to <- lubridate::ymd(to %||% get("Sys.Date")())
+
+  states <- states %||% unique(new_data$state)
+
+  facilities <- facilities %||% unique(subset(new_data, state %in% states)$facility)
+
+  validate_ml(new_data, old_data, from, to, states, facilities, status)
+
+  get_tx_ml(new_data, old_data, from, to, states, facilities, status)
+
+}
+
+
+validate_ml <- function(new_data,
+                        old_data,
+                        from,
+                        to,
+                        states,
+                        facilities,
+                        status) {
 
   if (!all(states %in% unique(new_data$state))) {
     rlang::abort("state(s) is/are not contained in the supplied data. Check the spelling and/or case.")
@@ -57,60 +80,69 @@ tx_ml <- function(old_data = NULL,
                  Check that the facility is correctly spelt and located in the state.")
   }
 
-  if (!rlang::is_null(from) && is.na(lubridate::as_date(from))) {
+  if (!rlang::is_null(from) && is.na(from)) {
     rlang::abort("The supplied date is not in 'yyyy-mm-dd' format.")
   }
 
-  if (!rlang::is_null(to) && is.na(lubridate::as_date(to))) {
+  if (!rlang::is_null(to) && is.na(to)) {
     rlang::abort("The supplied date is not in 'yyyy-mm-dd' format.")
   }
 
   if (!status %in% c("default", "calculated")) {
     rlang::abort("`status` can only be one of 'default' or 'calculated'. Check that you did not mispell, include CAPS or forget to quotation marks!")
   }
+}
+
+
+get_tx_ml <- function(new_data,
+                      old_data,
+                      from,
+                      to,
+                      states,
+                      facilities,
+                      status) {
 
   if (rlang::is_null(old_data)) {
     dplyr::filter(
       new_data,
       dplyr::between(
         date_lost,
-        lubridate::as_date(from %||% get("fy_start")()),
-        lubridate::as_date(to %||% get("Sys.Date")())
+        from,
+        to
       ),
       state %in% states,
       facility %in% facilities
     )
   } else {
     active <- switch(status,
-      "calculated" = dplyr::filter(
-        old_data,
-        current_status == "Active"
-      ),
-      "default" = dplyr::filter(
-        old_data,
-        current_status_28_days == "Active"
-      )
+                     "calculated" = dplyr::filter(
+                       old_data,
+                       current_status == "Active"
+                     ),
+                     "default" = dplyr::filter(
+                       old_data,
+                       current_status_28_days == "Active"
+                     )
     )
 
     switch(status,
-      "calculated" = dplyr::filter(
-        new_data,
-        patient_identifier %in% active$patient_identifier,
-        current_status == "Inactive",
-        state %in% states,
-        facility %in% facilities
-      ),
-      "default" = dplyr::filter(
-        new_data,
-        patient_identifier %in% active$patient_identifier,
-        current_status_28_days == "Inactive",
-        state %in% states,
-        facility %in% facilities
-      )
+           "calculated" = dplyr::filter(
+             new_data,
+             patient_identifier %in% active$patient_identifier,
+             current_status == "Inactive",
+             state %in% states,
+             facility %in% facilities
+           ),
+           "default" = dplyr::filter(
+             new_data,
+             patient_identifier %in% active$patient_identifier,
+             current_status_28_days == "Inactive",
+             state %in% states,
+             facility %in% facilities
+           )
     )
   }
 }
-
 
 
 utils::globalVariables(c(

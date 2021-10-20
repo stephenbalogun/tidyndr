@@ -6,6 +6,7 @@
 #' The default is to generate the appointment list for all the
 #' states/facilities.
 #' @inheritParams tx_new
+#' @param active TRUE or FALSE. To determine whether the appointment should be for only active patients or irrespective of their status.
 #'
 #' @return tx_appointment
 #' @export
@@ -31,13 +32,28 @@
 #'   facilities = "Facility 1"
 #' )
 tx_appointment <- function(data,
-                           from = get("fy_start")(),
-                           to = get("Sys.Date")(),
-                           states = .s,
-                           facilities = .f) {
-  .s <- unique(data$state)
+                           from = NULL,
+                           to = NULL,
+                           states = NULL,
+                           facilities = NULL,
+                           active = FALSE
+                           ) {
 
-  .f <- unique(subset(data, state %in% states)$facility)
+  from <- lubridate::ymd(from %||% get("fy_start")())
+
+  to <- lubridate::ymd(to %||% get("Sys.Date")())
+
+  states <- states %||% unique(data$state)
+
+  facilities <- facilities %||% unique(subset(data, state %in% states)$facility)
+
+  validate_appointment(data, from, to, states, facilities, active)
+
+  get_tx_appointment(data, from, to, states, facilities, active)
+
+}
+
+validate_appointment <- function(data, from, to, states, facilities, active) {
 
   if (!all(states %in% unique(data$state))) {
     rlang::abort("state(s) is/are not contained in the supplied data. Check the spelling and/or case.")
@@ -48,24 +64,44 @@ tx_appointment <- function(data,
                  Check that the facility is correctly spelt and located in the state.")
   }
 
-  if (is.na(lubridate::as_date(from)) || is.na(lubridate::as_date(to))) {
+  if (is.na(from) || is.na(to)) {
     rlang::abort("The supplied date is not in 'yyyy-mm-dd' format.")
   }
 
-  if (lubridate::as_date(from) > lubridate::as_date(to)) {
+  if (from > to) {
     rlang::abort("The `from` date cannot be after the `to` date.")
   }
 
-  dplyr::filter(
+  if (!active %in% c(TRUE, FALSE)) {
+    rlang::abort("Active can only be set to TRUE or FALSE")
+  }
+
+}
+
+
+get_tx_appointment <- function(data, from, to, states, facilities, active) {
+
+  df <- dplyr::filter(
     data,
     dplyr::between(
       appointment_date,
-      lubridate::as_date(from),
-      lubridate::as_date(to)
+      from,
+      to
     ),
     state %in% states,
     facility %in% facilities
   )
+
+  if (active) {
+    dplyr::filter(
+      df,
+      current_status == "Active",
+      !patient_has_died %in% TRUE,
+      !patient_transferred_out %in% TRUE
+    )
+  } else {
+    return(df)
+  }
 }
 
 

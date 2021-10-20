@@ -35,6 +35,14 @@ summarize_ndr <- function(..., level, names) {
   data <- rlang::list2(...)
 
 
+  validate_summary(data, level, names)
+
+  get_summary_ndr(data, level, names)
+}
+
+
+
+validate_summary <- function(data, level, names) {
   if (length(unique(level)) > 1) {
     rlang::abort('You have supplied more than one type of levels to the
                  "level" argument')
@@ -67,12 +75,15 @@ summarize_ndr <- function(..., level, names) {
     )
   }
 
+}
+
+
+get_summary_ndr <- function(data, level, names){
+
 
   if (length(data) == 1) {
     return(my_summary(data[[1]], l = level, n = names[[1]]))
   }
-
-
 
 
   i <- 1
@@ -87,17 +98,18 @@ summarize_ndr <- function(..., level, names) {
 
 
   dt <- switch(level,
-    "state" = purrr::reduce(df, dplyr::left_join, by = c("ip", "state")),
-    "facility" = purrr::reduce(df, dplyr::left_join, by = c("ip", "state", "lga", "facility")),
-    "country" = purrr::reduce(df, dplyr::left_join, by = "ip"),
-    "ip" = purrr::reduce(df, dplyr::left_join, by = "ip"),
-    "lga" = purrr::reduce(df, dplyr::left_join, by = c("ip", "state", "lga"))
+               "state" = purrr::reduce(df, dplyr::left_join, by = c("ip", "state")),
+               "facility" = purrr::reduce(df, dplyr::left_join, by = c("ip", "state", "lga", "facility")),
+               "country" = purrr::reduce(df, dplyr::left_join, by = "ip"),
+               "ip" = purrr::reduce(df, dplyr::left_join, by = "ip"),
+               "lga" = purrr::reduce(df, dplyr::left_join, by = c("ip", "state", "lga"))
   )
 
   dt[is.na(dt)] <- 0 ## replace NAs with Zero
 
   tibble::as_tibble(dt)
 }
+
 
 
 utils::globalVariables(

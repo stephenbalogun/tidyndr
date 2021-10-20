@@ -22,13 +22,23 @@
 #' )
 tx_regimen <- function(data,
                        age_band = NULL,
-                       states = .s,
-                       facilities = .f,
+                       states = NULL,
+                       facilities = NULL,
                        status = "calculated") {
-  age_range <- c(0, Inf)
-  .s <- unique(data$state)
-  .f <- unique(subset(data, state %in% states)$facility)
 
+  states <- states %||% unique(data$state)
+
+  facilities <- facilities %||% unique(subset(data, state %in% states)$facility)
+
+  validate_regimen(data, age_band, states, facilities, status)
+
+  get_tx_regimen(data, age_band, states, facilities, status)
+
+
+}
+
+
+validate_regimen <- function(data, age_band, states, facilities, status) {
   if (!rlang::is_double(age_band) && !rlang::is_null(age_band)) {
     rlang::abort("age_band is not of the class numeric. Did you quote any of the values?")
   }
@@ -49,60 +59,69 @@ tx_regimen <- function(data,
   if (!status %in% c("default", "calculated")) {
     rlang::abort("`status` can only be one of 'default' or 'calculated'. Check that you did not mispell, include CAPS or forget to quotation marks!")
   }
-
-
-  switch(status,
-    "calculated" = dplyr::filter(
-      data,
-      current_status == "Active",
-      dplyr::if_else(
-        current_age <= 3,
-        last_regimen %in% c(
-          "ABC-3TC-LPV/r",
-          "AZT-3TC-LPV/r"
-        ),
-        last_regimen %in% c(
-          "ABC-3TC-DTG",
-          "TDF-3TC-DTG"
-        )
-      ),
-      dplyr::between(
-        current_age,
-        age_band[[1]] %||% age_range[[1]],
-        age_band[[2]] %||% age_range[[2]]
-      ),
-      state %in% states,
-      facility %in% facilities
-    ),
-    "default" = dplyr::filter(
-      data,
-      current_status_28_days == "Active",
-      dplyr::if_else(
-        current_age <= 3,
-        last_regimen %in% c(
-          "ABC-3TC-LPV/r",
-          "AZT-3TC-LPV/r"
-        ),
-        last_regimen %in% c(
-          "ABC-3TC-DTG",
-          "TDF-3TC-DTG"
-        )
-      ),
-      dplyr::between(
-        current_age,
-        age_band[[1]] %||% age_range[[1]],
-        age_band[[2]] %||% age_range[[2]]
-      ),
-      state %in% states,
-      facility %in% facilities
-    )
-  )
 }
 
 
+get_tx_regimen <- function(data, age_band, states, facilities, status) {
+
+  age_range <- c(0, 150)
+
+  switch(status,
+         "calculated" = dplyr::filter(
+           data,
+           current_status == "Active",
+           !patient_has_died %in% TRUE,
+           !patient_transferred_out %in% TRUE,
+           dplyr::if_else(
+             current_age <= 3,
+             last_regimen %in% c(
+               "ABC-3TC-LPV/r",
+               "AZT-3TC-LPV/r"
+             ),
+             last_regimen %in% c(
+               "ABC-3TC-DTG",
+               "TDF-3TC-DTG"
+             )
+           ),
+           dplyr::between(
+             current_age,
+             age_band[[1]] %||% age_range[[1]],
+             age_band[[2]] %||% age_range[[2]]
+           ),
+           state %in% states,
+           facility %in% facilities
+         ),
+         "default" = dplyr::filter(
+           data,
+           current_status_28_days == "Active",
+           !patient_has_died %in% TRUE,
+           !patient_transferred_out %in% TRUE,
+           dplyr::if_else(
+             current_age <= 3,
+             last_regimen %in% c(
+               "ABC-3TC-LPV/r",
+               "AZT-3TC-LPV/r"
+             ),
+             last_regimen %in% c(
+               "ABC-3TC-DTG",
+               "TDF-3TC-DTG"
+             )
+           ),
+           dplyr::between(
+             current_age,
+             age_band[[1]] %||% age_range[[1]],
+             age_band[[2]] %||% age_range[[2]]
+           ),
+           state %in% states,
+           facility %in% facilities
+         )
+  )
+}
 
 utils::globalVariables(c(
   "last_regimen",
   "current_status",
+  "patient_has_died",
+  "patient_transferred_out",
   "current_age"
 ))

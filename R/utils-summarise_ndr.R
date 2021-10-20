@@ -9,21 +9,23 @@
 #' @keywords internal
 #' @return No return value, called for side effects
 my_summary <- function(data, l, n) {
-  if (l == "state") {
-    data %>%
-      dplyr::count(ip, state, name = n, .drop = TRUE) %>%
-      janitor::adorn_totals()
-  } else if (l == "facility") {
-    data %>%
-      dplyr::count(ip, state, lga, facility, name = n, .drop = TRUE) %>%
-      janitor::adorn_totals()
-  } else if (l == "country" | l == "ip") {
-    data %>%
-      dplyr::count(ip, name = n, .drop = TRUE) %>%
-      janitor::adorn_totals()
-  } else if (l == "lga") {
-    data %>%
-      dplyr::count(ip, state, lga, name = n, .drop = TRUE) %>%
-      janitor::adorn_totals()
-  }
+  switch(
+    l,
+    "country" = janitor::adorn_totals(
+      dplyr::count(data, ip, name = n, .drop = TRUE)
+    ),
+    "ip" = janitor::adorn_totals(
+      dplyr::count(data, ip, name = n, .drop = TRUE)
+    ),
+    "state" = janitor::adorn_totals(
+      dplyr::count(data, ip, state, name = n, .drop = TRUE)
+      ),
+  "lga" = janitor::adorn_totals(
+    dplyr::count(data, ip, state, lga, name = n, .drop = TRUE)
+    ),
+  "facility" = janitor::adorn_totals(
+    dplyr::count(data, ip, state, lga, facility, name = n, .drop = TRUE)
+    )
+  )
+
 }
