@@ -1,6 +1,6 @@
 Package: tidyndr
 Title: Analysis of the Nigeria National Data Repository (NDR)
-Version: 0.1.1
+Version: 0.1.1.900
 Authors@R: 
     c(person(given = "Stephen",
            family = "Balogun",
@@ -34,10 +34,12 @@ Imports:
     magrittr (>= 2.0.1),
     purrr (>= 0.3.4),
     rlang (>= 0.4.10),
+    stringr,
     stats,
     tibble,
     tidyr,
-    vroom (>= 1.3.2)
+    vroom (>= 1.3.2),
+    tidyselect
 Suggests: 
     testthat (>= 3.0.0),
     knitr,
