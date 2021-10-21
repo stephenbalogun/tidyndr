@@ -58,19 +58,19 @@ The `read_ndr()` function allows you to import your line-list in a nicely config
 
 3.  Converts all column names to [snake case](https://en.wikipedia.org/wiki/Snake_case) format.
 
-4.  Adds three new columns to your data - `date_lost` (calculated by adding 28 days to the sum of `last_drug_pickup_date` and the `days_of_arv_refill`), `appointment_date` (calculated by adding the number of `days_of_arv_refill` to the `last_drug_pickup_date`, and `current_status` (calculated by classifying the patient as "active" or "inactive" using the value of the `time_stamp` argument as a reference.
+4.  Adds three new columns to your treatment data - `date_lost` (calculated by adding 28 days to the sum of `last_drug_pickup_date` and the `days_of_arv_refill`), `appointment_date` (calculated by adding the number of `days_of_arv_refill` to the `last_drug_pickup_date`, and `current_status` (calculated by classifying the patient as "active" or "inactive" using the value of the `time_stamp` argument as a reference.
 
 The `read_ndr()` has 5 arguments that can be specified. The first arguments two are always required:
 
 -   `path` - this specifies the location of the NDR line-list to be imported. You can do this either by specifying the "absolute" file path or a "relative" file path. See `?file.path()` and `?read_ndr()` for more details. The line-list must be exactly as downloaded from the NDR.
 
--   `time_stamp` - this is the reference date for the NDR line-list. It is used to derive the `current_status` of clients based on the last drug pickup date and the number of days of ARV refill. The value for this argument should be specified in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) "yyyy-mm-dd" format. I recommend that you download the NDR line-list on Monday and specify this date as the previous Friday. That way, you are almost certain that all the data available on the NDR were as at the preceding week and upload of data from the new week has not commenced.
+-   `type` - to specify the type of line-list that you are importing. The options are "treatment", "recency" and "hts".
+
+-   `time_stamp` - this is required only when importing "treatment" line-list. It is the reference date for the NDR line-list. It is used to derive the `current_status` of clients based on the last drug pickup date and the number of days of ARV refill. The value for this argument should be specified in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) "yyyy-mm-dd" format. I recommend that you download the NDR line-list on Monday and specify this date as the previous Friday. That way, you are almost certain that all the data available on the NDR were as at the preceding week and upload of data from the new week has not commenced.
 
 -   `cols` - when the value to this argument is absent, `read_ndr()` uses the column specification for NDR column modifications that occurred between October 2020 and March 2021. NDR column specifications before October 2020 are not accounted for by the default function so these will have to be specified manually. See `?vroom::cols()` for more details.
 
--   `quiet` - when this is set to FALSE (the default) it prints the names of the two columns added.
-
--   `...` - these are other arguments that can be passed to `vroom::vroom()`.
+-   `quiet` - when this is set to FALSE (the default) it prints the names of the two columns added. This is available only when the line-list type is "treatment"
 
 ```{r, read_ndr, eval = FALSE}
 
@@ -117,7 +117,7 @@ This generates the line-list of clients who started ART within a period. It can 
 
 ```{r, tx_new}
 ## generate tx_new clients for the FY for all states in the data
-tx_new(ndr_example)
+tx_new(ndr_example, from = "2021-01-01", to = "2021-01-31")
 
 ## generate tx_new for only one state (State 1 in the data) for January 2021.
 
@@ -167,7 +167,7 @@ tx_ml(old_data = ndr_old,
 
 ## generate the line-list of clients who have become inactive for "State 1" and "State 2" 
 ## since the beginning of October 2021.
-tx_ml(new_data = ndr_example,
+tx_ml(ndr_example,
       states = c("State 1", "State 2"))
 ```
 
@@ -181,7 +181,7 @@ For the inactive clients generated, you might be interested in subsetting those 
 
 ```{r, tx_ml_outcomes, eval = FALSE}
 ## generate the line-list of all clients who became inactive this Fiscal Year
-ml_example <- tx_ml(new_data = ndr_example)
+ml_example <- tx_ml(ndr_example)
 
 ## subset inactive clients who were transferred out
 tx_ml_outcomes(ml_example, outcome = "transferred out")
@@ -358,15 +358,15 @@ summarise_ndr(curr, new, level = "state", names = c("curr", "tx_new"))
 
 ### `disaggregate` {#disaggregate}
 
-A very powerful function that allows you to summarise your generated line-list disaggregated based on a particular variable. The disaggregation options currently available are "age (or current age)", "sex (or gender)", or "pregnancy status". It accepts 3 arguments:
+A very powerful function that allows you to summarise your generated line-list disaggregated based on a particular variable. The disaggregation options currently available are "current_age", "sex", "pregnancy_status", "art_duration", "months_dispensed", and "age_sex". It accepts 4 arguments:
 
 -   `data` - see [`tx_new()`](#tx_new) documentation above.
 
--   `by` and `level` - see the documentation for [`summarise_ndr()`](#summarise_ndr) above.
+-   `by`, `level` and `pivot_wide` - see the documentation for [`summarise_ndr()`](#summarise_ndr) above.
 
 ```{r, disaggregate, eval = FALSE}
 ## generate list of inactive clients
-inactives <- tx_ml(new_data = ndr_example)
+inactives <- tx_ml(new_data = ndr_example, from = "2021-01-01", to = "2021-03-31")
 
 ## disaggregate inactive clients by gender at state level
 disaggregate(inactives,
@@ -375,6 +375,7 @@ disaggregate(inactives,
 ## disaggregate inactive clients by "age group" at country level
 disaggregate(inactives,
              by = "current_age",
-             level = "country")
+             level = "country",
+             pivot_wide = FALSE)
 
 ```
