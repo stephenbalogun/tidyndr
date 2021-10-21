@@ -13,8 +13,8 @@
 #' The default options are "state" for  \code{by} and TRUE for \code{pivot_wide}.
 #' value is "state".
 #'
-#' @return disaggregate
-#' @export
+#' @return disaggregated data
+#' @export disaggregate
 #'
 #' @examples
 #' ### Disaggregate "TX_NEW" clients into age categories for each state
@@ -24,6 +24,7 @@
 #' ### Disaggregate "TX_CURR" by gender for each facility
 #' curr_clients <- tx_curr(ndr_example)
 #' disaggregate(curr_clients, by = "sex", level = "facility")
+
 disaggregate <- function(data, by, ...) {
 
 
