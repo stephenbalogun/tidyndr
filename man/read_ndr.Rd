@@ -2,7 +2,7 @@
 % Please edit documentation in R/read_ndr.R
 \name{read_ndr}
 \alias{read_ndr}
-\title{Title}
+\title{Import NDR Line-lists into R}
 \usage{
 read_ndr(path, type = "treatment", ...)
 }

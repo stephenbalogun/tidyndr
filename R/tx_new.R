@@ -91,8 +91,8 @@ get_tx_new <-  function(data, from, to, states, facilities) {
     data,
     dplyr::between(
       art_start_date,
-      lubridate::as_date(from),
-      lubridate::as_date(to)
+      from,
+      to
     ),
     state %in% states,
     facility %in% facilities

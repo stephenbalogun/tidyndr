@@ -64,7 +64,7 @@ The `read_ndr()` has 5 arguments that can be specified. The first arguments two 
 
 -   `path` - this specifies the location of the NDR line-list to be imported. You can do this either by specifying the "absolute" file path or a "relative" file path. See `?file.path()` and `?read_ndr()` for more details. The line-list must be exactly as downloaded from the NDR.
 
--   `type` - to specify the type of line-list that you are importing. The options are "treatment", "recency" and "hts".
+-   `type` - to specify the type of line-list that you are importing. The options are `treatment`, `recency` and `hts`.
 
 -   `time_stamp` - this is required only when importing "treatment" line-list. It is the reference date for the NDR line-list. It is used to derive the `current_status` of clients based on the last drug pickup date and the number of days of ARV refill. The value for this argument should be specified in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) "yyyy-mm-dd" format. I recommend that you download the NDR line-list on Monday and specify this date as the previous Friday. That way, you are almost certain that all the data available on the NDR were as at the preceding week and upload of data from the new week has not commenced.
 

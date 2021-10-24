@@ -1,4 +1,4 @@
-#' Title
+#' Import NDR Line-lists into R
 #'
 #' Import the basic NDR patient-level line lists (treatment, recent infection, and HTS) into R. Column names and types are appropriately formatted using the \code{type} argument.
 #' @param path Path to the csv file on your computer. The file path should be specified in the
@@ -79,11 +79,14 @@ read.hts <- function(path, cols = NULL, ...) {
 }
 
 
+
 read.recency <- function(path, cols = NULL, ...) {
   df <- tryCatch(error = function(cnd) {
     vroom::vroom(path)
   },
-  vroom::vroom(path, col_types = cols %||% recency_cols(), na = c("NULL", ""), ...))
+  vroom::vroom(path, col_types = cols %||% recency_cols(), ...)) %>%
+    purrr::modify_if(is.factor, ~dplyr::na_if(., "NULL")) %>%
+    purrr::modify_if(is.factor, forcats::fct_drop)
 
   return(janitor::clean_names(df))
 }

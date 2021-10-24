@@ -19,7 +19,7 @@ The default options are "state" for  \code{by} and TRUE for \code{pivot_wide}.
 value is "state".}
 }
 \value{
-disaggregate
+disaggregated data
 }
 \description{
 Counts the number of occurrence of an outcome based on the category of

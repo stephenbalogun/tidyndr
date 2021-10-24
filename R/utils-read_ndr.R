@@ -188,7 +188,7 @@ recency_cols <- function() {
     vroom::col_logical(),
     vroom::col_factor(),
     vroom::col_factor(),
-    vroom::col_date(format = "%d/%m/%Y"),
+    vroom::col_date(format = "%e-%m-%Y"),
     vroom::col_character(),
     vroom::col_factor(),
     vroom::col_factor(),
@@ -199,7 +199,7 @@ recency_cols <- function() {
     vroom::col_double(),
     vroom::col_date(format = "%d-%m-%Y"),
     vroom::col_date(format = "%d-%m-%Y"),
-    vroom::col_character(),
+    vroom::col_date(format = "%d-%m-%Y"),
     vroom::col_character(),
     vroom::col_character()
   )
