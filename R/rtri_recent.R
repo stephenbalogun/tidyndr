@@ -6,7 +6,7 @@
 #' @export hts_rtri_pos
 #'
 #' @examples
-hts_rtri_pos <- function(data,
+rtri_recent <- function(data,
                      from = NULL,
                      to = NULL,
                      states = NULL,
@@ -19,13 +19,13 @@ hts_rtri_pos <- function(data,
 
   validate_recent(data, from, to , states, facilities)
 
-  get_rtri_pos(data, from, to, states, facilities)
+  get_rtri_recent(data, from, to, states, facilities)
 
 
 }
 
 
-get_rtri_pos <-  function(data, from, to, states, facilities) {
+get_rtri_recent <-  function(data, from, to, states, facilities) {
 
   dt <- dplyr::filter(
     data,

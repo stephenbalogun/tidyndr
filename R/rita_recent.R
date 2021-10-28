@@ -6,7 +6,7 @@
 #' @export hts_rita_pos
 #'
 #' @examples
-hts_rita_pos <- function(data,
+rita_recent <- function(data,
                      from = NULL,
                      to = NULL,
                      states = NULL,
@@ -21,13 +21,13 @@ hts_rita_pos <- function(data,
 
   validate_recent(data, from, to , states, facilities)
 
-  get_rita_pos(data, from, to, states, facilities)
+  get_rita_recent(data, from, to, states, facilities)
 
 
 }
 
 
-get_rita_pos <-  function(data, from, to, states, facilities) {
+get_rita_recent <-  function(data, from, to, states, facilities) {
 
   dt <- dplyr::filter(
     data,

@@ -6,7 +6,7 @@
 #' @export hts_rita_result
 #'
 #' @examples
-hts_rita_result <- function(data,
+rita_result <- function(data,
                         from = NULL,
                         to = NULL,
                         states = NULL,
