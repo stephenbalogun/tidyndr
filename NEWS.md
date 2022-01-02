@@ -1,3 +1,5 @@
+# tidyndr 0.2.0
+
 # tidyndr 0.1.0
 
 * Added a `NEWS.md` file to track changes to the package.
@@ -12,3 +14,45 @@
 ## Minor update
 
 * Disaggregated `current_age` column to align with the PEPFAR MER 2.6 guidance
+
+
+
+# tidyndr 0.2.0
+
+## New functions
+
+* Added HIV-1 recent infection indicators
+  
+    * `hts_tst_pos()`
+    
+    * `recent_eligible()`
+    
+    * `hts_recent()`
+    
+    * `rtri_recent()`
+    
+    * `rita_sample()`
+    
+    * `rita_result()`
+    
+    * `rita_recent()`
+    
+    * `summarise_recency()`
+    
+    * `summarize_recency()`
+    
+    
+## New dataset
+
+* Included a simulated dataset for the HIV-1 recent infection (recency) indicators
+
+## Minor update
+
+* Updated `read_ndr()` to accommodate recency line-list
+
+* Modified `summarise_recency()` to make the `names` argument optional
+
+* Updated the `ndr_example` data set
+
+* Updated vignettes to reflect the new inclusions and modifications
+
