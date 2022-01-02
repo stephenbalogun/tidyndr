@@ -28,7 +28,7 @@ A data frame with 10000 rows and 36 variables:
 \item{testing_point}{Place where the HIV testing was conducted}
 \item{index_client}{is the client a result of Index Testing Services}
 \item{opt_out}{Did the client opt out of recency testing?}
-\item{recency_test_name}{Namme of testing kit used for the recent infection testing}
+\item{recency_test_name}{Name of testing kit used for the recent infection testing}
 \item{recency_test_date}{Date when the recency testing was conducted}
 \item{recency_number}{Number assigned during recency testing}
 \item{control_line}{Was the control line visible on the Asante kit during testing?}
@@ -37,11 +37,11 @@ A data frame with 10000 rows and 36 variables:
 \item{recency_interpretation}{Interpretation of the rapid testing for recency}
 \item{final_recency_result}{The final recency outcome following Viral Load}
 \item{viral_load_requested}{Was the viral load of the client requested?}
-\item{viral_load_result}{TThe viral load count of the client}
+\item{viral_load_result}{The viral load count of the client}
 \item{date_of_viral_load_result}{The date the viral load result was released}
 \item{date_sample_collected}{The date of viral load sample collection}
 \item{date_sample_sent}{The date the collected viral load sample was sent for assay}
-\item{pcr_lab}{laboratory where recency viral load is analysed}
+\item{pcr_lab}{laboratory where recency viral load is analyzed}
 \item{x36}{column missing column name and containing negligible entries}
 }
 }
