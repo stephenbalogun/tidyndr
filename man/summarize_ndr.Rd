@@ -4,7 +4,7 @@
 \alias{summarize_ndr}
 \title{Count the Number of Outcomes Based on a Specified Level}
 \usage{
-summarize_ndr(..., level, names)
+summarize_ndr(..., level = "state", names = NULL)
 }
 \arguments{
 \item{...}{Dataframes to be summarized.}
@@ -25,7 +25,7 @@ given dataframes into a single table. It also adds a "Total" roll that
 adds all the rows for each of the numeric columns.
 }
 \examples{
-new <- tx_new(ndr_example)
+new <- tx_new(ndr_example, from = "2021-03-01")
 curr <- tx_curr(ndr_example)
 
 summarize_ndr(
@@ -35,10 +35,9 @@ summarize_ndr(
   names = c("tx_new", "tx_curr")
 )
 
-### summarize for only one dataframe
+### summarize for only one dataframe (defaults data name when name is not specified)
 summarize_ndr(
-  new,
-  level = "ip",
-  names = "tx_new"
+  data = new,
+  level = "ip"
 )
 }

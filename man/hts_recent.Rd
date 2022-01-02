@@ -30,3 +30,11 @@ line-list of clients who had recent HIV infection test done during the period of
 \description{
 Subset Clients who had Recent Infection Test Done during a period of Interest
 }
+\examples{
+### Line-list of clients offered recency testing
+hts_recent_clients <- hts_recent(recency_example, from = "2021-07-01", to = "2021-10-31")
+
+hts_pos <- hts_tst_pos(recency_example) # identifies all hts_positive clients
+# line-list positive clients offered recency testing in 'Okun' state
+hts_recent(hts_pos, state = "Okun")
+}

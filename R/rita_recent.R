@@ -3,9 +3,14 @@
 #' @inheritParams tx_new
 #'
 #' @return Line-list of clients who are RTRI recent and have a viral load result greater or equal to 1000 copies per microliter of blood.
-#' @export hts_rita_pos
+#' @export rita_recent
 #'
 #' @examples
+#' ## Line-list all HIV positive clients confirmed to be RITA recent
+#' hts_pos <- hts_tst_pos(recency_example)
+#'
+#' rita_recent(hts_pos)
+
 rita_recent <- function(data,
                      from = NULL,
                      to = NULL,

@@ -46,17 +46,17 @@ medications for at least 6 months from the reference date. The default
 reference date is the date of analysis.
 }
 \examples{
-tx_vl_eligible(ndr_example)
+tx_vl_eligible(ndr_example, ref = "2021-09-30")
 
-# Determine clients who are going to be eligible for VL by the end of Q2 of FY21
+# Determine clients who are going to be eligible for VL by the end of Q1 of FY22
 tx_vl_eligible(ndr_example,
-  ref = "2021-03-31"
+  ref = "2021-12-31"
 )
 
-# Subset clients from "State 1" who are due for viral load in Q2 of FY21
+# Subset clients from "Arewa" and "Okun" who are due for viral load in Q1 of FY22
 tx_vl_eligible(ndr_example,
-  ref = "2021-03-31",
-  states = c("State 1", "State 3"),
+  ref = "2021-12-31",
+  states = c("Arewa", "Okun"),
   sample = TRUE
 )
 }

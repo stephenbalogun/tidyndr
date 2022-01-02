@@ -43,9 +43,9 @@ pediatrics and adolescents) from the specified reference date.
 \examples{
 tx_pvls_den(ndr_example, status = "default")
 
-# Determine clients who are virally suppressed for two state at the end of Q1
+# Determine clients who are virally suppressed for two state at the end of Q4
 tx_pvls_den(ndr_example,
-  ref = "2020-12-31",
-  states = c("State 1", "State 2")
+  ref = "2021-09-30",
+  states = c("Okun", "Arewa")
 )
 }

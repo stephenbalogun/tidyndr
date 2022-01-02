@@ -3,9 +3,11 @@
 #' @inheritParams tx_new
 #'
 #' @return Line-list of clients with recent infection and a viral load result
-#' @export hts_rita_result
+#' @export rita_result
 #'
 #' @examples
+#' ## Get HTS_POS clients who had a documented viral load result for recency in 2021
+#' rita_result(recency_example, from = "2021-01-01")
 rita_result <- function(data,
                         from = NULL,
                         to = NULL,

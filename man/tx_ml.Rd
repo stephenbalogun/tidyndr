@@ -52,13 +52,12 @@ with \code{tx_ml_outcomes()}, generates inactive clients with a particular
 outcome of interest.
 }
 \examples{
-tx_ml(new_data = ndr_example, from = "2020-10-01", to = "2020-10-31")
+tx_ml(new_data = ndr_example, from = "2021-06-01")
 
-# Find clients who were inactive at the end of Q1 of FY21
+# Find clients who were inactive in Q4 of FY21
 tx_ml(
   new_data = ndr_example,
-  from = "2020-10-01",
-  to = "2020-12-31"
+  from = "2021-07-01", to = "2021-09-30"
 )
 
 ## generate line-list of `tx_ml()` using two datasets
@@ -69,8 +68,8 @@ ndr_new <- ndr_example
 tx_ml(
   old_data = ndr_old,
   new_data = ndr_new,
-  from = "2021-01-01",
-  to = "2021-02-28"
+  from = "2021-07-01",
+  to = "2021-09-30"
 )
 }
 }

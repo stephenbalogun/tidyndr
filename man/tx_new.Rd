@@ -36,15 +36,15 @@ facility of interest with the \code{states} and \code{facilities} arguments.
 For multiple states or facilities, use the \code{c()} to combine the names.
 }
 \examples{
-tx_new(ndr_example)
+tx_new(ndr_example, from = "2021-06-01", to = "2021-09-30")
 
-# generate the TX_NEW for a specific state (State 1)
-tx_new(ndr_example, states = "State 1")
+# generate the TX_NEW for a specific state (Ayetoro)
+tx_new(ndr_example, states = "Ayetoro")
 
 # Determine the TX_NEW for Quarter 1 of FY21 for State 2
 tx_new(ndr_example,
-  from = "2020-10-01",
-  to = "2020-12-31",
-  states = c("State 2", "State 3")
+  from = "2021-10-01",
+  to = "2021-12-31",
+  states = c("Arewa", "Ayetoro")
 )
 }

@@ -19,15 +19,15 @@
 #' # Calculate the active clients using the NDR `current_status_28_days` column
 #' tx_curr(ndr_example, status = "default")
 #'
-#' # generate the TX_CURR for two states (e.g. "State 1" and "State 2" in the ndr_example file)
+#' # generate the TX_CURR for two states (e.g. "Arewa" and "Okun" in the ndr_example file)
 #' tx_curr(ndr_example,
-#'   states = c("State 1", "State 2")
+#'   states = c("Okun", "Arewa")
 #' )
 #'
-#' # determine the active clients in two facilities ("Facility 1", and "Facility 2) in "State 1"
+#' # determine the active clients in two facilities ("Facility1", and "Facility2) in "Abaji"
 #' tx_curr(ndr_example,
-#'   states = "State 1",
-#'   facilities = c("Facility 1", "Facility 2")
+#'   states = "Abaji",
+#'   facilities = c("Facility1", "Facility2")
 #' )
 tx_curr <- function(data,
                     states = NULL,

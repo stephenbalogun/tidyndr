@@ -3,9 +3,12 @@
 #' @inheritParams tx_new
 #'
 #' @return Line-list of clients with who are RTRI Positive
-#' @export hts_rtri_pos
+#' @export rtri_recent
 #'
 #' @examples
+#' ## Line-list RTRI recent persons for 'Arewa' state for the first quarter of 2021
+#' rtri_recent(recency_example, states = "Arewa", from = "2021-01-01", to = "2021-03-31")
+
 rtri_recent <- function(data,
                      from = NULL,
                      to = NULL,

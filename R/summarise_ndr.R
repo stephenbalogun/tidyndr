@@ -15,7 +15,7 @@
 #' @export
 #'
 #' @examples
-#' new <- tx_new(ndr_example)
+#' new <- tx_new(ndr_example, from = "2021-03-01")
 #' curr <- tx_curr(ndr_example)
 #'
 #' summarise_ndr(
@@ -25,14 +25,13 @@
 #'   names = c("tx_new", "tx_curr")
 #' )
 #'
-#' ### summarise for only one dataframe
+#' ### summarise for only one dataframe (defaults data name when name is not specified)
 #' summarise_ndr(
 #'   data = new,
-#'   level = "ip",
-#'   names = "tx_new"
+#'   level = "ip"
 #' )
-summarise_ndr <- function(..., level, names) {
-  data <- rlang::list2(...)
+summarise_ndr <- function(..., level = "state", names = NULL) {
+  data <- rlang::dots_list(..., .named = TRUE)
 
   validate_summary(data, level, names)
 

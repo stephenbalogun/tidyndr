@@ -46,21 +46,20 @@ states/facilities.
 \examples{
 # Determine clients who have medication refill in Q2 of FY21
 tx_appointment(ndr_example,
-  from = "2021-01-01",
-  to = "2021-03-30"
+  from = "2021-06-01",
+  to = "2021-09-30"
 )
 
-# Determine clients who have medication refill in March 2021 using the 'default' status
+# Determine clients who have medication refill in July 2021
 tx_appointment(ndr_example,
-  from = "2021-03-01",
-  to = "2021-03-31",
+  from = "2021-07-01",
+  to = "2021-07-31",
 )
 
-# Determine clients with medication refill in January 2021 for a particular facility
+# Determine clients with medication refill in "Okun" state for a particular facility
 tx_appointment(ndr_example,
   from = "2021-01-01",
-  to = "2021-01-31",
-  states = "State 1",
-  facilities = "Facility 1"
+  states = "Okun",
+  facilities = "Facility1"
 )
 }

@@ -6,6 +6,11 @@
 #' @export recent_eligible
 #'
 #' @examples
+#' ## Line-list all HIV positive clients who are eligible for recency testing
+#' hts_pos <- hts_tst_pos(recency_example)
+#'
+#'  recent_eligible(hts_pos, state = "Arewa") # eligible clients in 'Arewa' state
+
 recent_eligible <- function(data,
                        from = NULL,
                        to = NULL,
@@ -95,6 +100,6 @@ validate_recent <- function(data, from, to, states, facilities) {
 
 
 utils::globalVariables(
-  c("recency_test_date", "recency_test_name", "facility_state")
+  c("recency_test_date", "recency_test_name", "facility_state", "opt_out", "age")
 )
 

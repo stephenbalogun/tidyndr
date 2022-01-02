@@ -5,7 +5,7 @@
 \alias{ndr_example}
 \title{Line-list of 50,000 Simulated Clients Provided in the NDR Format.}
 \format{
-A data frame with 50000 rows and 48 variables:
+A data frame with 50000 rows and 52 variables:
 \describe{
 \item{ip}{Implementing Partner}
 \item{state}{State of registration of client}

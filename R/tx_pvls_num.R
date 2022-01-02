@@ -14,10 +14,10 @@
 #' @examples
 #' tx_pvls_num(ndr_example)
 #'
-#' # Determine clients who are virally suppressed for a state at the end of Q1
+#' # Determine clients who are virally suppressed for a state at the end of October 2021
 #' tx_pvls_num(ndr_example,
-#'   ref = "2020-12-31",
-#'   states = "State 1"
+#'   ref = "2021-10-31",
+#'   states = "Arewa"
 #' )
 #'
 #' # Determine clients with viral load result less than 400

@@ -15,7 +15,7 @@
 #' @export
 #'
 #' @examples
-#' new <- tx_new(ndr_example)
+#' new <- tx_new(ndr_example, from = "2021-03-01")
 #' curr <- tx_curr(ndr_example)
 #'
 #' summarize_ndr(
@@ -25,15 +25,13 @@
 #'   names = c("tx_new", "tx_curr")
 #' )
 #'
-#' ### summarize for only one dataframe
+#' ### summarize for only one dataframe (defaults data name when name is not specified)
 #' summarize_ndr(
-#'   new,
-#'   level = "ip",
-#'   names = "tx_new"
+#'   data = new,
+#'   level = "ip"
 #' )
-summarize_ndr <- function(..., level, names) {
-  data <- rlang::list2(...)
-
+summarize_ndr <- function(..., level = "state", names = NULL) {
+  data <- rlang::dots_list(..., .named = TRUE)
 
   validate_summary(data, level, names)
 
@@ -48,28 +46,19 @@ validate_summary <- function(data, level, names) {
                  "level" argument')
   }
 
-  if (rlang::is_null(level)) {
-    rlang::abort("Did you forget to pass a value to `level`?")
-  }
-
   if (!any(level %in% c("ip", "country", "state", "lga", "facility"))) {
     rlang::abort("level must be one of 'ip', 'country', 'state', 'lga', or 'facility'")
   }
 
-  if (length(data) != length(names)) {
+  if (!is.null(names) && length(data) != length(names)) {
     rlang::abort(
       'the number of dataframes supplied is not equal to the number of names supplied to the "names" argument'
     )
   }
 
-  if (rlang::is_null(names)) {
-    rlang::abort(
-      "Did you forget to specify the name(s) for your summary?"
-    )
-  }
 
 
-  if (!is.character(names)) {
+  if (!is.null(names) && !is.character(names)) {
     rlang::abort(
       "names must be supplied as characters. Did you forget to put the names in quotes?"
     )
@@ -80,6 +69,12 @@ validate_summary <- function(data, level, names) {
 
 get_summary_ndr <- function(data, level, names){
 
+
+  if (is.null(names)) {
+
+    names <- names(data)
+
+  }
 
   if (length(data) == 1) {
     return(my_summary(data[[1]], l = level, n = names[[1]]))

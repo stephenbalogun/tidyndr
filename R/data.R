@@ -5,7 +5,7 @@
 #' Repository. Three additional variables are added for easy referencing during analysis.
 #' These variables are: `date_ltfu`, `appointment_date` and `current_status`.
 #'
-#' @format A data frame with 50000 rows and 48 variables:
+#' @format A data frame with 50000 rows and 52 variables:
 #' \describe{
 #'   \item{ip}{Implementing Partner}
 #'   \item{state}{State of registration of client}
