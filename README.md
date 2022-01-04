@@ -10,6 +10,7 @@ Tidyndr
 coverage](https://codecov.io/gh/stephenbalogun/tidyndr/branch/master/graph/badge.svg)](https://app.codecov.io/gh/stephenbalogun/tidyndr?branch=master/)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/tidyndr)](https://CRAN.R-project.org/package=tidyndr)
+<!-- [![R-CMD-check](https://github.com/stephenbalogun/tidyndr/workflows/R-CMD-check/badge.svg)](https://github.com/stephenbalogun/tidyndr/actions) -->
 <!-- badges: end -->
 
 The goal of {tidyndr} is to provide a specialized, simple and easy to
