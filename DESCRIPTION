@@ -46,6 +46,7 @@ Suggests:
     rmarkdown,
     spelling
 Config/testthat/edition: 3
+Config/rcmdcheck/ignore-inconsequential-notes: true
 URL: https://github.com/stephenbalogun/tidyndr
 BugReports: https://github.com/stephenbalogun/tidyndr/issues
 VignetteBuilder: knitr

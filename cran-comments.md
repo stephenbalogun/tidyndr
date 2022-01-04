@@ -12,8 +12,9 @@ This is a resubmission. In this version I have:
 
 ## Test environments
 
--   local R installation, R 4.1.1
--   ubuntu 20.04 (on travis-ci), R 4.1.1
+-   local R installation, R 4.1.2
+-   ubuntu 20.04 (release), R 4.1.2
+-    macOS-latest (release), 4.1.2
 -   win-builder (devel)
 
 ## R CMD check results
