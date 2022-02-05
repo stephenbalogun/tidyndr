@@ -201,15 +201,15 @@ get_disagg <- function(df, by, by_value, level = "state", pivot_wide = TRUE, ...
   by_c <- rlang::sym(by)
   dt <- switch(
     level,
-    "ip"= dplyr::count(df, ip, !!by_c, .drop = TRUE, name = "number"),
+    "ip"= dplyr::count(df, ip, !!by_c, .drop = FALSE, name = "number"),
 
-    "country"= dplyr::count(df, ip, !!by_c, .drop = TRUE, name = "number"),
+    "country"= dplyr::count(df, ip, !!by_c, .drop = FALSE, name = "number"),
 
-    "state" = dplyr::count(df, ip, state, !!by_c, .drop = TRUE, name = "number"),
+    "state" = dplyr::count(df, ip, state, !!by_c, .drop = FALSE, name = "number"),
 
-    "lga" = dplyr::count(df, ip, state, lga, !!by_c, .drop = TRUE, name = "number"),
+    "lga" = dplyr::count(df, ip, state, lga, !!by_c, .drop = FALSE, name = "number"),
 
-    "facility" = dplyr::count(df, ip, state, lga, facility, !!by_c, .drop = TRUE, name = "number")
+    "facility" = dplyr::count(df, ip, state, lga, facility, !!by_c, .drop = FALSE, name = "number")
   )
 
   dt <- structure(dt, "class" = c("spec_tbl_df", "tbl_df", "tbl", "data.frame"))
@@ -245,15 +245,15 @@ get_disagg_ <- function(df, by, by_value, level = level, pivot_wide = pivot_wide
 
   dt <- switch(
     level,
-    "ip"= dplyr::count(df, ip, !!!by_c, .drop = TRUE, name = "number"),
+    "ip"= dplyr::count(df, ip, !!!by_c, .drop = FALSE, name = "number"),
 
-    "country"= dplyr::count(df, ip, !!!by_c, .drop = TRUE, name = "number"),
+    "country"= dplyr::count(df, ip, !!!by_c, .drop = FALSE, name = "number"),
 
-    "state" = dplyr::count(df, ip, state, !!!by_c, .drop = TRUE, name = "number"),
+    "state" = dplyr::count(df, ip, state, !!!by_c, .drop = FALSE, name = "number"),
 
-    "lga" = dplyr::count(df, ip, state, lga, !!!by_c, .drop = TRUE, name = "number"),
+    "lga" = dplyr::count(df, ip, state, lga, !!!by_c, .drop = FALSE, name = "number"),
 
-    "facility" = dplyr::count(df, ip, state, lga, facility, !!!by_c, .drop = TRUE, name = "number")
+    "facility" = dplyr::count(df, ip, state, lga, facility, !!!by_c, .drop = FALSE, name = "number")
   )
 
   dt <- structure(dt, "class" = c("spec_tbl_df", "tbl_df", "tbl", "data.frame"))
