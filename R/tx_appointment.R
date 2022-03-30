@@ -95,8 +95,7 @@ get_tx_appointment <- function(data, from, to, states, facilities, active) {
     dplyr::filter(
       df,
       current_status == "Active",
-      !patient_has_died %in% TRUE,
-      !patient_transferred_out %in% TRUE
+      !patient_has_died %in% TRUE
     )
   } else {
     return(df)

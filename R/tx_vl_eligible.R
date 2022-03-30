@@ -30,7 +30,7 @@ tx_vl_eligible <- function(data,
                            ref = NULL,
                            states = NULL,
                            facilities = NULL,
-                           status = "calculated",
+                           status = "default",
                            sample = FALSE) {
 
   ref <- lubridate::ymd(ref %||% get("Sys.Date")())
@@ -89,7 +89,6 @@ get_tx_vl_eligible <- function(data,
              data,
              current_status == "Active",
              !patient_has_died %in% TRUE,
-             !patient_transferred_out %in% TRUE,
              ref - art_start_date >=
                lubridate::period(6, "months"),
              dplyr::if_else(
@@ -109,7 +108,6 @@ get_tx_vl_eligible <- function(data,
              data,
              current_status_28_days == "Active",
              !patient_has_died %in% TRUE,
-             !patient_transferred_out %in% TRUE,
              ref - art_start_date >=
                lubridate::period(6, "months"),
              dplyr::if_else(
@@ -132,7 +130,6 @@ get_tx_vl_eligible <- function(data,
              data,
              current_status == "Active",
              !patient_has_died %in% TRUE,
-             !patient_transferred_out %in% TRUE,
              ref - art_start_date >=
                lubridate::period(6, "months"),
              state %in% states,
@@ -142,7 +139,6 @@ get_tx_vl_eligible <- function(data,
              data,
              current_status_28_days == "Active",
              !patient_has_died %in% TRUE,
-             !patient_transferred_out %in% TRUE,
              ref - art_start_date >=
                lubridate::period(6, "months"),
              state %in% states,

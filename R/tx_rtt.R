@@ -30,7 +30,7 @@ tx_rtt <- function(new_data,
                    old_data,
                    states = NULL,
                    facilities = NULL,
-                   status = "calculated") {
+                   status = "default") {
 
 
   states <- states %||% unique(new_data$state)
@@ -70,14 +70,12 @@ get_tx_rtt <- function(new_data, old_data, states, facilities, status) {
     "calculated" = dplyr::filter(
       old_data,
       current_status == "Inactive",
-      !patient_has_died %in% TRUE,
-      !patient_transferred_out %in% TRUE,
+      !patient_has_died %in% TRUE
     ),
     "default" = dplyr::filter(
       old_data,
       current_status_28_days == "Inactive",
-      !patient_has_died %in% TRUE,
-      !patient_transferred_out %in% TRUE,
+      !patient_has_died %in% TRUE
     )
   )
 
@@ -87,7 +85,6 @@ get_tx_rtt <- function(new_data, old_data, states, facilities, status) {
       current_status == "Active",
       patient_identifier %in% losses$patient_identifier,
       !patient_has_died %in% TRUE,
-      !patient_transferred_out %in% TRUE,
       state %in% states,
       facility %in% facilities
     ),
@@ -96,7 +93,6 @@ get_tx_rtt <- function(new_data, old_data, states, facilities, status) {
       current_status_28_days == "Active",
       patient_identifier %in% losses$patient_identifier,
       !patient_has_died %in% TRUE,
-      !patient_transferred_out %in% TRUE,
       state %in% states,
       facility %in% facilities
     )

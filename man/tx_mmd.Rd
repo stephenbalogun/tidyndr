@@ -9,7 +9,7 @@ tx_mmd(
   months = NULL,
   states = NULL,
   facilities = NULL,
-  status = "calculated"
+  status = "default"
 )
 }
 \arguments{

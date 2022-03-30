@@ -44,7 +44,7 @@ tx_ml <- function(new_data,
                   to = NULL,
                   states = NULL,
                   facilities = NULL,
-                  status = "calculated") {
+                  status = "default") {
 
 
   from <- lubridate::ymd(from %||% get("fy_start")())

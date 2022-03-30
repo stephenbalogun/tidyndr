@@ -32,7 +32,7 @@
 tx_curr <- function(data,
                     states = NULL,
                     facilities = NULL,
-                    status = "calculated") {
+                    status = "default") {
 
   states <- states %||% unique(data$state)
 
@@ -68,7 +68,6 @@ get_tx_curr <- function(data,
       data,
       current_status == "Active",
       !patient_has_died %in% TRUE,
-      !patient_transferred_out %in% TRUE,
       state %in% states,
       facility %in% facilities
     ),
@@ -76,7 +75,6 @@ get_tx_curr <- function(data,
       data,
       current_status_28_days == "Active",
       !patient_has_died %in% TRUE,
-      !patient_transferred_out %in% TRUE,
       state %in% states,
       facility %in% facilities
     )

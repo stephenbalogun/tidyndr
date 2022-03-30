@@ -9,7 +9,7 @@ tx_vl_eligible(
   ref = NULL,
   states = NULL,
   facilities = NULL,
-  status = "calculated",
+  status = "default",
   sample = FALSE
 )
 }

@@ -11,7 +11,7 @@ tx_ml(
   to = NULL,
   states = NULL,
   facilities = NULL,
-  status = "calculated"
+  status = "default"
 )
 }
 \arguments{

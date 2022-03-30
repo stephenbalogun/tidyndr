@@ -9,7 +9,7 @@ tx_rtt(
   old_data,
   states = NULL,
   facilities = NULL,
-  status = "calculated"
+  status = "default"
 )
 }
 \arguments{

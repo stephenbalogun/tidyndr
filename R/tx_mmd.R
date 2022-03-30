@@ -26,7 +26,7 @@ tx_mmd <- function(data,
                    months = NULL,
                    states = NULL,
                    facilities = NULL,
-                   status = "calculated") {
+                   status = "default") {
 
   months <- months %||% c(3, 4, 5, 6)
 
@@ -71,7 +71,6 @@ get_tx_mmd <- function(data, months, states, facilities, status) {
            ),
            current_status == "Active",
            !patient_has_died %in% TRUE,
-           !patient_transferred_out %in% TRUE,
            months_dispensed %in% months,
            state %in% states,
            facility %in% facilities
@@ -82,7 +81,6 @@ get_tx_mmd <- function(data, months, states, facilities, status) {
            ),
            current_status_28_days == "Active",
            !patient_has_died %in% TRUE,
-           !patient_transferred_out %in% TRUE,
            months_dispensed %in% months,
            state %in% states,
            facility %in% facilities

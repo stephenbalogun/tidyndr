@@ -24,7 +24,7 @@ tx_regimen <- function(data,
                        age_band = NULL,
                        states = NULL,
                        facilities = NULL,
-                       status = "calculated") {
+                       status = "default") {
 
   states <- states %||% unique(data$state)
 
@@ -71,7 +71,6 @@ get_tx_regimen <- function(data, age_band, states, facilities, status) {
            data,
            current_status == "Active",
            !patient_has_died %in% TRUE,
-           !patient_transferred_out %in% TRUE,
            dplyr::if_else(
              current_age <= 3,
              last_regimen %in% c(
@@ -95,7 +94,6 @@ get_tx_regimen <- function(data, age_band, states, facilities, status) {
            data,
            current_status_28_days == "Active",
            !patient_has_died %in% TRUE,
-           !patient_transferred_out %in% TRUE,
            dplyr::if_else(
              current_age <= 3,
              last_regimen %in% c(

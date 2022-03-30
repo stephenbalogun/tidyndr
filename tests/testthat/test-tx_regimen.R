@@ -4,7 +4,6 @@ test_that("tx_regimen works", {
     ndr_example %>%
       subset(current_status_28_days == "Active" &
                !patient_has_died %in% TRUE &
-             !patient_transferred_out %in% TRUE &
         dplyr::if_else(
           current_age <= 3,
           last_regimen %in% c(

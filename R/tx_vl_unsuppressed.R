@@ -25,7 +25,7 @@ tx_vl_unsuppressed <- function(data,
                                ref = NULL,
                                states = NULL,
                                facilities = NULL,
-                               status = "calculated",
+                               status = "default",
                                n = 1000) {
 
   ref <- lubridate::ymd(ref %||% get("Sys.Date")())
@@ -77,7 +77,6 @@ get_tx_vl_unsuppressed <- function(data, ref, states, facilities, status, n) {
            data,
            current_status == "Active",
            !patient_has_died %in% TRUE,
-             !patient_transferred_out %in% TRUE,
            lubridate::as_date(ref) - art_start_date >=
              lubridate::period(6, "months"),
            dplyr::if_else(
@@ -97,7 +96,6 @@ get_tx_vl_unsuppressed <- function(data, ref, states, facilities, status, n) {
            data,
            current_status_28_days == "Active",
            !patient_has_died %in% TRUE,
-             !patient_transferred_out %in% TRUE,
            lubridate::as_date(ref) - art_start_date >=
              lubridate::period(6, "months"),
            dplyr::if_else(

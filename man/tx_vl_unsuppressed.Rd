@@ -9,7 +9,7 @@ tx_vl_unsuppressed(
   ref = NULL,
   states = NULL,
   facilities = NULL,
-  status = "calculated",
+  status = "default",
   n = 1000
 )
 }

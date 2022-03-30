@@ -4,7 +4,7 @@
 \alias{tx_curr}
 \title{Subset Clients who are Currently on Treatment}
 \usage{
-tx_curr(data, states = NULL, facilities = NULL, status = "calculated")
+tx_curr(data, states = NULL, facilities = NULL, status = "default")
 }
 \arguments{
 \item{data}{An NDR dataframe imported using the \code{read_ndr()}.}
