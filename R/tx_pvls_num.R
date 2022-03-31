@@ -27,7 +27,8 @@ tx_pvls_num <- function(data,
                         states = NULL,
                         facilities = NULL,
                         status = "default",
-                        n = 1000) {
+                        n = 1000,
+                        use_six_months = TRUE) {
 
   ref <- lubridate::ymd(ref %||% get("Sys.Date")())
 
@@ -35,9 +36,9 @@ tx_pvls_num <- function(data,
 
   facilities <- facilities %||% unique(subset(data, state %in% states)$facility)
 
-  validate_pvls_num(data, ref, states, facilities, status, n)
+  validate_pvls_num(data, ref, states, facilities, status, n, use_six_months)
 
-  get_tx_pvls_num(data, ref, states, facilities, status, n)
+  get_tx_pvls_num(data, ref, states, facilities, status, n, use_six_months)
 }
 
 
@@ -46,7 +47,8 @@ validate_pvls_num <- function(data,
                               states,
                               facilities,
                               status,
-                              n) {
+                              n,
+                              use_six_months) {
 
   if (!all(states %in% unique(data$state))) {
     rlang::abort("state(s) is not contained in the supplied data. Check the spelling and/or case.")
@@ -69,10 +71,16 @@ validate_pvls_num <- function(data,
     rlang::abort("n cannot be less than zero")
   }
 
+  if (!is.logical(use_six_months)) {
+    rlang::abort("use_six_months can either be TRUE or FALSE")
+  }
+
 }
 
 
-get_tx_pvls_num <- function(data, ref, states, facilities, status, n) {
+get_tx_pvls_num <- function(data, ref, states, facilities, status, n, use_six_months) {
+
+  if (use_six_months) {
   switch(status,
          "calculated" = dplyr::filter(
            data,
@@ -113,6 +121,38 @@ get_tx_pvls_num <- function(data, ref, states, facilities, status, n) {
            facility %in% facilities
          )
   )
+  } else {
+
+    switch(status,
+           "calculated" = dplyr::filter(
+             data,
+             current_status == "Active",
+             !patient_has_died %in% TRUE,
+             lubridate::as_date(ref) - art_start_date >=
+               lubridate::period(6, "months"),
+               lubridate::as_date(ref) -
+                 date_of_current_viral_load <=
+                 lubridate::period(1, "year"),
+             current_viral_load < n,
+             state %in% states,
+             facility %in% facilities
+           ),
+           "default" = dplyr::filter(
+             data,
+             current_status_28_days == "Active",
+             !patient_has_died %in% TRUE,
+             lubridate::as_date(ref) - art_start_date >=
+               lubridate::period(6, "months"),
+               lubridate::as_date(ref) -
+                 date_of_current_viral_load <=
+                 lubridate::period(1, "year"),
+             current_viral_load < n,
+             state %in% states,
+             facility %in% facilities
+           )
+    )
+
+  }
 }
 
 utils::globalVariables(c(

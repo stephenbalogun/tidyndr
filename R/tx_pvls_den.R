@@ -8,6 +8,7 @@
 #' @param ref Date provided in ISO8601 format ("yyyy-mm-dd"). Used to
 #'    determine clients who are eligible for viral load and should have a
 #'    documented result. The default is the date of analysis.
+#' @param use_six_months `TRUE` of `FALSE`. To determine if six months eligibility should be used for pediatrics and adolescents repeat viral load or the standard annual repeat.
 #' @inheritParams tx_new
 #' @inheritParams tx_curr
 #'
@@ -26,7 +27,8 @@ tx_pvls_den <- function(data,
                         ref = NULL,
                         states = NULL,
                         facilities = NULL,
-                        status = "default") {
+                        status = "default",
+                        use_six_months = TRUE) {
 
   ref <- lubridate::ymd(ref %||% get("Sys.Date")())
 
@@ -34,9 +36,9 @@ tx_pvls_den <- function(data,
 
   facilities <- facilities %||% unique(subset(data, state %in% states)$facility)
 
-  validate_pvls_den(data, ref, states, facilities, status)
+  validate_pvls_den(data, ref, states, facilities, status, use_six_months)
 
-  get_tx_pvls_den(data, ref, states, facilities, status)
+  get_tx_pvls_den(data, ref, states, facilities, status, use_six_months)
 
 }
 
@@ -45,7 +47,8 @@ validate_pvls_den <- function(data,
                               ref,
                               states,
                               facilities,
-                              status) {
+                              status,
+                              use_six_months) {
 
   if (!all(states %in% unique(data$state))) {
     rlang::abort("state(s) is not contained in the supplied data. Check the spelling and/or case.")
@@ -64,10 +67,16 @@ validate_pvls_den <- function(data,
     rlang::abort("`status` can only be one of 'default' or 'calculated'. Check that you did not mispell, include CAPS or forget to quotation marks!")
   }
 
+  if (!is.logical(use_six_months)) {
+    rlang::abort("use_six_months can either be TRUE or FALSE")
+  }
+
 }
 
 
-get_tx_pvls_den <- function(data, ref, states, facilities, status) {
+get_tx_pvls_den <- function(data, ref, states, facilities, status, use_six_months) {
+
+  if (use_six_months) {
 
   switch(status,
          "calculated" = dplyr::filter(
@@ -107,6 +116,38 @@ get_tx_pvls_den <- function(data, ref, states, facilities, status) {
            facility %in% facilities
          )
   )
+  } else {
+
+    switch(status,
+           "calculated" = dplyr::filter(
+             data,
+             current_status == "Active",
+             !patient_has_died %in% TRUE,
+             lubridate::as_date(ref) - art_start_date >
+               lubridate::period(6, "months"),
+               lubridate::as_date(ref) -
+                 date_of_current_viral_load <=
+                 lubridate::period(1, "year"),
+             state %in% states,
+             facility %in% facilities
+           ),
+           "default" = dplyr::filter(
+             data,
+             current_status_28_days == "Active",
+             !patient_has_died %in% TRUE,
+             lubridate::as_date(ref) - art_start_date >
+               lubridate::period(6, "months"),
+               lubridate::as_date(ref) -
+                 date_of_current_viral_load <=
+                 lubridate::period(1, "year"),
+             state %in% states,
+             facility %in% facilities
+           )
+    )
+
+  }
+
+
 }
 
 

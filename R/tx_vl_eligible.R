@@ -31,7 +31,8 @@ tx_vl_eligible <- function(data,
                            states = NULL,
                            facilities = NULL,
                            status = "default",
-                           sample = FALSE) {
+                           sample = FALSE,
+                           use_six_months = TRUE) {
 
   ref <- lubridate::ymd(ref %||% get("Sys.Date")())
 
@@ -39,9 +40,9 @@ tx_vl_eligible <- function(data,
 
   facilities <- facilities %||% unique(subset(data, state %in% states)$facility)
 
-  validate_vl_eligible(data, ref, states, facilities, status, sample)
+  validate_vl_eligible(data, ref, states, facilities, status, sample, use_six_months)
 
-  get_tx_vl_eligible(data, ref, states, facilities, status, sample)
+  get_tx_vl_eligible(data, ref, states, facilities, status, sample, use_six_months)
 
 }
 
@@ -51,7 +52,8 @@ validate_vl_eligible <- function(data,
                                  states,
                                  facilities,
                                  status,
-                                 sample) {
+                                 sample,
+                                 use_six_months) {
   if (!all(states %in% unique(data$state))) {
     rlang::abort("state(s) is/are not contained in the supplied data. Check the spelling and/or case.")
   }
@@ -74,6 +76,10 @@ validate_vl_eligible <- function(data,
     rlang::abort("Sample can only be set to TRUE or FALSE")
   }
 
+  if (!is.logical(use_six_months)) {
+    rlang::abort("use_six_months can either be TRUE or FALSE")
+  }
+
 }
 
 get_tx_vl_eligible <- function(data,
@@ -81,9 +87,12 @@ get_tx_vl_eligible <- function(data,
                                states,
                                facilities,
                                status,
-                               sample) {
+                               sample,
+                               use_six_months) {
 
   if (sample) {
+
+    if (use_six_months) {
     switch(status,
            "calculated" = dplyr::filter(
              data,
@@ -124,6 +133,36 @@ get_tx_vl_eligible <- function(data,
              facility %in% facilities
            )
     )
+    } else {
+      switch(status,
+             "calculated" = dplyr::filter(
+               data,
+               current_status == "Active",
+               !patient_has_died %in% TRUE,
+               ref - art_start_date >=
+                 lubridate::period(6, "months"),
+                 ref -
+                   date_of_current_viral_load >
+                   lubridate::period(1, "year") |
+                 is.na(date_of_current_viral_load),
+               state %in% states,
+               facility %in% facilities
+             ),
+             "default" = dplyr::filter(
+               data,
+               current_status_28_days == "Active",
+               !patient_has_died %in% TRUE,
+               ref - art_start_date >=
+                 lubridate::period(6, "months"),
+                 ref -
+                   date_of_current_viral_load >
+                   lubridate::period(1, "year") |
+                 is.na(date_of_current_viral_load),
+               state %in% states,
+               facility %in% facilities
+             )
+      )
+    }
   } else {
     switch(status,
            "calculated" = dplyr::filter(

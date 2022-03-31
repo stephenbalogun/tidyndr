@@ -10,7 +10,8 @@ tx_pvls_num(
   states = NULL,
   facilities = NULL,
   status = "default",
-  n = 1000
+  n = 1000,
+  use_six_months = TRUE
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ The options are to either to use the NDR current_status_28_days column
 or the derived current_status column ("calculated").}
 
 \item{n}{the value below which viral load result is adjudged to be suppressed.}
+
+\item{use_six_months}{\code{TRUE} of \code{FALSE}. To determine if six months eligibility should be used for pediatrics and adolescents repeat viral load or the standard annual repeat.}
 }
 \value{
 tx_pvls_num
