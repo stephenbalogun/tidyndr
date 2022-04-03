@@ -2,6 +2,7 @@
 
 export("%>%")
 export("%||%")
+export(cot_cascade)
 export(current_cols)
 export(disaggregate)
 export(fy_start)
