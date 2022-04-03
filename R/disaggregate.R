@@ -24,10 +24,8 @@
 #' ### Disaggregate "TX_CURR" by gender for each facility
 #' curr_clients <- tx_curr(ndr_example)
 #' disaggregate(curr_clients, by = "sex", level = "facility")
-
+#'
 disaggregate <- function(data, by, ...) {
-
-
   df <- structure(data, "class" = c(class(data), by))
 
 
@@ -42,40 +40,35 @@ disagg_ndr <- function(df, ...) {
 
 
 ### sex disaggregation
-disagg_ndr.sex <- function(df, level = "state", pivot_wide = TRUE, ...){
-
+disagg_ndr.sex <- function(df, level = "state", pivot_wide = TRUE, ...) {
   gender <- forcats::fct_collapse(df$sex,
-                                  "Male" = "M",
-                                  "Female" = "F",
-                                  other_level = "unknown")
+    "Male" = "M",
+    "Female" = "F",
+    other_level = "unknown"
+  )
 
   get_disagg(df, by = "sex", by_value = gender, pivot_wide = pivot_wide, level = level)
-
 }
 
 
 
 
 ### pregnancy status
-disagg_ndr.pregnancy_status <- function(df, level = "state", pivot_wide = TRUE, ...){
-
+disagg_ndr.pregnancy_status <- function(df, level = "state", pivot_wide = TRUE, ...) {
   preg_status <- forcats::fct_collapse(df$pregnancy_status,
-                                         pregnant = "P",
-                                         breastfeeding = "BF",
-                                         not_pregnant = "NP",
-                                         other_level = "missing_or_unknown"
+    pregnant = "P",
+    breastfeeding = "BF",
+    not_pregnant = "NP",
+    other_level = "missing_or_unknown"
   )
 
   get_disagg(df, by = "pregnancy_status", by_value = preg_status, pivot_wide = pivot_wide, level = level)
-
-
 }
 
 
 
 ### current_age
-disagg_ndr.current_age <- function(df, level = "state", pivot_wide = TRUE, ...){
-
+disagg_ndr.current_age <- function(df, level = "state", pivot_wide = TRUE, ...) {
   age <- dplyr::case_when(
     df$current_age < 1 ~ "<1",
     dplyr::between(df$current_age, 1, 4) ~ "1-4",
@@ -99,19 +92,17 @@ disagg_ndr.current_age <- function(df, level = "state", pivot_wide = TRUE, ...){
   age <- factor(
     age,
     levels = c("<1", "1-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65+", "missing"),
-    ordered = TRUE)
+    ordered = TRUE
+  )
 
   get_disagg(df, by = "current_age", by_value = age, pivot_wide = pivot_wide, level = level)
-
-
 }
 
 
 
 ### duration
-disagg_ndr.art_duration <- function(df, level = "state", pivot_wide = TRUE, ...){
-
-  df$art_duration <-  as.integer(df$appointment_date - df$art_start_date)
+disagg_ndr.art_duration <- function(df, level = "state", pivot_wide = TRUE, ...) {
+  df$art_duration <- as.integer(df$appointment_date - df$art_start_date)
 
   art_duration <- dplyr::case_when(
     df$art_duration < 90 ~ "<3 months",
@@ -123,16 +114,13 @@ disagg_ndr.art_duration <- function(df, level = "state", pivot_wide = TRUE, ...)
   art_duration <- factor(art_duration, levels = c("missing", "<3 months", "3-5 months", "6 months+"), ordered = TRUE)
 
   get_disagg(df, by = "art_duration", by_value = art_duration, pivot_wide = pivot_wide, level = level)
-
-
 }
 
 
 
 
 ### duration of ARV Dispensed
-disagg_ndr.months_dispensed <- function(df, level = "state", pivot_wide = TRUE, ...){
-
+disagg_ndr.months_dispensed <- function(df, level = "state", pivot_wide = TRUE, ...) {
   if (!any(names(df) %in% "months_dispensed")) {
     df$months_dispensed <- floor(df$days_of_arv_refill / 28)
   }
@@ -148,15 +136,12 @@ disagg_ndr.months_dispensed <- function(df, level = "state", pivot_wide = TRUE, 
   mmd <- factor(mmd, levels = c("missing", "<3 months", "3-5 months", "6 months+"), ordered = TRUE)
 
   get_disagg(df, by = "months_dispensed", by_value = mmd, pivot_wide = pivot_wide, level = level)
-
-
 }
 
 
 
 ### disaggregate by age and sex
-disagg_ndr.age_sex <- function(df, level = "state", pivot_wide = TRUE){
-
+disagg_ndr.age_sex <- function(df, level = "state", pivot_wide = TRUE) {
   age <- dplyr::case_when(
     df$current_age < 1 ~ "<1",
     dplyr::between(df$current_age, 1, 4) ~ "1-4",
@@ -180,42 +165,36 @@ disagg_ndr.age_sex <- function(df, level = "state", pivot_wide = TRUE){
   age <- factor(
     age,
     levels = c("<1", "1-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65+", "missing"),
-    ordered = TRUE)
+    ordered = TRUE
+  )
 
   gender <- forcats::fct_collapse(df$sex,
-                                  "Male" = "M",
-                                  "Female" = "F",
-                                  other_level = "unknown")
+    "Male" = "M",
+    "Female" = "F",
+    other_level = "unknown"
+  )
 
 
   get_disagg_(df, by = c("sex", "current_age"), by_value = list(gender, age), pivot_wide = pivot_wide, level = level)
-
 }
 
 
 # for disaggregation by one variable
-get_disagg <- function(df, by, by_value, level = "state", pivot_wide = TRUE, ...){
-
+get_disagg <- function(df, by, by_value, level = "state", pivot_wide = TRUE, ...) {
   df[by] <- by_value
 
   by_c <- rlang::sym(by)
-  dt <- switch(
-    level,
-    "ip"= dplyr::count(df, ip, !!by_c, .drop = FALSE, name = "number"),
-
-    "country"= dplyr::count(df, ip, !!by_c, .drop = FALSE, name = "number"),
-
+  dt <- switch(level,
+    "ip" = dplyr::count(df, ip, !!by_c, .drop = FALSE, name = "number"),
+    "country" = dplyr::count(df, ip, !!by_c, .drop = FALSE, name = "number"),
     "state" = dplyr::count(df, ip, state, !!by_c, .drop = FALSE, name = "number"),
-
     "lga" = dplyr::count(df, ip, state, lga, !!by_c, .drop = FALSE, name = "number"),
-
     "facility" = dplyr::count(df, ip, state, lga, facility, !!by_c, .drop = FALSE, name = "number")
   )
 
   dt <- structure(dt, "class" = c("spec_tbl_df", "tbl_df", "tbl", "data.frame"))
 
-  if(pivot_wide) {
-
+  if (pivot_wide) {
     dt <- tidyr::pivot_wider(
       dt,
       names_from = tidyselect::all_of(by),
@@ -228,38 +207,29 @@ get_disagg <- function(df, by, by_value, level = "state", pivot_wide = TRUE, ...
 
 
   tibble::as_tibble(janitor::adorn_totals(dt))
-
 }
 
 
 
 ## for disaggregation by two variables
 get_disagg_ <- function(df, by, by_value, level = level, pivot_wide = pivot_wide) {
-
-
   df[by[1]] <- by_value[[1]]
 
   df[by[2]] <- by_value[[2]]
 
   by_c <- rlang::syms(by)
 
-  dt <- switch(
-    level,
-    "ip"= dplyr::count(df, ip, !!!by_c, .drop = FALSE, name = "number"),
-
-    "country"= dplyr::count(df, ip, !!!by_c, .drop = FALSE, name = "number"),
-
+  dt <- switch(level,
+    "ip" = dplyr::count(df, ip, !!!by_c, .drop = FALSE, name = "number"),
+    "country" = dplyr::count(df, ip, !!!by_c, .drop = FALSE, name = "number"),
     "state" = dplyr::count(df, ip, state, !!!by_c, .drop = FALSE, name = "number"),
-
     "lga" = dplyr::count(df, ip, state, lga, !!!by_c, .drop = FALSE, name = "number"),
-
     "facility" = dplyr::count(df, ip, state, lga, facility, !!!by_c, .drop = FALSE, name = "number")
   )
 
   dt <- structure(dt, "class" = c("spec_tbl_df", "tbl_df", "tbl", "data.frame"))
 
-  if(pivot_wide) {
-
+  if (pivot_wide) {
     dt <- tidyr::pivot_wider(
       dt,
       names_from = by[2],

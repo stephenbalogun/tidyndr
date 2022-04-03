@@ -30,7 +30,7 @@
 #'   hts_pos,
 #'   hts_recent
 #' )
-
+#'
 summarise_recency <- function(..., level = "facility_state", names = NULL) {
   data <- rlang::dots_list(..., .named = TRUE)
 
@@ -63,17 +63,12 @@ validate_summary2 <- function(data, level, names) {
       "names must be supplied as characters. Did you forget to put the names in quotes?"
     )
   }
-
 }
 
 
-get_summary_recency <- function(data, level, names){
-
-
+get_summary_recency <- function(data, level, names) {
   if (is.null(names)) {
-
     names <- names(data)
-
   }
 
   if (length(data) == 1) {
@@ -93,13 +88,13 @@ get_summary_recency <- function(data, level, names){
 
 
   dt <- switch(level,
-               "facility_state" = purrr::reduce(df, dplyr::full_join, by = c("ip", "facility_state")),
-               "facility" = purrr::reduce(df, dplyr::full_join, by = c("ip", "facility_state", "facility_lga", "facility")),
-               "country" = purrr::reduce(df, dplyr::full_join, by = "ip"),
-               "ip" = purrr::reduce(df, dplyr::full_join, by = "ip"),
-               "lga" = purrr::reduce(df, dplyr::full_join, by = c("ip", "facility_state", "facility_lga")),
-               "client_state" = purrr::reduce(df, dplyr::full_join, by = c("ip", "client_state")),
-               "client_lga" = purrr::reduce(df, dplyr::full_join, by = c("ip", "client_state", "client_lga"))
+    "facility_state" = purrr::reduce(df, dplyr::full_join, by = c("ip", "facility_state")),
+    "facility" = purrr::reduce(df, dplyr::full_join, by = c("ip", "facility_state", "facility_lga", "facility")),
+    "country" = purrr::reduce(df, dplyr::full_join, by = "ip"),
+    "ip" = purrr::reduce(df, dplyr::full_join, by = "ip"),
+    "lga" = purrr::reduce(df, dplyr::full_join, by = c("ip", "facility_state", "facility_lga")),
+    "client_state" = purrr::reduce(df, dplyr::full_join, by = c("ip", "client_state")),
+    "client_lga" = purrr::reduce(df, dplyr::full_join, by = c("ip", "client_state", "client_lga"))
   )
 
   dt[is.na(dt)] <- 0 ## replace NAs with Zero

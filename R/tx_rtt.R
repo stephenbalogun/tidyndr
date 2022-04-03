@@ -30,16 +30,15 @@ tx_rtt <- function(new_data,
                    old_data,
                    states = NULL,
                    facilities = NULL,
-                   status = "default") {
-
-
+                   status = "default",
+                   remove_duplicates = FALSE) {
   states <- states %||% unique(new_data$state)
 
   facilities <- facilities %||% unique(subset(new_data, state %in% states)$facility)
 
-  validate_rtt(new_data, old_data, states, facilities, status)
+  validate_rtt(new_data, old_data, states, facilities, status, remove_duplicates)
 
-  get_tx_rtt(new_data, old_data, states, facilities, status)
+  get_tx_rtt(new_data, old_data, states, facilities, status, remove_duplicates)
 }
 
 
@@ -48,7 +47,8 @@ validate_rtt <- function(new_data,
                          old_data,
                          states,
                          facilities,
-                         status) {
+                         status,
+                         remove_duplicates) {
   if (!all(states %in% unique(new_data$state))) {
     rlang::warn("state(s) is/are not contained in the supplied data. Check the spelling and/or case.")
   }
@@ -61,11 +61,15 @@ validate_rtt <- function(new_data,
   if (!status %in% c("default", "calculated")) {
     rlang::abort("`status` can only be one of 'default' or 'calculated'. Check that you did not mispell, include CAPS or forget to quotation marks!")
   }
+
+  if (!is.logical(remove_duplicates)) {
+    rlang::abort("The `remove_duplicates` argument is a logical variable and can only be set to `TRUE` or `FALSE`")
+  }
 }
 
 
 
-get_tx_rtt <- function(new_data, old_data, states, facilities, status) {
+get_tx_rtt <- function(new_data, old_data, states, facilities, status, remove_duplicates) {
   losses <- switch(status,
     "calculated" = dplyr::filter(
       old_data,
@@ -79,7 +83,7 @@ get_tx_rtt <- function(new_data, old_data, states, facilities, status) {
     )
   )
 
-  switch(status,
+  df <- switch(status,
     "calculated" = dplyr::filter(
       new_data,
       current_status == "Active",
@@ -97,6 +101,12 @@ get_tx_rtt <- function(new_data, old_data, states, facilities, status) {
       facility %in% facilities
     )
   )
+
+  if (remove_duplicates) {
+    df <- dplyr::distinct(df, facility, patient_identifier, .keep_all = TRUE)
+  }
+
+  return(df)
 }
 
 

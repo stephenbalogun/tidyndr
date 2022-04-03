@@ -107,27 +107,29 @@ recency_example <- recency_example %>%
     `Client LGA` = sample(c(sample(lgas(), 50, FALSE), unique(examp2$lga)), 10000, TRUE),
     Facility = sample(examp2$facility, 10000, replace = FALSE),
     `DATIM Code` = factor(sample(examp2$facility, 10000, FALSE),
-                          labels = str_c(
-                            "datim_code000",
-                            1:length(unique(examp2$facility))
-                          )
+      labels = str_c(
+        "datim_code000",
+        1:length(unique(examp2$facility))
+      )
     ),
     `Facility LGA` = sample(examp2$lga, 10000, FALSE),
     `Client ID` = sample(examp2$patient_identifier, 10000, FALSE)
   ) %>%
   group_by(`Facility State`) %>%
-  mutate(`Recency Number` = str_c("300", row_number(), sep = ""),
-         `Client Code` = str_c("CBO", sample(1:9, 1), sample(1:12, 1), 2021, `Facility State`, sep = "/")) %>%
+  mutate(
+    `Recency Number` = str_c("300", row_number(), sep = ""),
+    `Client Code` = str_c("CBO", sample(1:9, 1), sample(1:12, 1), 2021, `Facility State`, sep = "/")
+  ) %>%
   ungroup() %>%
   mutate(
     `Visit Date` = sample(recency_df$`Visit Date`, 10000, FALSE),
     Sex = sample(recency_df$Sex, 10000, FALSE)
-    )
+  )
 
 ### save the ndr_example csv file (n = 5000) for shipping with the package
 write_csv(sample_n(recency_example, 1000),
-          "C:/Users/DR. BALOGUN STEPHEN/OneDrive - Catholic Caritas Foundation/Documents/My R/tidyndr/inst/extdata/recency_example.csv",
-          na = ""
+  "C:/Users/DR. BALOGUN STEPHEN/OneDrive - Catholic Caritas Foundation/Documents/My R/tidyndr/inst/extdata/recency_example.csv",
+  na = ""
 )
 
 ### save the ndr_example csv file for pushing to github (n = 50, 000)e
@@ -138,5 +140,3 @@ write_csv(recency_example, path, na = "")
 #### read the recency_example (n = 10, 000) for package as .rda file
 recency_example <- tidyndr::read_ndr(path, type = "recency")
 usethis::use_data(recency_example, overwrite = TRUE)
-
-

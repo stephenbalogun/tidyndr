@@ -32,18 +32,17 @@ tx_vl_eligible <- function(data,
                            facilities = NULL,
                            status = "default",
                            sample = FALSE,
-                           use_six_months = TRUE) {
-
+                           use_six_months = TRUE,
+                           remove_duplicates = FALSE) {
   ref <- lubridate::ymd(ref %||% get("Sys.Date")())
 
   states <- states %||% unique(data$state)
 
   facilities <- facilities %||% unique(subset(data, state %in% states)$facility)
 
-  validate_vl_eligible(data, ref, states, facilities, status, sample, use_six_months)
+  validate_vl_eligible(data, ref, states, facilities, status, sample, use_six_months, remove_duplicates)
 
-  get_tx_vl_eligible(data, ref, states, facilities, status, sample, use_six_months)
-
+  get_tx_vl_eligible(data, ref, states, facilities, status, sample, use_six_months, remove_duplicates)
 }
 
 
@@ -53,7 +52,8 @@ validate_vl_eligible <- function(data,
                                  facilities,
                                  status,
                                  sample,
-                                 use_six_months) {
+                                 use_six_months,
+                                 remove_duplicates) {
   if (!all(states %in% unique(data$state))) {
     rlang::abort("state(s) is/are not contained in the supplied data. Check the spelling and/or case.")
   }
@@ -80,6 +80,9 @@ validate_vl_eligible <- function(data,
     rlang::abort("use_six_months can either be TRUE or FALSE")
   }
 
+  if (!is.logical(remove_duplicates)) {
+    rlang::abort("The `remove_duplicates` argument is a logical variable and can only be set to `TRUE` or `FALSE`")
+  }
 }
 
 get_tx_vl_eligible <- function(data,
@@ -88,103 +91,108 @@ get_tx_vl_eligible <- function(data,
                                facilities,
                                status,
                                sample,
-                               use_six_months) {
-
-  if (sample) {
-
+                               use_six_months,
+                               remove_duplicates) {
+  df <- if (sample) {
     if (use_six_months) {
-    switch(status,
-           "calculated" = dplyr::filter(
-             data,
-             current_status == "Active",
-             !patient_has_died %in% TRUE,
-             ref - art_start_date >=
-               lubridate::period(6, "months"),
-             dplyr::if_else(
-               current_age < 20,
-               ref -
-                 date_of_current_viral_load >
-                 lubridate::period(6, "months"),
-               ref -
-                 date_of_current_viral_load >
-                 lubridate::period(1, "year")
-             ) |
-               is.na(date_of_current_viral_load),
-             state %in% states,
-             facility %in% facilities
-           ),
-           "default" = dplyr::filter(
-             data,
-             current_status_28_days == "Active",
-             !patient_has_died %in% TRUE,
-             ref - art_start_date >=
-               lubridate::period(6, "months"),
-             dplyr::if_else(
-               current_age < 20,
-               ref -
-                 date_of_current_viral_load >
-                 lubridate::period(6, "months"),
-               ref -
-                 date_of_current_viral_load >
-                 lubridate::period(1, "year")
-             ) |
-               is.na(date_of_current_viral_load),
-             state %in% states,
-             facility %in% facilities
-           )
-    )
+      switch(status,
+        "calculated" = dplyr::filter(
+          data,
+          current_status == "Active",
+          !patient_has_died %in% TRUE,
+          ref - art_start_date >=
+            lubridate::period(6, "months"),
+          dplyr::if_else(
+            current_age < 20,
+            ref -
+              date_of_current_viral_load >
+              lubridate::period(6, "months"),
+            ref -
+              date_of_current_viral_load >
+              lubridate::period(1, "year")
+          ) |
+            is.na(date_of_current_viral_load),
+          state %in% states,
+          facility %in% facilities
+        ),
+        "default" = dplyr::filter(
+          data,
+          current_status_28_days == "Active",
+          !patient_has_died %in% TRUE,
+          ref - art_start_date >=
+            lubridate::period(6, "months"),
+          dplyr::if_else(
+            current_age < 20,
+            ref -
+              date_of_current_viral_load >
+              lubridate::period(6, "months"),
+            ref -
+              date_of_current_viral_load >
+              lubridate::period(1, "year")
+          ) |
+            is.na(date_of_current_viral_load),
+          state %in% states,
+          facility %in% facilities
+        )
+      )
     } else {
       switch(status,
-             "calculated" = dplyr::filter(
-               data,
-               current_status == "Active",
-               !patient_has_died %in% TRUE,
-               ref - art_start_date >=
-                 lubridate::period(6, "months"),
-                 ref -
-                   date_of_current_viral_load >
-                   lubridate::period(1, "year") |
-                 is.na(date_of_current_viral_load),
-               state %in% states,
-               facility %in% facilities
-             ),
-             "default" = dplyr::filter(
-               data,
-               current_status_28_days == "Active",
-               !patient_has_died %in% TRUE,
-               ref - art_start_date >=
-                 lubridate::period(6, "months"),
-                 ref -
-                   date_of_current_viral_load >
-                   lubridate::period(1, "year") |
-                 is.na(date_of_current_viral_load),
-               state %in% states,
-               facility %in% facilities
-             )
+        "calculated" = dplyr::filter(
+          data,
+          current_status == "Active",
+          !patient_has_died %in% TRUE,
+          ref - art_start_date >=
+            lubridate::period(6, "months"),
+          ref -
+            date_of_current_viral_load >
+            lubridate::period(1, "year") |
+            is.na(date_of_current_viral_load),
+          state %in% states,
+          facility %in% facilities
+        ),
+        "default" = dplyr::filter(
+          data,
+          current_status_28_days == "Active",
+          !patient_has_died %in% TRUE,
+          ref - art_start_date >=
+            lubridate::period(6, "months"),
+          ref -
+            date_of_current_viral_load >
+            lubridate::period(1, "year") |
+            is.na(date_of_current_viral_load),
+          state %in% states,
+          facility %in% facilities
+        )
       )
     }
   } else {
     switch(status,
-           "calculated" = dplyr::filter(
-             data,
-             current_status == "Active",
-             !patient_has_died %in% TRUE,
-             ref - art_start_date >=
-               lubridate::period(6, "months"),
-             state %in% states,
-             facility %in% facilities
-           ),
-           "default" = dplyr::filter(
-             data,
-             current_status_28_days == "Active",
-             !patient_has_died %in% TRUE,
-             ref - art_start_date >=
-               lubridate::period(6, "months"),
-             state %in% states,
-             facility %in% facilities
-           )
+      "calculated" = dplyr::filter(
+        data,
+        current_status == "Active",
+        !patient_has_died %in% TRUE,
+        ref - art_start_date >=
+          lubridate::period(6, "months"),
+        state %in% states,
+        facility %in% facilities
+      ),
+      "default" = dplyr::filter(
+        data,
+        current_status_28_days == "Active",
+        !patient_has_died %in% TRUE,
+        ref - art_start_date >=
+          lubridate::period(6, "months"),
+        state %in% states,
+        facility %in% facilities
+      )
     )
   }
+
+  if (remove_duplicates) {
+    df <- dplyr::distinct(df, facility, patient_identifier, .keep_all = TRUE)
+  }
+
+  return(df)
 }
 
 

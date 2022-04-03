@@ -10,30 +10,23 @@
 #' hts_pos <- hts_tst_pos(recency_example)
 #'
 #' rita_recent(hts_pos)
-
+#'
 rita_recent <- function(data,
-                     from = NULL,
-                     to = NULL,
-                     states = NULL,
-                     facilities = NULL
-) {
-
-
-
+                        from = NULL,
+                        to = NULL,
+                        states = NULL,
+                        facilities = NULL) {
   states <- states %||% unique(data$facility_state)
 
   facilities <- facilities %||% unique(subset(data, facility_state %in% states)$facility)
 
-  validate_recent(data, from, to , states, facilities)
+  validate_recent(data, from, to, states, facilities)
 
   get_rita_recent(data, from, to, states, facilities)
-
-
 }
 
 
-get_rita_recent <-  function(data, from, to, states, facilities) {
-
+get_rita_recent <- function(data, from, to, states, facilities) {
   dt <- dplyr::filter(
     data,
     recency_interpretation == "Recent",
@@ -52,14 +45,13 @@ get_rita_recent <-  function(data, from, to, states, facilities) {
     )
   }
 
-  if(!is.null(to)) {
+  if (!is.null(to)) {
     dt <- dplyr::filter(
       dt, date_of_viral_load_result <= lubridate::ymd(to)
     )
   }
 
   return(dt)
-
 }
 
 
@@ -67,5 +59,3 @@ get_rita_recent <-  function(data, from, to, states, facilities) {
 utils::globalVariables(
   c("recency_interpretation", "date_of_viral_load_result", "final_recency_result", "viral_load_result", "facility_state")
 )
-
-

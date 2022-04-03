@@ -35,4 +35,5 @@ Generate List of Clients who are RITA Recent
 hts_pos <- hts_tst_pos(recency_example)
 
 rita_recent(hts_pos)
+
 }

@@ -34,5 +34,6 @@ Subset Clients who had Recent Infection Test Done during a period of Interest
 ## Line-list all HIV positive clients who are eligible for recency testing
 hts_pos <- hts_tst_pos(recency_example)
 
- recent_eligible(hts_pos, state = "Arewa") # eligible clients in 'Arewa' state
+recent_eligible(hts_pos, state = "Arewa") # eligible clients in 'Arewa' state
+
 }

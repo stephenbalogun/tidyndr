@@ -4,7 +4,14 @@
 \alias{tx_new}
 \title{Subset Clients Starting ART Within a Particular Period.}
 \usage{
-tx_new(data, from = NULL, to = NULL, states = NULL, facilities = NULL)
+tx_new(
+  data,
+  from = NULL,
+  to = NULL,
+  states = NULL,
+  facilities = NULL,
+  remove_duplicates = FALSE
+)
 }
 \arguments{
 \item{data}{An NDR dataframe imported using the \code{read_ndr()}.}
@@ -23,6 +30,8 @@ states using the \code{c()} e.g. \code{c("State 1", "State 2")}.}
 all the facilities contained in the dataframe. If specifying more than one
 facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}
+
+\item{remove_duplicates}{Boolean argument. It specifies if duplicate patient entries in the facilities should be removed or kept}
 }
 \value{
 TX_NEW clients in the period of interest

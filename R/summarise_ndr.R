@@ -36,7 +36,6 @@ summarise_ndr <- function(..., level = "state", names = NULL) {
   validate_summary(data, level, names)
 
   get_summary_ndr(data, level, names)
-
 }
 
 

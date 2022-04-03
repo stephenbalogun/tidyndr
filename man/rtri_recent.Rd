@@ -33,4 +33,5 @@ Get List of RTRI Recent Clients
 \examples{
 ## Line-list RTRI recent persons for 'Arewa' state for the first quarter of 2021
 rtri_recent(recency_example, states = "Arewa", from = "2021-01-01", to = "2021-03-31")
+
 }

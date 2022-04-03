@@ -3,7 +3,6 @@ test_that("rtri_recent subsets only clients who are presumed to be recent based 
     rtri_recent(recency_example, from = "2020-01-01"),
     recency_example %>%
       subset(recency_interpretation %in% c("Recent", "recent", "RECENT") &
-               !is.na(recency_test_date)
-      )
+        !is.na(recency_test_date))
   )
 })

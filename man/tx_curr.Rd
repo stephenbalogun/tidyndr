@@ -4,7 +4,13 @@
 \alias{tx_curr}
 \title{Subset Clients who are Currently on Treatment}
 \usage{
-tx_curr(data, states = NULL, facilities = NULL, status = "default")
+tx_curr(
+  data,
+  states = NULL,
+  facilities = NULL,
+  status = "default",
+  remove_duplicates = FALSE
+)
 }
 \arguments{
 \item{data}{An NDR dataframe imported using the \code{read_ndr()}.}
@@ -21,6 +27,8 @@ facility, combine the facilities using the \code{c()} e.g.
 \item{status}{Determines how the number of active clients is calculated.
 The options are to either to use the NDR current_status_28_days column
 or the derived current_status column ("calculated").}
+
+\item{remove_duplicates}{Boolean argument. It specifies if duplicate patient entries in the facilities should be removed or kept}
 }
 \value{
 TX_CURR

@@ -16,11 +16,9 @@
 #'   outcome = "dead"
 #' )
 tx_ml_outcomes <- function(data, outcome) {
-
   validate_ml_outcomes(data, outcome)
 
   get_tx_ml_outcomes(data, outcome)
-
 }
 
 
@@ -29,14 +27,13 @@ validate_ml_outcomes <- function(data, outcome) {
     rlang::abort("Outcome should be either `dead` or `transferred out`.
                  Check you spellings and your CAPS!")
   }
-
 }
 
 get_tx_ml_outcomes <- function(data, outcome) {
   switch(outcome,
-         "dead" = dplyr::filter(data, patient_has_died == TRUE),
-         "transfer out" = dplyr::filter(data, patient_transferred_out == TRUE),
-         "transferred out" = dplyr::filter(data, patient_transferred_out == TRUE)
+    "dead" = dplyr::filter(data, patient_has_died == TRUE),
+    "transfer out" = dplyr::filter(data, patient_transferred_out == TRUE),
+    "transferred out" = dplyr::filter(data, patient_transferred_out == TRUE)
   )
 }
 

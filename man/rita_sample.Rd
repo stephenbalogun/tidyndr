@@ -37,4 +37,5 @@ sample_collected <- rita_sample(recency_example)
 ## Samples collected in 'Ayetoro', and 'Arewa' states
 
 rita_sample(recency_example, states = c("Arewa", "Ayetoro"))
+
 }

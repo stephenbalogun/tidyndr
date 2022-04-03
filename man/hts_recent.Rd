@@ -37,4 +37,5 @@ hts_recent_clients <- hts_recent(recency_example, from = "2021-07-01", to = "202
 hts_pos <- hts_tst_pos(recency_example) # identifies all hts_positive clients
 # line-list positive clients offered recency testing in 'Okun' state
 hts_recent(hts_pos, state = "Okun")
+
 }

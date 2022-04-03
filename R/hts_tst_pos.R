@@ -8,20 +8,17 @@
 #' @examples
 #' ### Line-list of clients hts positives from 'Okun' and 'Abaji' states in first half of 2021
 #' hts_pos <- hts_tst_pos(
-#' recency_example,
-#' state = c("Okun", "Abaji"),
-#' from = "2021-01-01",
-#' to = "2021-06-30"
+#'   recency_example,
+#'   state = c("Okun", "Abaji"),
+#'   from = "2021-01-01",
+#'   to = "2021-06-30"
 #' )
-
+#'
 hts_tst_pos <- function(data,
                         from = NULL,
                         to = NULL,
                         states = NULL,
-                        facilities = NULL
-) {
-
-
+                        facilities = NULL) {
   from <- lubridate::ymd(from %||% get("fy_start")())
 
   to <- lubridate::ymd(to %||% get("Sys.Date")())
@@ -30,16 +27,13 @@ hts_tst_pos <- function(data,
 
   facilities <- facilities %||% unique(subset(data, facility_state %in% states)$facility)
 
-  validate_pos(data, from, to , states, facilities)
+  validate_pos(data, from, to, states, facilities)
 
   get_hts_pos(data, from, to, states, facilities)
-
-
 }
 
 
-get_hts_pos <-  function(data, from, to, states, facilities) {
-
+get_hts_pos <- function(data, from, to, states, facilities) {
   dplyr::filter(
     data,
     dplyr::between(
@@ -57,7 +51,6 @@ get_hts_pos <-  function(data, from, to, states, facilities) {
 
 
 validate_pos <- function(data, from, to, states, facilities) {
-
   if (!all(states %in% unique(data$facility_state))) {
     rlang::abort("state(s) is/are not contained in the supplied data. Check the spelling and/or case.")
   }
@@ -79,7 +72,6 @@ validate_pos <- function(data, from, to, states, facilities) {
   if (from > to) {
     rlang::abort("The 'to' date cannot be before the 'from' date!!")
   }
-
 }
 
 
@@ -88,4 +80,3 @@ validate_pos <- function(data, from, to, states, facilities) {
 utils::globalVariables(
   c("hts_result", "hts_confirmatory_result", "hts_tie_breaker_result", "visit_date", "facility_state")
 )
-

@@ -34,4 +34,5 @@ disaggregate(new_clients, by = "current_age") # default value of level is "state
 ### Disaggregate "TX_CURR" by gender for each facility
 curr_clients <- tx_curr(ndr_example)
 disaggregate(curr_clients, by = "sex", level = "facility")
+
 }

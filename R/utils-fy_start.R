@@ -8,13 +8,14 @@
 fy_start <- function() {
   if (lubridate::month(Sys.Date()) < 10) {
     stats::update(Sys.Date(),
-                  years = lubridate::year(Sys.Date()) - 1,
-                  months = 10,
-                  days = 1)
+      years = lubridate::year(Sys.Date()) - 1,
+      months = 10,
+      days = 1
+    )
   } else {
     stats::update(Sys.Date(),
-                  months = 10,
-                  days = 1
+      months = 10,
+      days = 1
     )
   }
 }

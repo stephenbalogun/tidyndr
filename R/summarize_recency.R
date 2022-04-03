@@ -30,7 +30,7 @@
 #'   hts_pos,
 #'   hts_recent
 #' )
-
+#'
 summarize_recency <- function(..., level = "facility_state", names = NULL) {
   data <- rlang::dots_list(..., .named = TRUE)
 

@@ -3,6 +3,6 @@ test_that("tx_curr filters only active clients", {
     tx_curr(ndr_example, status = "default"),
     ndr_example %>%
       subset(current_status_28_days == "Active" &
-               !patient_has_died %in% TRUE)
+        !patient_has_died %in% TRUE)
   )
 })

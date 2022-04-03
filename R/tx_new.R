@@ -19,6 +19,7 @@
 #'   all the facilities contained in the dataframe. If specifying more than one
 #'   facility, combine the facilities using the \code{c()} e.g.
 #'   \code{c("Facility 1", "Facility 2")}.
+#' @param remove_duplicates Boolean argument. It specifies if duplicate patient entries in the facilities should be removed or kept
 #'
 #' @return TX_NEW clients in the period of interest
 #' @export tx_new
@@ -39,10 +40,8 @@ tx_new <- function(data,
                    from = NULL,
                    to = NULL,
                    states = NULL,
-                   facilities = NULL
-                   ) {
-
-
+                   facilities = NULL,
+                   remove_duplicates = FALSE) {
   from <- lubridate::ymd(from %||% get("fy_start")())
 
   to <- lubridate::ymd(to %||% get("Sys.Date")())
@@ -51,15 +50,12 @@ tx_new <- function(data,
 
   facilities <- facilities %||% unique(subset(data, state %in% states)$facility)
 
-  validate_new(data, from, to , states, facilities)
+  validate_new(data, from, to, states, facilities, remove_duplicates)
 
-  get_tx_new(data, from, to, states, facilities)
-
-
+  get_tx_new(data, from, to, states, facilities, remove_duplicates)
 }
 
-validate_new <- function(data, from, to, states, facilities) {
-
+validate_new <- function(data, from, to, states, facilities, remove_duplicates) {
   if (!all(states %in% unique(data$state))) {
     rlang::abort("state(s) is/are not contained in the supplied data. Check the spelling and/or case.")
   }
@@ -82,12 +78,14 @@ validate_new <- function(data, from, to, states, facilities) {
     rlang::abort("The 'to' date cannot be before the 'from' date!!")
   }
 
+  if (!is.logical(remove_duplicates)) {
+    rlang::abort("The `remove_duplicates` argument is a logical variable and can only be set to `TRUE` or `FALSE`")
+  }
 }
 
 
-get_tx_new <-  function(data, from, to, states, facilities) {
-
-  dplyr::filter(
+get_tx_new <- function(data, from, to, states, facilities, remove_duplicates) {
+  data <- dplyr::filter(
     data,
     dplyr::between(
       art_start_date,
@@ -97,6 +95,12 @@ get_tx_new <-  function(data, from, to, states, facilities) {
     state %in% states,
     facility %in% facilities
   )
+
+  if (remove_duplicates) {
+    data <- dplyr::distinct(data, facility, patient_identifier, .keep_all = TRUE)
+  }
+
+  return(data)
 }
 
 

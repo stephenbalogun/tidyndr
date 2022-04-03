@@ -208,6 +208,4 @@ recency_cols <- function() {
 
 ndr_types <- function() {
   c("treatment", "hts", "recency")
-
 }
-

@@ -44,9 +44,8 @@ tx_ml <- function(new_data,
                   to = NULL,
                   states = NULL,
                   facilities = NULL,
-                  status = "default") {
-
-
+                  status = "default",
+                  remove_duplicates = FALSE) {
   from <- lubridate::ymd(from %||% get("fy_start")())
 
   to <- lubridate::ymd(to %||% get("Sys.Date")())
@@ -55,10 +54,9 @@ tx_ml <- function(new_data,
 
   facilities <- facilities %||% unique(subset(new_data, state %in% states)$facility)
 
-  validate_ml(new_data, old_data, from, to, states, facilities, status)
+  validate_ml(new_data, old_data, from, to, states, facilities, status, remove_duplicates)
 
-  get_tx_ml(new_data, old_data, from, to, states, facilities, status)
-
+  get_tx_ml(new_data, old_data, from, to, states, facilities, status, remove_duplicates)
 }
 
 
@@ -68,8 +66,8 @@ validate_ml <- function(new_data,
                         to,
                         states,
                         facilities,
-                        status) {
-
+                        status,
+                        remove_duplicates) {
   if (!all(states %in% unique(new_data$state))) {
     rlang::abort("state(s) is/are not contained in the supplied data. Check the spelling and/or case.")
   }
@@ -90,6 +88,10 @@ validate_ml <- function(new_data,
   if (!status %in% c("default", "calculated")) {
     rlang::abort("`status` can only be one of 'default' or 'calculated'. Check that you did not mispell, include CAPS or forget to quotation marks!")
   }
+
+  if (!is.logical(remove_duplicates)) {
+    rlang::abort("The `remove_duplicates` argument is a logical variable and can only be set to `TRUE` or `FALSE`")
+  }
 }
 
 
@@ -99,9 +101,9 @@ get_tx_ml <- function(new_data,
                       to,
                       states,
                       facilities,
-                      status) {
-
-  if (rlang::is_null(old_data)) {
+                      status,
+                      remove_duplicates) {
+  df <- if (rlang::is_null(old_data)) {
     dplyr::filter(
       new_data,
       dplyr::between(
@@ -114,33 +116,39 @@ get_tx_ml <- function(new_data,
     )
   } else {
     active <- switch(status,
-                     "calculated" = dplyr::filter(
-                       old_data,
-                       current_status == "Active"
-                     ),
-                     "default" = dplyr::filter(
-                       old_data,
-                       current_status_28_days == "Active"
-                     )
+      "calculated" = dplyr::filter(
+        old_data,
+        current_status == "Active"
+      ),
+      "default" = dplyr::filter(
+        old_data,
+        current_status_28_days == "Active"
+      )
     )
 
     switch(status,
-           "calculated" = dplyr::filter(
-             new_data,
-             patient_identifier %in% active$patient_identifier,
-             current_status == "Inactive",
-             state %in% states,
-             facility %in% facilities
-           ),
-           "default" = dplyr::filter(
-             new_data,
-             patient_identifier %in% active$patient_identifier,
-             current_status_28_days == "Inactive",
-             state %in% states,
-             facility %in% facilities
-           )
+      "calculated" = dplyr::filter(
+        new_data,
+        patient_identifier %in% active$patient_identifier,
+        current_status == "Inactive",
+        state %in% states,
+        facility %in% facilities
+      ),
+      "default" = dplyr::filter(
+        new_data,
+        patient_identifier %in% active$patient_identifier,
+        current_status_28_days == "Inactive",
+        state %in% states,
+        facility %in% facilities
+      )
     )
   }
+
+  if (remove_duplicates) {
+    df <- dplyr::distinct(df, facility, patient_identifier, .keep_all = TRUE)
+  }
+
+  return(df)
 }
 
 

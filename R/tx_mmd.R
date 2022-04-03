@@ -26,23 +26,20 @@ tx_mmd <- function(data,
                    months = NULL,
                    states = NULL,
                    facilities = NULL,
-                   status = "default") {
-
+                   status = "default",
+                   remove_duplicates = FALSE) {
   months <- months %||% c(3, 4, 5, 6)
 
   states <- states %||% unique(data$state)
 
   facilities <- facilities %||% unique(subset(data, state %in% states)$facility)
 
-  validate_mmd(data, months, states, facilities, status)
+  validate_mmd(data, months, states, facilities, status, remove_duplicates)
 
-  get_tx_mmd(data, months, states, facilities, status)
-
-
+  get_tx_mmd(data, months, states, facilities, status, remove_duplicates)
 }
 
-validate_mmd <- function(data, months, states, facilities, status) {
-
+validate_mmd <- function(data, months, states, facilities, status, remove_duplicates) {
   if (!is.numeric(months) || any(months < 0)) {
     rlang::abort("The number of months supplied must be numeric, and not a negative number.")
   }
@@ -60,32 +57,41 @@ validate_mmd <- function(data, months, states, facilities, status) {
   if (!status %in% c("default", "calculated")) {
     rlang::abort("`status` can only be one of 'default' or 'calculated'. Check that you did not mispell, include CAPS or forget to quotation marks!")
   }
+
+  if (!is.logical(remove_duplicates)) {
+    rlang::abort("The `remove_duplicates` argument is a logical variable and can only be set to `TRUE` or `FALSE`")
+  }
 }
 
-get_tx_mmd <- function(data, months, states, facilities, status) {
-
-  switch(status,
-         "calculated" = dplyr::filter(
-           dplyr::mutate(data,
-                         months_dispensed = floor(days_of_arv_refill / 28)
-           ),
-           current_status == "Active",
-           !patient_has_died %in% TRUE,
-           months_dispensed %in% months,
-           state %in% states,
-           facility %in% facilities
-         ),
-         "default" = dplyr::filter(
-           dplyr::mutate(data,
-                         months_dispensed = floor(days_of_arv_refill / 28)
-           ),
-           current_status_28_days == "Active",
-           !patient_has_died %in% TRUE,
-           months_dispensed %in% months,
-           state %in% states,
-           facility %in% facilities
-         )
+get_tx_mmd <- function(data, months, states, facilities, status, remove_duplicates) {
+  df <- switch(status,
+    "calculated" = dplyr::filter(
+      dplyr::mutate(data,
+        months_dispensed = floor(days_of_arv_refill / 28)
+      ),
+      current_status == "Active",
+      !patient_has_died %in% TRUE,
+      months_dispensed %in% months,
+      state %in% states,
+      facility %in% facilities
+    ),
+    "default" = dplyr::filter(
+      dplyr::mutate(data,
+        months_dispensed = floor(days_of_arv_refill / 28)
+      ),
+      current_status_28_days == "Active",
+      !patient_has_died %in% TRUE,
+      months_dispensed %in% months,
+      state %in% states,
+      facility %in% facilities
+    )
   )
+
+  if (remove_duplicates) {
+    df <- dplyr::distinct(df, facility, patient_identifier, .keep_all = TRUE)
+  }
+
+  return(df)
 }
 
 utils::globalVariables(c(

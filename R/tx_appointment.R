@@ -35,9 +35,8 @@ tx_appointment <- function(data,
                            to = NULL,
                            states = NULL,
                            facilities = NULL,
-                           active = FALSE
-                           ) {
-
+                           active = FALSE,
+                           remove_duplicates = FALSE) {
   from <- lubridate::ymd(from %||% get("fy_start")())
 
   to <- lubridate::ymd(to %||% get("Sys.Date")())
@@ -46,14 +45,12 @@ tx_appointment <- function(data,
 
   facilities <- facilities %||% unique(subset(data, state %in% states)$facility)
 
-  validate_appointment(data, from, to, states, facilities, active)
+  validate_appointment(data, from, to, states, facilities, active, remove_duplicates)
 
-  get_tx_appointment(data, from, to, states, facilities, active)
-
+  get_tx_appointment(data, from, to, states, facilities, active, remove_duplicates)
 }
 
-validate_appointment <- function(data, from, to, states, facilities, active) {
-
+validate_appointment <- function(data, from, to, states, facilities, active, remove_duplicates) {
   if (!all(states %in% unique(data$state))) {
     rlang::abort("state(s) is/are not contained in the supplied data. Check the spelling and/or case.")
   }
@@ -75,11 +72,13 @@ validate_appointment <- function(data, from, to, states, facilities, active) {
     rlang::abort("Active can only be set to TRUE or FALSE")
   }
 
+  if (!is.logical(remove_duplicates)) {
+    rlang::abort("The `remove_duplicates` argument is a logical variable and can only be set to `TRUE` or `FALSE`")
+  }
 }
 
 
-get_tx_appointment <- function(data, from, to, states, facilities, active) {
-
+get_tx_appointment <- function(data, from, to, states, facilities, active, remove_duplicates) {
   df <- dplyr::filter(
     data,
     dplyr::between(
@@ -92,14 +91,18 @@ get_tx_appointment <- function(data, from, to, states, facilities, active) {
   )
 
   if (active) {
-    dplyr::filter(
+    df <- dplyr::filter(
       df,
       current_status == "Active",
       !patient_has_died %in% TRUE
     )
-  } else {
-    return(df)
   }
+
+  if (remove_duplicates) {
+    df <- dplyr::distinct(df, facility, patient_identifier, .keep_all = TRUE)
+  }
+
+  return(df)
 }
 
 

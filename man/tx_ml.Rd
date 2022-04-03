@@ -11,7 +11,8 @@ tx_ml(
   to = NULL,
   states = NULL,
   facilities = NULL,
-  status = "default"
+  status = "default",
+  remove_duplicates = FALSE
 )
 }
 \arguments{
@@ -39,6 +40,8 @@ facility, combine the facilities using the \code{c()} e.g.
 \item{status}{Determines how the number of active clients is calculated.
 The options are to either to use the NDR current_status_28_days column
 or the derived current_status column ("calculated").}
+
+\item{remove_duplicates}{Boolean argument. It specifies if duplicate patient entries in the facilities should be removed or kept}
 }
 \value{
 tx_ml

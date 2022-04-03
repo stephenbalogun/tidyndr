@@ -63,17 +63,12 @@ validate_summary <- function(data, level, names) {
       "names must be supplied as characters. Did you forget to put the names in quotes?"
     )
   }
-
 }
 
 
-get_summary_ndr <- function(data, level, names){
-
-
+get_summary_ndr <- function(data, level, names) {
   if (is.null(names)) {
-
     names <- names(data)
-
   }
 
   if (length(data) == 1) {
@@ -93,11 +88,11 @@ get_summary_ndr <- function(data, level, names){
 
 
   dt <- switch(level,
-               "state" = purrr::reduce(df, dplyr::full_join, by = c("ip", "state")),
-               "facility" = purrr::reduce(df, dplyr::full_join, by = c("ip", "state", "lga", "facility")),
-               "country" = purrr::reduce(df, dplyr::full_join, by = "ip"),
-               "ip" = purrr::reduce(df, dplyr::full_join, by = "ip"),
-               "lga" = purrr::reduce(df, dplyr::full_join, by = c("ip", "state", "lga"))
+    "state" = purrr::reduce(df, dplyr::full_join, by = c("ip", "state")),
+    "facility" = purrr::reduce(df, dplyr::full_join, by = c("ip", "state", "lga", "facility")),
+    "country" = purrr::reduce(df, dplyr::full_join, by = "ip"),
+    "ip" = purrr::reduce(df, dplyr::full_join, by = "ip"),
+    "lga" = purrr::reduce(df, dplyr::full_join, by = c("ip", "state", "lga"))
   )
 
   dt[is.na(dt)] <- 0 ## replace NAs with Zero

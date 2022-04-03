@@ -22,13 +22,9 @@
 #' file_path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
 #' read_ndr(file_path, time_stamp = "2021-02-15")
 #' }
-
-read_ndr <-  function(
-  path,
-  type = "treatment",
-  ...
-  ) {
-
+read_ndr <- function(path,
+                     type = "treatment",
+                     ...) {
   if (!any(ndr_types() == type)) {
     rlang::abort("line list type  is not one of 'recency', 'hts' or 'treatment'. Check for spelling mistakes or wrong capitalization")
   }
@@ -46,17 +42,21 @@ read <- function(path, ...) {
 
 
 
-read.treatment <- function (path, time_stamp, cols = NULL, quiet = FALSE,  ...) {
+read.treatment <- function(path, time_stamp, cols = NULL, quiet = FALSE, ...) {
   df <- tryCatch(error = function(cnd) {
     vroom::vroom(path, col_types = old_cols(), ...)
-  }, vroom::vroom(path, col_types = cols %||% current_cols(),
-                  ...))
-  df <- dplyr::mutate(janitor::clean_names(df), date_lost = last_drug_pickup_date +
-                        lubridate::days(days_of_arv_refill) + lubridate::days(28),
-                      appointment_date = last_drug_pickup_date + lubridate::days(days_of_arv_refill),
-                      current_status = dplyr::case_when(date_lost >= lubridate::as_date(time_stamp) ~
-                                                          "Active", date_lost < lubridate::as_date(time_stamp) ~
-                                                          "Inactive", is.na(time_stamp) ~ "skipped"))
+  }, vroom::vroom(path,
+    col_types = cols %||% current_cols(),
+    ...
+  ))
+  df <- dplyr::mutate(janitor::clean_names(df),
+    date_lost = last_drug_pickup_date +
+      lubridate::days(days_of_arv_refill) + lubridate::days(28),
+    appointment_date = last_drug_pickup_date + lubridate::days(days_of_arv_refill),
+    current_status = dplyr::case_when(date_lost >= lubridate::as_date(time_stamp) ~
+      "Active", date_lost < lubridate::as_date(time_stamp) ~
+      "Inactive", is.na(time_stamp) ~ "skipped")
+  )
   if (!quiet) {
     message("\nThree new variables created: \n[1] `date_lost` \n[2] `appointment_date \n[2] `current_status\n")
   }
@@ -69,23 +69,26 @@ read.treatment <- function (path, time_stamp, cols = NULL, quiet = FALSE,  ...) 
 
 
 read.hts <- function(path, cols = NULL, ...) {
-  df <- tryCatch(error = function(cnd) {
-    vroom::vroom(path)
-  },
-  vroom::vroom(path, col_types = cols %||% hts_cols(), na = c("NULL", ""), ...))
+  df <- tryCatch(
+    error = function(cnd) {
+      vroom::vroom(path)
+    },
+    vroom::vroom(path, col_types = cols %||% hts_cols(), na = c("NULL", ""), ...)
+  )
 
   return(janitor::clean_names(df))
-
 }
 
 
 
 read.recency <- function(path, cols = NULL, ...) {
-  df <- tryCatch(error = function(cnd) {
-    vroom::vroom(path)
-  },
-  vroom::vroom(path, col_types = cols %||% recency_cols(), ...)) %>%
-    purrr::modify_if(is.factor, ~dplyr::na_if(., "NULL")) %>%
+  df <- tryCatch(
+    error = function(cnd) {
+      vroom::vroom(path)
+    },
+    vroom::vroom(path, col_types = cols %||% recency_cols(), ...)
+  ) %>%
+    purrr::modify_if(is.factor, ~ dplyr::na_if(., "NULL")) %>%
     purrr::modify_if(is.factor, forcats::fct_drop)
 
   return(janitor::clean_names(df))

@@ -11,7 +11,8 @@ tx_pvls_num(
   facilities = NULL,
   status = "default",
   n = 1000,
-  use_six_months = TRUE
+  use_six_months = TRUE,
+  remove_duplicates = FALSE
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ or the derived current_status column ("calculated").}
 \item{n}{the value below which viral load result is adjudged to be suppressed.}
 
 \item{use_six_months}{\code{TRUE} of \code{FALSE}. To determine if six months eligibility should be used for pediatrics and adolescents repeat viral load or the standard annual repeat.}
+
+\item{remove_duplicates}{Boolean argument. It specifies if duplicate patient entries in the facilities should be removed or kept}
 }
 \value{
 tx_pvls_num

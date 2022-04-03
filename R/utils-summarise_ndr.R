@@ -9,8 +9,7 @@
 #' @keywords internal
 #' @return No return value, called for side effects
 my_summary <- function(data, l, n) {
-  switch(
-    l,
+  switch(l,
     "country" = janitor::adorn_totals(
       dplyr::count(data, ip, name = n, .drop = TRUE)
     ),
@@ -19,23 +18,21 @@ my_summary <- function(data, l, n) {
     ),
     "state" = janitor::adorn_totals(
       dplyr::count(data, ip, state, name = n, .drop = TRUE)
-      ),
-  "lga" = janitor::adorn_totals(
-    dplyr::count(data, ip, state, lga, name = n, .drop = TRUE)
     ),
-  "facility" = janitor::adorn_totals(
-    dplyr::count(data, ip, state, lga, facility, name = n, .drop = TRUE)
+    "lga" = janitor::adorn_totals(
+      dplyr::count(data, ip, state, lga, name = n, .drop = TRUE)
+    ),
+    "facility" = janitor::adorn_totals(
+      dplyr::count(data, ip, state, lga, facility, name = n, .drop = TRUE)
     )
   )
-
 }
 
 
 
 
 my_summary2 <- function(data, l, n) {
-  switch(
-    l,
+  switch(l,
     "country" = janitor::adorn_totals(
       dplyr::count(data, ip, name = n, .drop = TRUE)
     ),
@@ -58,7 +55,6 @@ my_summary2 <- function(data, l, n) {
       dplyr::count(data, ip, client_state, client_lga, name = n, .drop = TRUE)
     )
   )
-
 }
 
 

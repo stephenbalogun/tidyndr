@@ -33,9 +33,10 @@ Subset Newly Identified HIV Positive Clients over a Particular Period
 \examples{
 ### Line-list of clients hts positives from 'Okun' and 'Abaji' states in first half of 2021
 hts_pos <- hts_tst_pos(
-recency_example,
-state = c("Okun", "Abaji"),
-from = "2021-01-01",
-to = "2021-06-30"
+  recency_example,
+  state = c("Okun", "Abaji"),
+  from = "2021-01-01",
+  to = "2021-06-30"
 )
+
 }

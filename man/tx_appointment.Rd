@@ -11,7 +11,8 @@ tx_appointment(
   to = NULL,
   states = NULL,
   facilities = NULL,
-  active = FALSE
+  active = FALSE,
+  remove_duplicates = FALSE
 )
 }
 \arguments{
@@ -33,6 +34,8 @@ facility, combine the facilities using the \code{c()} e.g.
 \code{c("Facility 1", "Facility 2")}.}
 
 \item{active}{TRUE or FALSE. To determine whether the appointment should be for only active patients or irrespective of their status.}
+
+\item{remove_duplicates}{Boolean argument. It specifies if duplicate patient entries in the facilities should be removed or kept}
 }
 \value{
 tx_appointment

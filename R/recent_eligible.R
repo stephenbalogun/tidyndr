@@ -9,30 +9,24 @@
 #' ## Line-list all HIV positive clients who are eligible for recency testing
 #' hts_pos <- hts_tst_pos(recency_example)
 #'
-#'  recent_eligible(hts_pos, state = "Arewa") # eligible clients in 'Arewa' state
-
+#' recent_eligible(hts_pos, state = "Arewa") # eligible clients in 'Arewa' state
+#'
 recent_eligible <- function(data,
-                       from = NULL,
-                       to = NULL,
-                       states = NULL,
-                       facilities = NULL
-) {
-
+                            from = NULL,
+                            to = NULL,
+                            states = NULL,
+                            facilities = NULL) {
   states <- states %||% unique(data$facility_state)
 
   facilities <- facilities %||% unique(subset(data, facility_state %in% states)$facility)
 
-  validate_recent(data, from, to , states, facilities)
+  validate_recent(data, from, to, states, facilities)
 
   get_recent_eligible(data, from, to, states, facilities)
-
-
 }
 
 
-get_recent_eligible <-  function(data, from, to, states, facilities) {
-
-
+get_recent_eligible <- function(data, from, to, states, facilities) {
   dt <- dplyr::filter(
     data,
     hts_result %in% c("R", "Pos", "Positive", "Reactive", "POSITIVE", "REACTIVE", "pos"),
@@ -51,7 +45,7 @@ get_recent_eligible <-  function(data, from, to, states, facilities) {
     )
   }
 
-  if(!is.null(to)) {
+  if (!is.null(to)) {
     dt <- dplyr::filter(
       dt, recency_test_date <= lubridate::ymd(to)
     )
@@ -64,7 +58,6 @@ get_recent_eligible <-  function(data, from, to, states, facilities) {
 
 
 validate_recent <- function(data, from, to, states, facilities) {
-
   if (!all(states %in% unique(data$facility_state))) {
     rlang::abort("state(s) is/are not contained in the supplied data. Check the spelling and/or case.")
   }
@@ -74,12 +67,12 @@ validate_recent <- function(data, from, to, states, facilities) {
                  Check that the facility is correctly spelt and located in the state.")
   }
 
-  if(!is.null(from) && stringr::str_detect(from, "202[0-9]-[0-9][0-9]-[0-9][0-9]") == FALSE) {
+  if (!is.null(from) && stringr::str_detect(from, "202[0-9]-[0-9][0-9]-[0-9][0-9]") == FALSE) {
     rlang::abort("The supplied date to the `from` argument is not in the right format. Did you remember to
                  enter the date in 'yyyy-mm-dd' or forget the quotation marks?")
   }
 
-  if(!is.null(to) && stringr::str_detect(from, "202[0-9]-[0-9][0-9]-[0-9][0-9]") == FALSE) {
+  if (!is.null(to) && stringr::str_detect(from, "202[0-9]-[0-9][0-9]-[0-9][0-9]") == FALSE) {
     rlang::abort("The supplied date to the `to` argument is not in the right format. Did you remember to
                  enter the date in 'yyyy-mm-dd' or forget the quotation marks?")
   }
@@ -92,7 +85,6 @@ validate_recent <- function(data, from, to, states, facilities) {
   if (!is.null(from) && !is.null(to) && as.Date(from) > as.Date(to)) {
     rlang::abort("The 'to' date cannot be before the 'from' date!!")
   }
-
 }
 
 
@@ -102,4 +94,3 @@ validate_recent <- function(data, from, to, states, facilities) {
 utils::globalVariables(
   c("recency_test_date", "recency_test_name", "facility_state", "opt_out", "age")
 )
-
