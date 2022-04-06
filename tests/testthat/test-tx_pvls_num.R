@@ -3,21 +3,17 @@ test_that("tx_pvls_num works", {
     tx_pvls_num(
       ndr_example,
       status = "default",
-      lubridate::ymd("2021-03-31")
+      lubridate::ymd("2021-03-31"),
+      use_six_months = FALSE
     ),
     ndr_example %>%
       subset(current_status_28_days == "Active" &
         !patient_has_died %in% TRUE &
-        lubridate::as_date("2021-03-31") - art_start_date >=
-          lubridate::period(6, "months") &
+          lubridate::`%m+%`(art_start_date, lubridate::period(6, "months")) <= lubridate::ymd("2021-03-31") &
         dplyr::if_else(
           current_age < 20,
-          lubridate::as_date("2021-03-31") -
-            date_of_current_viral_load <=
-            lubridate::period(6, "months"),
-          lubridate::as_date("2021-03-31") -
-            date_of_current_viral_load <=
-            lubridate::period(1, "year")
+          lubridate::`%m+%`(date_of_current_viral_load, lubridate::period(6, "months")) > lubridate::ymd("2021-03-31"),
+          lubridate::`%m+%`(date_of_current_viral_load, lubridate::period(1, "year")) > lubridate::ymd("2021-03-31")
         ) &
         current_viral_load < 1000)
   )

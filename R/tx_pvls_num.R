@@ -87,16 +87,10 @@ get_tx_pvls_num <- function(data, ref, states, facilities, status, n, use_six_mo
         data,
         current_status == "Active",
         !patient_has_died %in% TRUE,
-        lubridate::as_date(ref) - art_start_date >=
-          lubridate::period(6, "months"),
+        lubridate::`%m+%`(art_start_date, lubridate::period(6, "months")) <= ref,
         dplyr::if_else(
-          current_age < 20,
-          lubridate::as_date(ref) -
-            date_of_current_viral_load <=
-            lubridate::period(6, "months"),
-          lubridate::as_date(ref) -
-            date_of_current_viral_load <=
-            lubridate::period(1, "year")
+          lubridate::`%m+%`(date_of_current_viral_load, lubridate::period(6, "months")) > ref,
+          lubridate::`%m+%`(date_of_current_viral_load, lubridate::period(1, "year")) > ref
         ),
         current_viral_load < n,
         state %in% states,
@@ -106,16 +100,11 @@ get_tx_pvls_num <- function(data, ref, states, facilities, status, n, use_six_mo
         data,
         current_status_28_days == "Active",
         !patient_has_died %in% TRUE,
-        lubridate::as_date(ref) - art_start_date >=
-          lubridate::period(6, "months"),
+        lubridate::`%m+%`(art_start_date, lubridate::period(6, "months")) <= ref,
         dplyr::if_else(
           current_age < 20,
-          lubridate::as_date(ref) -
-            date_of_current_viral_load <=
-            lubridate::period(6, "months"),
-          lubridate::as_date(ref) -
-            date_of_current_viral_load <=
-            lubridate::period(1, "year")
+          lubridate::`%m+%`(date_of_current_viral_load, lubridate::period(6, "months")) > ref,
+          lubridate::`%m+%`(date_of_current_viral_load, lubridate::period(1, "year")) > ref
         ),
         current_viral_load < n,
         state %in% states,
@@ -128,11 +117,8 @@ get_tx_pvls_num <- function(data, ref, states, facilities, status, n, use_six_mo
         data,
         current_status == "Active",
         !patient_has_died %in% TRUE,
-        lubridate::as_date(ref) - art_start_date >=
-          lubridate::period(6, "months"),
-        lubridate::as_date(ref) -
-          date_of_current_viral_load <=
-          lubridate::period(1, "year"),
+        lubridate::`%m+%`(art_start_date, lubridate::period(6, "months")) <= ref,
+        lubridate::`%m+%`(date_of_current_viral_load, lubridate::period(1, "year")) > ref,
         current_viral_load < n,
         state %in% states,
         facility %in% facilities
@@ -141,11 +127,8 @@ get_tx_pvls_num <- function(data, ref, states, facilities, status, n, use_six_mo
         data,
         current_status_28_days == "Active",
         !patient_has_died %in% TRUE,
-        lubridate::as_date(ref) - art_start_date >=
-          lubridate::period(6, "months"),
-        lubridate::as_date(ref) -
-          date_of_current_viral_load <=
-          lubridate::period(1, "year"),
+        lubridate::`%m+%`(art_start_date, lubridate::period(6, "months")) <= ref,
+        lubridate::`%m+%`(date_of_current_viral_load, lubridate::period(1, "year")) > ref,
         current_viral_load < n,
         state %in% states,
         facility %in% facilities
