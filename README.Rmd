@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 <!-- [![R-CMD-check](https://github.com/stephenbalogun/tidyndr/workflows/R-CMD-check/badge.svg)](https://github.com/stephenbalogun/tidyndr/actions) -->
 <!-- badges: end -->
 
-The goal of {tidyndr} is to provide a specialized, simple and easy to use functions that wrap around existing functions in `R` for manipulation of the [NDR](https://ndr.shieldnigeriaproject.com/) patient line-list file allowing the user to focus on the tasks to be completed rather than the code/formula details.
+The goal of {tidyndr} is to provide a specialized, simple and easy to use functions that wrap around existing functions in `R` for manipulation of the [NDR](https://ndr.phis3project.org.ng/) patient line-list file allowing the user to focus on the tasks to be completed rather than the code/formula details.
 
 The functions presented are similar to the [PEPFAR MER indicators](https://datim.zendesk.com/hc/en-us/articles/360000084446-MER-Indicator-Reference-Guides) and are currently grouped into four categories:
 

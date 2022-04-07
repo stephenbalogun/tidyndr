@@ -15,7 +15,7 @@ status](https://www.r-pkg.org/badges/version/tidyndr)](https://CRAN.R-project.or
 
 The goal of {tidyndr} is to provide a specialized, simple and easy to
 use functions that wrap around existing functions in `R` for
-manipulation of the [NDR](https://ndr.shieldnigeriaproject.com/) patient
+manipulation of the [NDR](https://ndr.phis3project.org.ng/) patient
 line-list file allowing the user to focus on the tasks to be completed
 rather than the code/formula details.
 
@@ -162,20 +162,20 @@ who are due for a viral load test out of all those who are eligible.
 ## Generate list of clients who are eligible for VL (i.e. expected to have a documented VL result)
 ndr_example %>%
   tx_vl_eligible(ref = "2021-12-31")
-#> # A tibble: 16,206 x 52
+#> # A tibble: 27,020 x 52
 #>    ip     state lga   facility datim_code sex   patient_identif~ hospital_number
 #>    <fct>  <fct> <fct> <fct>    <fct>      <fct> <chr>            <chr>          
-#>  1 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 2001       0001           
-#>  2 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 3001       0001           
-#>  3 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 1002       0001           
-#>  4 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 3005       0001           
-#>  5 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 2005       0001           
-#>  6 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 1004       0003           
-#>  7 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 3006       0002           
-#>  8 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 1005       0004           
-#>  9 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 3009       0004           
-#> 10 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 2009       0001           
-#> # ... with 16,196 more rows, and 44 more variables: date_of_birth <date>,
+#>  1 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 3001       0001           
+#>  2 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 1002       0001           
+#>  3 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 3003       0001           
+#>  4 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 1003       0002           
+#>  5 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 2004       0002           
+#>  6 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 3005       0001           
+#>  7 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 2005       0001           
+#>  8 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 1004       0003           
+#>  9 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 3007       0002           
+#> 10 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 1005       0004           
+#> # ... with 27,010 more rows, and 44 more variables: date_of_birth <date>,
 #> #   age_at_art_initiation <dbl>, current_age <dbl>, art_start_date <date>,
 #> #   art_start_date_source <fct>, last_drug_pickup_date <date>,
 #> #   last_drug_pickup_date_q1 <date>, last_drug_pickup_date_q2 <date>,
@@ -187,20 +187,20 @@ ndr_example %>%
 ndr_example %>%
   tx_vl_eligible("2022-03-31",
                  sample = TRUE)
-#> # A tibble: 16,206 x 52
+#> # A tibble: 27,020 x 52
 #>    ip     state lga   facility datim_code sex   patient_identif~ hospital_number
 #>    <fct>  <fct> <fct> <fct>    <fct>      <fct> <chr>            <chr>          
-#>  1 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 2001       0001           
-#>  2 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 3001       0001           
-#>  3 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 1002       0001           
-#>  4 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 3005       0001           
-#>  5 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 2005       0001           
-#>  6 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 1004       0003           
-#>  7 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 3006       0002           
-#>  8 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 1005       0004           
-#>  9 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 3009       0004           
-#> 10 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 2009       0001           
-#> # ... with 16,196 more rows, and 44 more variables: date_of_birth <date>,
+#>  1 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 3001       0001           
+#>  2 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 1002       0001           
+#>  3 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 3003       0001           
+#>  4 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 1003       0002           
+#>  5 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 2004       0002           
+#>  6 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 3005       0001           
+#>  7 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 2005       0001           
+#>  8 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ M     State 1004       0003           
+#>  9 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 3007       0002           
+#> 10 IP_na~ Stat~ LGA0~ Facilit~ datim_cod~ F     State 1005       0004           
+#> # ... with 27,010 more rows, and 44 more variables: date_of_birth <date>,
 #> #   age_at_art_initiation <dbl>, current_age <dbl>, art_start_date <date>,
 #> #   art_start_date_source <fct>, last_drug_pickup_date <date>,
 #> #   last_drug_pickup_date_q1 <date>, last_drug_pickup_date_q2 <date>,
@@ -219,7 +219,7 @@ no_of_vl_eligible <- tx_vl_eligible(ndr_example,
 vl_coverage <- scales::percent(no_of_vl_results / no_of_vl_eligible)
 
 print(vl_coverage)
-#> [1] "1%"
+#> [1] "2%"
 ```
 
 For all the ‘Treatment’ and ‘Viral Suppression’ indicators (except
@@ -268,10 +268,13 @@ ml <- tx_ml(new_data = ndr_example, from = "2021-10-01", to = "2021-12-31")
 summarise_ndr(new, curr, ml,
               level = "state",
               names = c("tx_new", "tx_curr", "tx_ml"))
-#> # A tibble: 1 x 5
-#>   ip    state tx_new tx_curr tx_ml
-#>   <chr> <chr>  <int>   <int> <int>
-#> 1 Total -          0   16207     0
+#> # A tibble: 4 x 5
+#>   ip      state   tx_new tx_curr tx_ml
+#>   <chr>   <chr>    <int>   <int> <int>
+#> 1 Total   -            0   27020     0
+#> 2 IP_name State 1      0    5645     0
+#> 3 IP_name State 2      0    7929     0
+#> 4 IP_name State 3      0   13446     0
 ```
 
 The `disaggregate()` allows you to summarise an indicator of interest
@@ -288,23 +291,34 @@ new_clients <- tx_new(ndr_example, from = "2021-07-01", to = "2021-09-30")
 
 disaggregate(new_clients,
              by = "current_age", pivot_wide = FALSE)
-#> # A tibble: 1 x 4
-#>   ip    state current_age number
-#>   <chr> <chr> <chr>        <int>
-#> 1 Total -     -                0
+#> # A tibble: 65 x 4
+#>    ip      state   current_age number
+#>    <chr>   <chr>   <chr>        <int>
+#>  1 IP_name State 1 <1               0
+#>  2 IP_name State 1 1-4              0
+#>  3 IP_name State 1 5-9              0
+#>  4 IP_name State 1 10-14            0
+#>  5 IP_name State 1 15-19            0
+#>  6 IP_name State 1 20-24            0
+#>  7 IP_name State 1 25-29            0
+#>  8 IP_name State 1 30-34            0
+#>  9 IP_name State 1 35-39            0
+#> 10 IP_name State 1 40-44            0
+#> # ... with 55 more rows
 
 ## disaggregate 'TX_CURR' by sex
 
 ndr_example %>%
   tx_curr() %>%
   disaggregate(by = "sex")
-#> # A tibble: 4 x 5
-#>   ip      state    Male Female unknown
-#>   <chr>   <chr>   <int>  <int>   <int>
-#> 1 IP_name State 1  1050   2505       0
-#> 2 IP_name State 2  1539   3307       1
-#> 3 IP_name State 3  3354   4451       0
-#> 4 Total   -        5943  10263       1
+#> # A tibble: 5 x 5
+#>   ip      state      Male Female unknown
+#>   <chr>   <chr>     <int>  <int>   <int>
+#> 1 IP_name "State 1"  1661   3984       0
+#> 2 IP_name "State 2"  2335   5594       0
+#> 3 IP_name "State 3"  5894   7552       0
+#> 4 IP_name ""            0      0       0
+#> 5 Total   "-"        9890  17130       0
 ```
 
 ## Code of Conduct
