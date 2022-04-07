@@ -60,5 +60,5 @@
 #'   \item{date_lost}{The calculated expected LTFU date based on the last_drug_pick_up_date, days_of_arv_refill and 28 days missed appointment date}
 #'    \item{appointment_date}{The calculated expected next date of medication refill based on the last_drug_pick_up_date and days_of_arv_refill}
 #'   }
-#' @note for more information, kindly visit \url{https://ndr.shieldnigeriaproject.com/}
+#' @note for more information, kindly visit \url{https://ndr.phis3project.org.ng/}
 "ndr_example"

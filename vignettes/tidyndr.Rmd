@@ -20,7 +20,7 @@ set.seed(1014)
 >
 > \- Lord Kelvin
 
-The [Nigeria National Data Repository (NDR)](https://ndr.shieldnigeriaproject.com/) houses the de-identified patient-level information for the HIV program in Nigeria. Perhaps the most versatile feature of the repository is that it allows users with login access to download this patient-level information, analyze, and make informed decisions to improve the response of their program towards achieving the [UNAIDS](https://www.unaids.org/) **three 95s** targets.You can download "treatment", "recent infection" and "HTS" line lists.
+The [Nigeria National Data Repository (NDR)](https://ndr.phis3project.org.ng/) houses the de-identified patient-level information for the HIV program in Nigeria. Perhaps the most versatile feature of the repository is that it allows users with login access to download this patient-level information, analyze, and make informed decisions to improve the response of their program towards achieving the [UNAIDS](https://www.unaids.org/) **three 95s** targets.You can download "treatment", "recent infection" and "HTS" line lists.
 
 Analysis of the de-identified patient-level information is traditionally conducted in Microsoft Excel. While this provides a great platform, it has some downsides which include:
 

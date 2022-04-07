@@ -42,5 +42,5 @@
 #'   \item{pcr_lab}{laboratory where recency viral load is analyzed}
 #'   \item{x36}{column missing column name and containing negligible entries}
 #'   }
-#' @note for more information, kindly visit \url{https://ndr.shieldnigeriaproject.com/}
+#' @note for more information, kindly visit \url{https://ndr.phis3project.org.ng/}
 "recency_example"

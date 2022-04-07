@@ -53,6 +53,6 @@ A dataset of randomly generated HIV-1 recent infection line-list to simulate
 the NDR patient recency line-list.
 }
 \note{
-for more information, kindly visit \url{https://ndr.shieldnigeriaproject.com/}
+for more information, kindly visit \url{https://ndr.phis3project.org.ng/}
 }
 \keyword{datasets}

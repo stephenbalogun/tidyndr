@@ -71,6 +71,6 @@ Repository. Three additional variables are added for easy referencing during ana
 These variables are: \code{date_ltfu}, \code{appointment_date} and \code{current_status}.
 }
 \note{
-for more information, kindly visit \url{https://ndr.shieldnigeriaproject.com/}
+for more information, kindly visit \url{https://ndr.phis3project.org.ng/}
 }
 \keyword{datasets}
