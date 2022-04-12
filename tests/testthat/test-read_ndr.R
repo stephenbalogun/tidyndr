@@ -59,7 +59,7 @@ test_that("read_ndr() reads-in NDR '.csv' patient-level line-list", {
     names(
       suppressWarnings(
         vroom::vroom(file_path, col_types = cols) %>%
-          janitor::clean_names() %>%
+          dplyr::rename_with(snakecase::to_snake_case) %>%
           dplyr::mutate(
             date_lost = last_drug_pickup_date +
               lubridate::days(days_of_arv_refill) +

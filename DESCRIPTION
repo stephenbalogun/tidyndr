@@ -39,7 +39,8 @@ Imports:
     tibble,
     tidyr,
     vroom (>= 1.3.2),
-    tidyselect
+    tidyselect,
+    snakecase
 Suggests: 
     testthat (>= 3.0.0),
     knitr,
