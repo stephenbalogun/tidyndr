@@ -20,16 +20,15 @@
 #' )
 #'
 vl_cascade <- function(data,
-                        ref = NULL,
-                        states = NULL,
-                        facilities = NULL,
-                        status = "default",
-                        n = 1000,
-                        use_six_months = TRUE,
-                        remove_duplicates = FALSE,
+                       ref = NULL,
+                       states = NULL,
+                       facilities = NULL,
+                       status = "default",
+                       n = 1000,
+                       use_six_months = TRUE,
+                       remove_duplicates = FALSE,
                        .level = "state",
                        .names = NULL) {
-
   ref <- lubridate::ymd(ref %||% get("Sys.Date")())
 
   states <- states %||% unique(data$state)
@@ -43,15 +42,15 @@ vl_cascade <- function(data,
 
 
 validate_vl_cascade <- function(data,
-                              ref,
-                              states,
-                              facilities,
-                              status,
-                              n,
-                              use_six_months,
-                              remove_duplicates,
-                              .level,
-                              .names) {
+                                ref,
+                                states,
+                                facilities,
+                                status,
+                                n,
+                                use_six_months,
+                                remove_duplicates,
+                                .level,
+                                .names) {
   if (!all(states %in% unique(data$state))) {
     rlang::abort("state(s) is not contained in the supplied data. Check the spelling and/or case.")
   }
@@ -87,7 +86,7 @@ validate_vl_cascade <- function(data,
 
   if (!is.null(.names) && length(.names) != 5) {
     rlang::abort(
-      'the number of `.names` supplied should be equal to the number of the five viral load cascade indicators'
+      "the number of `.names` supplied should be equal to the number of the five viral load cascade indicators"
     )
   }
 
@@ -96,12 +95,10 @@ validate_vl_cascade <- function(data,
       "names must be supplied as characters. Did you forget to put the names in quotes?"
     )
   }
-
 }
 
 
 get_vl_cascade <- function(data, ref, states, facilities, status, n, use_six_months, remove_duplicates, .level, .names) {
-
   vl_eligible <- tx_vl_eligible(
     data,
     ref = ref,
@@ -143,14 +140,14 @@ get_vl_cascade <- function(data, ref, states, facilities, status, n, use_six_mon
   ) %>%
     dplyr::mutate(
       vl_coverage = janitor::round_half_up(
-        vl_result / vl_eligible * 100, digits = 3
+        vl_result / vl_eligible * 100,
+        digits = 3
       ),
       vl_suppression_rate = janitor::round_half_up(
-        vl_suppressed / vl_result * 100, digits = 3
+        vl_suppressed / vl_result * 100,
+        digits = 3
       )
     )
-
-
 }
 
 # utils::globalVariables(c(

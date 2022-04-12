@@ -43,13 +43,15 @@ read <- function(path, ...) {
 
 
 read.treatment <- function(path, time_stamp, cols = NULL, quiet = FALSE, ...) {
-  df <- tryCatch(error = function(cnd) {
-    dplyr::rename_with(vroom::vroom(path, col_types = old_cols(), ...), snakecase::to_snake_case)
-  },
-  dplyr::rename_with(
-    vroom::vroom(path,
-    col_types = cols %||% current_cols(),
-    ...), snakecase::to_snake_case
+  df <- tryCatch(
+    error = function(cnd) {
+      dplyr::rename_with(vroom::vroom(path, col_types = old_cols(), ...), snakecase::to_snake_case)
+    },
+    dplyr::rename_with(
+      vroom::vroom(path,
+        col_types = cols %||% current_cols(),
+        ...
+      ), snakecase::to_snake_case
     )
   )
   df <- dplyr::mutate(dplyr::rename_with(df, snakecase::to_snake_case),
@@ -78,7 +80,7 @@ read.hts <- function(path, cols = NULL, ...) {
     },
     dplyr::rename_with(
       vroom::vroom(path, col_types = cols %||% hts_cols(), na = c("NULL", ""), ...), snakecase::to_snake_case
-      )
+    )
   )
 }
 
@@ -91,7 +93,7 @@ read.recency <- function(path, cols = NULL, show_col = FALSE, ...) {
     },
     dplyr::rename_with(
       vroom::vroom(path, col_types = cols %||% recency_cols(), show_col_types = show_col, ...), snakecase::to_snake_case
-      )
+    )
   ) %>%
     purrr::modify_if(is.factor, ~ dplyr::na_if(., "NULL")) %>%
     purrr::modify_if(is.factor, forcats::fct_drop)

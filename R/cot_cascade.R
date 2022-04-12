@@ -22,18 +22,18 @@
 #' )
 #'
 cot_cascade <- function(data,
-                       quarter = NULL,
-                       ref = NULL,
-                       states = NULL,
-                       facilities = NULL,
-                       status = "default",
-                       remove_duplicates = FALSE,
-                       .level = "state",
-                       .names = NULL) {
-
+                        quarter = NULL,
+                        ref = NULL,
+                        states = NULL,
+                        facilities = NULL,
+                        status = "default",
+                        remove_duplicates = FALSE,
+                        .level = "state",
+                        .names = NULL) {
   quarter <- quarter %||% dplyr::if_else(lubridate::quarter(get("Sys.Date")()) <= 3,
-                            lubridate::quarter(get("Sys.Date")()) + 1,
-                            1)
+    lubridate::quarter(get("Sys.Date")()) + 1,
+    1
+  )
 
   states <- states %||% unique(data$state)
 
@@ -46,14 +46,14 @@ cot_cascade <- function(data,
 
 
 validate_cot_cascade <- function(data,
-                                quarter,
-                                ref,
-                                states,
-                                facilities,
-                                status,
-                                remove_duplicates,
-                                .level,
-                                .names) {
+                                 quarter,
+                                 ref,
+                                 states,
+                                 facilities,
+                                 status,
+                                 remove_duplicates,
+                                 .level,
+                                 .names) {
   if (!all(states %in% unique(data$state))) {
     rlang::abort("state(s) is not contained in the supplied data. Check the spelling and/or case.")
   }
@@ -89,7 +89,7 @@ validate_cot_cascade <- function(data,
 
   if (!is.null(.names) && length(.names) != 7) {
     rlang::abort(
-      'the number of `.names` supplied should be equal to the number of the six treatment continuity indicators'
+      "the number of `.names` supplied should be equal to the number of the six treatment continuity indicators"
     )
   }
 
@@ -98,255 +98,241 @@ validate_cot_cascade <- function(data,
       "names must be supplied as characters. Did you forget to put the names in quotes?"
     )
   }
-
 }
 
 
 get_cot_cascade <- function(data, quarter, ref, states, facilities, status, remove_duplicates, .level, .names) {
-
-
   switch(quarter,
+    `1` = {
+      start <- paste(
+        dplyr::if_else(lubridate::month(Sys.Date()) < 10, lubridate::year(Sys.Date()) - 1, lubridate::year(Sys.Date())),
+        "10",
+        "01",
+        sep = "-"
+      )
 
-         `1` = {
+      stop <- ref %||% (lubridate::`%m+%`(lubridate::ymd(start), lubridate::period(3, "months")) - 1)
 
-           start <- paste(
-             dplyr::if_else(lubridate::month(Sys.Date()) < 10, lubridate::year(Sys.Date()) - 1, lubridate::year(Sys.Date())),
-             "10",
-             "01",
-             sep = "-"
-           )
+      if (remove_duplicates) {
+        tx_curr_prev <- dplyr::distinct(
+          dplyr::filter(data, current_status_q4_28_days == "Active", state %in% states, facility %in% facilities),
+          facility, patient_identifier,
+          .keep_all = TRUE
+        )
+      } else {
+        tx_curr_prev <- dplyr::filter(data, current_status_q4_28_days == "Active", state %in% states, facility %in% facilities)
+      }
 
-           stop <- ref %||% (lubridate::`%m+%`(lubridate::ymd(start),  lubridate::period(3, "months")) - 1)
+      tx_new <- tx_new(
+        data,
+        from = start,
+        to = stop,
+        states = states,
+        facilities = facilities,
+        remove_duplicates = remove_duplicates
+      )
 
-           if (remove_duplicates) {
+      tx_ml <- tx_ml(
+        data,
+        from = start,
+        to = stop,
+        states = states,
+        facilities = facilities,
+        status = status,
+        remove_duplicates = remove_duplicates
+      )
 
-             tx_curr_prev <- dplyr::distinct(
-               dplyr::filter(data, current_status_q4_28_days == "Active", state %in% states, facility %in% facilities),
-               facility, patient_identifier, .keep_all = TRUE)
-           } else {
-             tx_curr_prev <- dplyr::filter(data, current_status_q4_28_days == "Active", state %in% states, facility %in% facilities)
-           }
+      tx_ml_dead <- tx_ml_outcomes(tx_ml, outcome = "dead")
 
-           tx_new <- tx_new(
-             data,
-             from = start,
-             to = stop,
-             states = states,
-             facilities = facilities,
-             remove_duplicates = remove_duplicates
-             )
+      tx_ml_to <- tx_ml_outcomes(tx_ml, outcome = "transferred out")
 
-           tx_ml <- tx_ml(
-             data,
-             from = start,
-             to = stop,
-             states = states,
-             facilities = facilities,
-             status = status,
-             remove_duplicates = remove_duplicates
-           )
+      summarise_ndr(
+        tx_curr_prev,
+        tx_new,
+        tx_ml,
+        tx_ml_dead,
+        tx_ml_to,
+        level = .level,
+        names = .names
+      ) %>%
+        dplyr::mutate(
+          tx_ml_iit = tx_ml - tx_ml_dead - tx_ml_to,
+          iit_rate = janitor::round_half_up(tx_ml_iit / (tx_curr_prev + tx_new) * 100, digits = 3)
+        )
+    },
+    `2` = {
+      start <- paste(
+        lubridate::year(Sys.Date()),
+        "01",
+        "01",
+        sep = "-"
+      )
 
-           tx_ml_dead <- tx_ml_outcomes(tx_ml, outcome = "dead")
+      stop <- ref %||% (lubridate::`%m+%`(lubridate::ymd(start), lubridate::period(3, "months")) - 1)
 
-           tx_ml_to <- tx_ml_outcomes(tx_ml, outcome = "transferred out")
-
-           summarise_ndr(
-             tx_curr_prev,
-             tx_new,
-             tx_ml,
-             tx_ml_dead,
-             tx_ml_to,
-             level = .level,
-             names = .names
-           ) %>%
-             dplyr::mutate(
-               tx_ml_iit = tx_ml - tx_ml_dead - tx_ml_to,
-
-               iit_rate = janitor::round_half_up(tx_ml_iit / (tx_curr_prev + tx_new) * 100, digits = 3)
-             )
-
-         },
-
-         `2` = {
-           start <- paste(
-             lubridate::year(Sys.Date()),
-             "01",
-             "01",
-             sep = "-"
-           )
-
-           stop <- ref %||% (lubridate::`%m+%`(lubridate::ymd(start), lubridate::period(3, "months")) - 1)
-
-           if (remove_duplicates) {
-
-             tx_curr_prev <- dplyr::distinct(
-               dplyr::filter(data, current_status_q1_28_days == "Active", state %in% states, facility %in% facilities),
-               facility, patient_identifier, .keep_all = TRUE)
-           } else {
-             tx_curr_prev <- dplyr::filter(data, current_status_q1_28_days == "Active", state %in% states, facility %in% facilities)
-           }
+      if (remove_duplicates) {
+        tx_curr_prev <- dplyr::distinct(
+          dplyr::filter(data, current_status_q1_28_days == "Active", state %in% states, facility %in% facilities),
+          facility, patient_identifier,
+          .keep_all = TRUE
+        )
+      } else {
+        tx_curr_prev <- dplyr::filter(data, current_status_q1_28_days == "Active", state %in% states, facility %in% facilities)
+      }
 
 
-           tx_new <- tx_new(
-             data,
-             from = start,
-             to = stop,
-             states = states,
-             facilities = facilities,
-             remove_duplicates = remove_duplicates
-           )
+      tx_new <- tx_new(
+        data,
+        from = start,
+        to = stop,
+        states = states,
+        facilities = facilities,
+        remove_duplicates = remove_duplicates
+      )
 
-           tx_ml <- tx_ml(
-             data,
-             from = start,
-             to = stop,
-             states = states,
-             facilities = facilities,
-             status = status,
-             remove_duplicates = remove_duplicates
-           )
+      tx_ml <- tx_ml(
+        data,
+        from = start,
+        to = stop,
+        states = states,
+        facilities = facilities,
+        status = status,
+        remove_duplicates = remove_duplicates
+      )
 
-           tx_ml_dead <- tx_ml_outcomes(tx_ml, outcome = "dead")
+      tx_ml_dead <- tx_ml_outcomes(tx_ml, outcome = "dead")
 
-           tx_ml_to <- tx_ml_outcomes(tx_ml, outcome = "transferred out")
+      tx_ml_to <- tx_ml_outcomes(tx_ml, outcome = "transferred out")
 
-           summarise_ndr(
-             tx_curr_prev,
-             tx_new,
-             tx_ml,
-             tx_ml_dead,
-             tx_ml_to,
-             level = .level,
-             names = .names
-           ) %>%
-             dplyr::mutate(
-               tx_ml_iit = tx_ml - tx_ml_dead - tx_ml_to,
+      summarise_ndr(
+        tx_curr_prev,
+        tx_new,
+        tx_ml,
+        tx_ml_dead,
+        tx_ml_to,
+        level = .level,
+        names = .names
+      ) %>%
+        dplyr::mutate(
+          tx_ml_iit = tx_ml - tx_ml_dead - tx_ml_to,
+          iit_rate = janitor::round_half_up(tx_ml_iit / (tx_curr_prev + tx_new) * 100, digits = 3)
+        )
+    },
+    `3` = {
+      start <- paste(
+        lubridate::year(Sys.Date()),
+        "04",
+        "01",
+        sep = "-"
+      )
 
-               iit_rate = janitor::round_half_up(tx_ml_iit / (tx_curr_prev + tx_new) * 100, digits = 3)
-             )
+      stop <- ref %||% (lubridate::`%m+%`(lubridate::ymd(start), lubridate::period(3, "months")) - 1)
 
-         },
+      if (remove_duplicates) {
+        tx_curr_prev <- dplyr::distinct(
+          dplyr::filter(data, current_status_q2_28_days == "Active", state %in% states, facility %in% facilities),
+          facility, patient_identifier,
+          .keep_all = TRUE
+        )
+      } else {
+        tx_curr_prev <- dplyr::filter(data, current_status_q2_28_days == "Active", state %in% states, facility %in% facilities)
+      }
 
-         `3` = {
-           start <- paste(
-             lubridate::year(Sys.Date()),
-             "04",
-             "01",
-             sep = "-"
-           )
+      tx_new <- tx_new(
+        data,
+        from = start,
+        to = stop,
+        states = states,
+        facilities = facilities,
+        remove_duplicates = remove_duplicates
+      )
 
-           stop <- ref %||% (lubridate::`%m+%`(lubridate::ymd(start), lubridate::period(3, "months")) - 1)
+      tx_ml <- tx_ml(
+        data,
+        from = start,
+        to = stop,
+        states = states,
+        facilities = facilities,
+        status = status,
+        remove_duplicates = remove_duplicates
+      )
 
-           if (remove_duplicates) {
+      tx_ml_dead <- tx_ml_outcomes(tx_ml, outcome = "dead")
 
-             tx_curr_prev <- dplyr::distinct(
-               dplyr::filter(data, current_status_q2_28_days == "Active", state %in% states, facility %in% facilities),
-               facility, patient_identifier, .keep_all = TRUE)
-           } else {
-             tx_curr_prev <- dplyr::filter(data, current_status_q2_28_days == "Active", state %in% states, facility %in% facilities)
-           }
+      tx_ml_to <- tx_ml_outcomes(tx_ml, outcome = "transferred out")
 
-           tx_new <- tx_new(
-             data,
-             from = start,
-             to = stop,
-             states = states,
-             facilities = facilities,
-             remove_duplicates = remove_duplicates
-           )
+      summarise_ndr(
+        tx_curr_prev,
+        tx_new,
+        tx_ml,
+        tx_ml_dead,
+        tx_ml_to,
+        level = .level,
+        names = .names
+      ) %>%
+        dplyr::mutate(
+          tx_ml_iit = tx_ml - tx_ml_dead - tx_ml_to,
+          iit_rate = janitor::round_half_up(tx_ml_iit / (tx_curr_prev + tx_new) * 100, digits = 3)
+        )
+    },
+    `4` = {
+      start <- paste(
+        lubridate::year(Sys.Date()),
+        "07",
+        "01",
+        sep = "-"
+      )
 
-           tx_ml <- tx_ml(
-             data,
-             from = start,
-             to = stop,
-             states = states,
-             facilities = facilities,
-             status = status,
-             remove_duplicates = remove_duplicates
-           )
+      stop <- ref %||% (lubridate::`%m+%`(lubridate::ymd(start), lubridate::period(3, "months")) - 1)
 
-           tx_ml_dead <- tx_ml_outcomes(tx_ml, outcome = "dead")
+      if (remove_duplicates) {
+        tx_curr_prev <- dplyr::distinct(
+          dplyr::filter(data, current_status_q3_28_days == "Active", state %in% states, facility %in% facilities),
+          facility, patient_identifier,
+          .keep_all = TRUE
+        )
+      } else {
+        tx_curr_prev <- dplyr::filter(data, current_status_q3_28_days == "Active", state %in% states, facility %in% facilities)
+      }
 
-           tx_ml_to <- tx_ml_outcomes(tx_ml, outcome = "transferred out")
+      tx_new <- tx_new(
+        data,
+        from = start,
+        to = stop,
+        states = states,
+        facilities = facilities,
+        remove_duplicates = remove_duplicates
+      )
 
-           summarise_ndr(
-             tx_curr_prev,
-             tx_new,
-             tx_ml,
-             tx_ml_dead,
-             tx_ml_to,
-             level = .level,
-             names = .names
-           ) %>%
-             dplyr::mutate(
-               tx_ml_iit = tx_ml - tx_ml_dead - tx_ml_to,
+      tx_ml <- tx_ml(
+        data,
+        from = start,
+        to = stop,
+        states = states,
+        facilities = facilities,
+        status = status,
+        remove_duplicates = remove_duplicates
+      )
 
-               iit_rate = janitor::round_half_up(tx_ml_iit / (tx_curr_prev + tx_new) * 100, digits = 3)
-             )
+      tx_ml_dead <- tx_ml_outcomes(tx_ml, outcome = "dead")
 
-         },
+      tx_ml_to <- tx_ml_outcomes(tx_ml, outcome = "transferred out")
 
-         `4` = {
-           start <- paste(
-             lubridate::year(Sys.Date()),
-             "07",
-             "01",
-             sep = "-"
-           )
-
-           stop <- ref %||% (lubridate::`%m+%`(lubridate::ymd(start), lubridate::period(3, "months")) - 1)
-
-           if (remove_duplicates) {
-
-             tx_curr_prev <- dplyr::distinct(
-               dplyr::filter(data, current_status_q3_28_days == "Active", state %in% states, facility %in% facilities),
-               facility, patient_identifier, .keep_all = TRUE)
-           } else {
-             tx_curr_prev <- dplyr::filter(data, current_status_q3_28_days == "Active", state %in% states, facility %in% facilities)
-           }
-
-           tx_new <- tx_new(
-             data,
-             from = start,
-             to = stop,
-             states = states,
-             facilities = facilities,
-             remove_duplicates = remove_duplicates
-           )
-
-           tx_ml <- tx_ml(
-             data,
-             from = start,
-             to = stop,
-             states = states,
-             facilities = facilities,
-             status = status,
-             remove_duplicates = remove_duplicates
-           )
-
-           tx_ml_dead <- tx_ml_outcomes(tx_ml, outcome = "dead")
-
-           tx_ml_to <- tx_ml_outcomes(tx_ml, outcome = "transferred out")
-
-           summarise_ndr(
-             tx_curr_prev,
-             tx_new,
-             tx_ml,
-             tx_ml_dead,
-             tx_ml_to,
-             level = .level,
-             names = .names
-           ) %>%
-             dplyr::mutate(
-               tx_ml_iit = tx_ml - tx_ml_dead - tx_ml_to,
-
-               iit_rate = janitor::round_half_up(tx_ml_iit / (tx_curr_prev + tx_new) * 100, digits = 3)
-             )
-
-         }
+      summarise_ndr(
+        tx_curr_prev,
+        tx_new,
+        tx_ml,
+        tx_ml_dead,
+        tx_ml_to,
+        level = .level,
+        names = .names
+      ) %>%
+        dplyr::mutate(
+          tx_ml_iit = tx_ml - tx_ml_dead - tx_ml_to,
+          iit_rate = janitor::round_half_up(tx_ml_iit / (tx_curr_prev + tx_new) * 100, digits = 3)
+        )
+    }
   )
-
-
 }
 
 
