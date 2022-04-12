@@ -118,7 +118,14 @@ get_cot_cascade <- function(data, quarter, ref, states, facilities, status, remo
 
            stop <- ref %||% (lubridate::`%m+%`(lubridate::ymd(start),  lubridate::period(3, "months")) - 1)
 
-           tx_curr_prev <- dplyr::filter(data, current_status_q4_28_days == "Active", state %in% states, facility %in% facilities)
+           if (remove_duplicates) {
+
+             tx_curr_prev <- dplyr::distinct(
+               dplyr::filter(data, current_status_q4_28_days == "Active", state %in% states, facility %in% facilities),
+               facility, patient_identifier, .keep_all = TRUE)
+           } else {
+             tx_curr_prev <- dplyr::filter(data, current_status_q4_28_days == "Active", state %in% states, facility %in% facilities)
+           }
 
            tx_new <- tx_new(
              data,
@@ -170,7 +177,15 @@ get_cot_cascade <- function(data, quarter, ref, states, facilities, status, remo
 
            stop <- ref %||% (lubridate::`%m+%`(lubridate::ymd(start), lubridate::period(3, "months")) - 1)
 
-           tx_curr_prev <- dplyr::filter(data, current_status_q1_28_days == "Active")
+           if (remove_duplicates) {
+
+             tx_curr_prev <- dplyr::distinct(
+               dplyr::filter(data, current_status_q1_28_days == "Active", state %in% states, facility %in% facilities),
+               facility, patient_identifier, .keep_all = TRUE)
+           } else {
+             tx_curr_prev <- dplyr::filter(data, current_status_q1_28_days == "Active", state %in% states, facility %in% facilities)
+           }
+
 
            tx_new <- tx_new(
              data,
@@ -222,7 +237,14 @@ get_cot_cascade <- function(data, quarter, ref, states, facilities, status, remo
 
            stop <- ref %||% (lubridate::`%m+%`(lubridate::ymd(start), lubridate::period(3, "months")) - 1)
 
-           tx_curr_prev <- dplyr::filter(data, current_status_q2_28_days == "Active")
+           if (remove_duplicates) {
+
+             tx_curr_prev <- dplyr::distinct(
+               dplyr::filter(data, current_status_q2_28_days == "Active", state %in% states, facility %in% facilities),
+               facility, patient_identifier, .keep_all = TRUE)
+           } else {
+             tx_curr_prev <- dplyr::filter(data, current_status_q2_28_days == "Active", state %in% states, facility %in% facilities)
+           }
 
            tx_new <- tx_new(
              data,
@@ -274,7 +296,14 @@ get_cot_cascade <- function(data, quarter, ref, states, facilities, status, remo
 
            stop <- ref %||% (lubridate::`%m+%`(lubridate::ymd(start), lubridate::period(3, "months")) - 1)
 
-           tx_curr_prev <- dplyr::filter(data, current_status_q3_28_days == "Active")
+           if (remove_duplicates) {
+
+             tx_curr_prev <- dplyr::distinct(
+               dplyr::filter(data, current_status_q3_28_days == "Active", state %in% states, facility %in% facilities),
+               facility, patient_identifier, .keep_all = TRUE)
+           } else {
+             tx_curr_prev <- dplyr::filter(data, current_status_q3_28_days == "Active", state %in% states, facility %in% facilities)
+           }
 
            tx_new <- tx_new(
              data,
