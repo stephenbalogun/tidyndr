@@ -16,6 +16,9 @@ Authors@R:
             person(given = "Temitope",
            family = "Kolade",
            role = "ctb"),
+           person(given = "Kehinde",
+           family = "Balogun",
+           role = "ctb"),
             person(given = "Geraldine",
            family = "Abone",
            role = "ctb"))

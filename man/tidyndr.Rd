@@ -25,6 +25,7 @@ Other contributors:
   \item Scholastica Olanrewaju [contributor]
   \item Oluwaseun Okunuga [contributor]
   \item Temitope Kolade [contributor]
+  \item Kehinde Balogun [contributor]
   \item Geraldine Abone [contributor]
 }
 
