@@ -8,6 +8,7 @@
 #' @param ref the referenced date for the analysis. If this is not set (i.e. `NULL`) it will be assumed to be the last day of the quarter.
 #' @param .level the level at which the aggregate summary should be performed. The options are "ip", "country", "state", "lga" and "facility".
 #' @param .names if specified, these will be used for naming of the viral load indicators instead of the default.
+#' @param .disagg if specified, the cot_cascade will be disaggregated using "age", "sex", "age_sex", "pregnancy_status", "art_duration" or "months_dispensed".
 #'
 #' @return summary of treatment continuity indicators
 #' @export
@@ -29,7 +30,8 @@ cot_cascade <- function(data,
                         status = "default",
                         remove_duplicates = FALSE,
                         .level = "state",
-                        .names = NULL) {
+                        .names = NULL,
+                        .disagg = NULL) {
   quarter <- quarter %||% dplyr::if_else(lubridate::quarter(get("Sys.Date")()) <= 3,
     lubridate::quarter(get("Sys.Date")()) + 1,
     1
@@ -39,9 +41,9 @@ cot_cascade <- function(data,
 
   facilities <- facilities %||% unique(subset(data, state %in% states)$facility)
 
-  validate_cot_cascade(data, quarter, ref, states, facilities, status, remove_duplicates, .level, .names)
+  validate_cot_cascade(data, quarter, ref, states, facilities, status, remove_duplicates, .level, .names, .disagg)
 
-  get_cot_cascade(data, quarter, ref, states, facilities, status, remove_duplicates, .level, .names)
+  get_cot_cascade(data, quarter, ref, states, facilities, status, remove_duplicates, .level, .names, .disagg)
 }
 
 
@@ -53,7 +55,8 @@ validate_cot_cascade <- function(data,
                                  status,
                                  remove_duplicates,
                                  .level,
-                                 .names) {
+                                 .names,
+                                 .disagg) {
   if (!all(states %in% unique(data$state))) {
     rlang::abort("state(s) is not contained in the supplied data. Check the spelling and/or case.")
   }
@@ -98,10 +101,15 @@ validate_cot_cascade <- function(data,
       "names must be supplied as characters. Did you forget to put the names in quotes?"
     )
   }
+
+  if (!any(.disagg %in% c("current_age", "sex", "art_duration", "months_dispensed", "pregnancy_status", "age_sex")) &&
+    !is.null(.disagg)) {
+    rlang::abort(".disagg must be one of 'current_age', 'sex', 'art_duration', 'months_dispensed', 'pregnancy_status' or 'age_sex'")
+  }
 }
 
 
-get_cot_cascade <- function(data, quarter, ref, states, facilities, status, remove_duplicates, .level, .names) {
+get_cot_cascade <- function(data, quarter, ref, states, facilities, status, remove_duplicates, .level, .names, .disagg) {
   switch(quarter,
     `1` = {
       start <- paste(
@@ -145,20 +153,6 @@ get_cot_cascade <- function(data, quarter, ref, states, facilities, status, remo
       tx_ml_dead <- tx_ml_outcomes(tx_ml, outcome = "dead")
 
       tx_ml_to <- tx_ml_outcomes(tx_ml, outcome = "transferred out")
-
-      summarise_ndr(
-        tx_curr_prev,
-        tx_new,
-        tx_ml,
-        tx_ml_dead,
-        tx_ml_to,
-        level = .level,
-        names = .names
-      ) %>%
-        dplyr::mutate(
-          tx_ml_iit = tx_ml - tx_ml_dead - tx_ml_to,
-          iit_rate = janitor::round_half_up(tx_ml_iit / (tx_curr_prev + tx_new) * 100, digits = 3)
-        )
     },
     `2` = {
       start <- paste(
@@ -203,20 +197,6 @@ get_cot_cascade <- function(data, quarter, ref, states, facilities, status, remo
       tx_ml_dead <- tx_ml_outcomes(tx_ml, outcome = "dead")
 
       tx_ml_to <- tx_ml_outcomes(tx_ml, outcome = "transferred out")
-
-      summarise_ndr(
-        tx_curr_prev,
-        tx_new,
-        tx_ml,
-        tx_ml_dead,
-        tx_ml_to,
-        level = .level,
-        names = .names
-      ) %>%
-        dplyr::mutate(
-          tx_ml_iit = tx_ml - tx_ml_dead - tx_ml_to,
-          iit_rate = janitor::round_half_up(tx_ml_iit / (tx_curr_prev + tx_new) * 100, digits = 3)
-        )
     },
     `3` = {
       start <- paste(
@@ -260,20 +240,6 @@ get_cot_cascade <- function(data, quarter, ref, states, facilities, status, remo
       tx_ml_dead <- tx_ml_outcomes(tx_ml, outcome = "dead")
 
       tx_ml_to <- tx_ml_outcomes(tx_ml, outcome = "transferred out")
-
-      summarise_ndr(
-        tx_curr_prev,
-        tx_new,
-        tx_ml,
-        tx_ml_dead,
-        tx_ml_to,
-        level = .level,
-        names = .names
-      ) %>%
-        dplyr::mutate(
-          tx_ml_iit = tx_ml - tx_ml_dead - tx_ml_to,
-          iit_rate = janitor::round_half_up(tx_ml_iit / (tx_curr_prev + tx_new) * 100, digits = 3)
-        )
     },
     `4` = {
       start <- paste(
@@ -317,22 +283,53 @@ get_cot_cascade <- function(data, quarter, ref, states, facilities, status, remo
       tx_ml_dead <- tx_ml_outcomes(tx_ml, outcome = "dead")
 
       tx_ml_to <- tx_ml_outcomes(tx_ml, outcome = "transferred out")
-
-      summarise_ndr(
-        tx_curr_prev,
-        tx_new,
-        tx_ml,
-        tx_ml_dead,
-        tx_ml_to,
-        level = .level,
-        names = .names
-      ) %>%
-        dplyr::mutate(
-          tx_ml_iit = tx_ml - tx_ml_dead - tx_ml_to,
-          iit_rate = janitor::round_half_up(tx_ml_iit / (tx_curr_prev + tx_new) * 100, digits = 3)
-        )
     }
   )
+
+
+  if (is.null(.disagg)) {
+    summarise_ndr(
+      tx_curr_prev,
+      tx_new,
+      tx_ml,
+      tx_ml_dead,
+      tx_ml_to,
+      level = .level,
+      names = .names
+    ) %>%
+      dplyr::mutate(
+        tx_ml_iit = tx_ml - tx_ml_dead - tx_ml_to,
+        iit_rate = janitor::round_half_up(tx_ml_iit / (tx_curr_prev + tx_new) * 100, digits = 3)
+      )
+  } else {
+    tx_curr_prev %>%
+      disaggregate(by = .disagg, level = .level, pivot_wide = FALSE) %>%
+      dplyr::rename(tx_curr_prev = number) %>%
+      dplyr::full_join(
+        tx_new %>%
+          disaggregate(by = .disagg, level = .level, pivot_wide = FALSE) %>%
+          dplyr::rename(tx_new = number)
+      ) %>%
+      dplyr::full_join(
+        tx_ml %>%
+          disaggregate(by = .disagg, level = .level, pivot_wide = FALSE) %>%
+          dplyr::rename(tx_ml = number)
+      ) %>%
+      dplyr::full_join(
+        tx_ml_dead %>%
+          disaggregate(by = .disagg, level = .level, pivot_wide = FALSE) %>%
+          dplyr::rename(tx_ml_dead = number)
+      ) %>%
+      dplyr::full_join(
+        tx_ml_to %>%
+          disaggregate(by = .disagg, level = .level, pivot_wide = FALSE) %>%
+          dplyr::rename(tx_ml_to = number)
+      ) %>%
+      dplyr::mutate(
+        tx_ml_iit = tx_ml - tx_ml_dead - tx_ml_to,
+        iit_rate = janitor::round_half_up(tx_ml_iit / (tx_curr_prev + tx_new) * 100, digits = 3)
+      )
+  }
 }
 
 
@@ -342,5 +339,6 @@ utils::globalVariables(c(
   "current_status_q1_28_days",
   "current_status_q2_28_days",
   "current_status_q3_28_days",
-  "tx_ml_iit"
+  "tx_ml_iit",
+  "number"
 ))

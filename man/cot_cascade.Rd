@@ -13,7 +13,8 @@ cot_cascade(
   status = "default",
   remove_duplicates = FALSE,
   .level = "state",
-  .names = NULL
+  .names = NULL,
+  .disagg = NULL
 )
 }
 \arguments{
@@ -41,6 +42,8 @@ or the derived current_status column ("calculated").}
 \item{.level}{the level at which the aggregate summary should be performed. The options are "ip", "country", "state", "lga" and "facility".}
 
 \item{.names}{if specified, these will be used for naming of the viral load indicators instead of the default.}
+
+\item{.disagg}{if specified, the cot_cascade will be disaggregated using "age", "sex", "age_sex", "pregnancy_status", "art_duration" or "months_dispensed".}
 }
 \value{
 summary of treatment continuity indicators

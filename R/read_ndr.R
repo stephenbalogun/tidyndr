@@ -43,18 +43,13 @@ read <- function(path, ...) {
 
 
 read.treatment <- function(path, time_stamp, cols = NULL, quiet = FALSE, ...) {
-  df <- tryCatch(
-    error = function(cnd) {
-      dplyr::rename_with(vroom::vroom(path, col_types = old_cols(), ...), snakecase::to_snake_case)
-    },
-    dplyr::rename_with(
-      vroom::vroom(path,
-        col_types = cols %||% current_cols(),
-        ...
-      ), snakecase::to_snake_case
-    )
-  )
-  df <- dplyr::mutate(dplyr::rename_with(df, snakecase::to_snake_case),
+  df <- tryCatch(error = function(cnd) {
+    vroom::vroom(path, col_types = old_cols(), ...)
+  }, vroom::vroom(path,
+    col_types = cols %||% current_cols(),
+    ...
+  ))
+  df <- dplyr::mutate(janitor::clean_names(df),
     date_lost = last_drug_pickup_date +
       lubridate::days(days_of_arv_refill) + lubridate::days(28),
     appointment_date = last_drug_pickup_date + lubridate::days(days_of_arv_refill),
@@ -65,8 +60,6 @@ read.treatment <- function(path, time_stamp, cols = NULL, quiet = FALSE, ...) {
   if (!quiet) {
     message("\nThree new variables created: \n[1] `date_lost` \n[2] `appointment_date \n[2] `current_status\n")
   }
-
-
   return(df)
 }
 
@@ -74,27 +67,28 @@ read.treatment <- function(path, time_stamp, cols = NULL, quiet = FALSE, ...) {
 
 
 read.hts <- function(path, cols = NULL, ...) {
-  tryCatch(
-    error = function(cnd) {
-      dplyr::rename_with(vroom::vroom(path), snakecase::to_snake_case)
-    },
-    dplyr::rename_with(
-      vroom::vroom(path, col_types = cols %||% hts_cols(), na = c("NULL", ""), ...), snakecase::to_snake_case
-    )
-  )
+  df <- tryCatch(error = function(cnd) {
+    vroom::vroom(path)
+  }, vroom::vroom(path, col_types = cols %||% hts_cols(), na = c(
+    "NULL",
+    ""
+  ), ...))
+  return(janitor::clean_names(df))
 }
 
 
 
 read.recency <- function(path, cols = NULL, show_col = FALSE, ...) {
-  tryCatch(
-    error = function(cnd) {
-      dplyr::rename_with(vroom::vroom(path, show_col_types = show_col), snakecase::to_snake_case)
-    },
-    dplyr::rename_with(
-      vroom::vroom(path, col_types = cols %||% recency_cols(), show_col_types = show_col, ...), snakecase::to_snake_case
-    )
-  ) %>%
-    purrr::modify_if(is.factor, ~ dplyr::na_if(., "NULL")) %>%
+  df <- tryCatch(error = function(cnd) {
+    vroom::vroom(path)
+  }, vroom::vroom(path,
+    col_types = cols %||% recency_cols(),
+    ...
+  )) %>%
+    purrr::modify_if(is.factor, ~ dplyr::na_if(
+      .,
+      "NULL"
+    )) %>%
     purrr::modify_if(is.factor, forcats::fct_drop)
+  return(janitor::clean_names(df))
 }

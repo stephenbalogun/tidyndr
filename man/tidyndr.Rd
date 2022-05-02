@@ -24,8 +24,8 @@ Other contributors:
 \itemize{
   \item Scholastica Olanrewaju [contributor]
   \item Oluwaseun Okunuga [contributor]
-  \item Temitope Kolade [contributor]
   \item Kehinde Balogun [contributor]
+  \item Temitope Kolade [contributor]
   \item Geraldine Abone [contributor]
 }
 
