@@ -20,7 +20,7 @@ cot_cascade(
 \arguments{
 \item{data}{An NDR dataframe imported using the \code{read_ndr()}.}
 
-\item{quarter}{the quarter of the fiscal year for which the treatment continuity indicators should be calculated.}
+\item{quarter}{the quarter of the fiscal year (based on the PEPFAR calendar) for which the treatment continuity indicators should be calculated.}
 
 \item{ref}{the referenced date for the analysis. If this is not set (i.e. \code{NULL}) it will be assumed to be the last day of the quarter.}
 

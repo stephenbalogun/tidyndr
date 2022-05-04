@@ -75,8 +75,8 @@ get_tx_regimen <- function(data, age_band, states, facilities, status, remove_du
       dplyr::if_else(
         current_age <= 3,
         last_regimen %in% c(
-          "ABC-3TC-LPV/r",
-          "AZT-3TC-LPV/r"
+          "AZT-3TC-DTG",
+          "ABC-3TC-DTG"
         ),
         last_regimen %in% c(
           "ABC-3TC-DTG",
@@ -98,8 +98,8 @@ get_tx_regimen <- function(data, age_band, states, facilities, status, remove_du
       dplyr::if_else(
         current_age <= 3,
         last_regimen %in% c(
-          "ABC-3TC-LPV/r",
-          "AZT-3TC-LPV/r"
+          "AZT-3TC-DTG",
+          "ABC-3TC-DTG"
         ),
         last_regimen %in% c(
           "ABC-3TC-DTG",

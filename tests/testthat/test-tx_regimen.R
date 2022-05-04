@@ -7,8 +7,8 @@ test_that("tx_regimen works", {
         dplyr::if_else(
           current_age <= 3,
           last_regimen %in% c(
-            "ABC-3TC-LPV/r",
-            "AZT-3TC-LPV/r"
+            "AZT-3TC-DTG",
+            "ABC-3TC-DTG"
           ),
           last_regimen %in% c(
             "ABC-3TC-DTG",

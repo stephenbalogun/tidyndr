@@ -4,7 +4,7 @@
 #' `tx_curr` (previous quarter), `tx_new`, `tx_ml`, `tx_ml_dead`, `tx_ml_to`, `tx_ml_iit`, and `iit_rate`.
 #'
 #' @inheritParams tx_curr
-#' @param quarter the quarter of the fiscal year for which the treatment continuity indicators should be calculated.
+#' @param quarter the quarter of the fiscal year (based on the PEPFAR calendar) for which the treatment continuity indicators should be calculated.
 #' @param ref the referenced date for the analysis. If this is not set (i.e. `NULL`) it will be assumed to be the last day of the quarter.
 #' @param .level the level at which the aggregate summary should be performed. The options are "ip", "country", "state", "lga" and "facility".
 #' @param .names if specified, these will be used for naming of the viral load indicators instead of the default.
@@ -73,6 +73,25 @@ validate_cot_cascade <- function(data,
   if (!is.null(quarter) && quarter > 4) {
     rlang::abort("Kindly supply a whole number between 1 and 4 corresponding to the quarter of the fiscal year")
   }
+
+  if (quarter == 1 && !is.null(ref) && !dplyr::between(lubridate::month(lubridate::ymd(ref)), 10, 12)) {
+    rlang::abort("The date referenced appears not to be in Quarter 1 of the PEPFAR FY")
+  }
+
+
+  if (quarter == 2 && !is.null(ref) && !dplyr::between(lubridate::month(lubridate::ymd(ref)), 1, 3)) {
+    rlang::abort("The date referenced appears not to be in Quarter 2 of the PEPFAR FY")
+  }
+
+  if (quarter == 3 && !is.null(ref) && !dplyr::between(lubridate::month(lubridate::ymd(ref)), 4, 6)) {
+    rlang::abort("The date referenced appears not to be in Quarter 3 of the PEPFAR FY")
+  }
+
+
+  if (quarter == 4 && !is.null(ref) && !dplyr::between(lubridate::month(lubridate::ymd(ref)), 7, 9)) {
+    rlang::abort("The date referenced appears not to be in Quarter 4 of the PEPFAR FY")
+  }
+
 
   if (!is.null(ref) && is.na(ref)) {
     rlang::abort("The supplied date is not in 'yyyy-mm-dd' format.")
