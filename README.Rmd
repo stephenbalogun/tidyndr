@@ -19,7 +19,8 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/stephenbalogun/tidyndr/workflows/R-CMD-check/badge.svg)](https://github.com/stephenbalogun/tidyndr/actions) [![Codecov test coverage](https://codecov.io/gh/stephenbalogun/tidyndr/branch/master/graph/badge.svg)](https://app.codecov.io/gh/stephenbalogun/tidyndr?branch=master/)
 [![CRAN status](https://www.r-pkg.org/badges/version/tidyndr)](https://CRAN.R-project.org/package=tidyndr)
-<!-- [![R-CMD-check](https://github.com/stephenbalogun/tidyndr/workflows/R-CMD-check/badge.svg)](https://github.com/stephenbalogun/tidyndr/actions) -->
+ [![Total CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/tidyndr?color=blue)](https://cranlogs.r-pkg.org/#badges)
+  [![Monthly CRAN downloads](https://cranlogs.r-pkg.org/badges/tidyndr)](https://cranlogs.r-pkg.org/#badges)
 <!-- badges: end -->
 
 The goal of {tidyndr} is to provide a specialized, simple and easy to use functions that wrap around existing functions in `R` for manipulation of the [NDR](https://ndr.phis3project.org.ng/) patient line-list file allowing the user to focus on the tasks to be completed rather than the code/formula details.
