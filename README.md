@@ -14,6 +14,7 @@ status](https://www.r-pkg.org/badges/version/tidyndr)](https://CRAN.R-project.or
 downloads](https://cranlogs.r-pkg.org/badges/grand-total/tidyndr?color=blue)](https://cranlogs.r-pkg.org/#badges)
 [![Monthly CRAN
 downloads](https://cranlogs.r-pkg.org/badges/tidyndr)](https://cranlogs.r-pkg.org/#badges)
+
 <!-- badges: end -->
 
 The goal of {tidyndr} is to provide a specialized, simple and easy to
@@ -41,7 +42,7 @@ and are currently grouped into four categories:
 
 ## Installation
 
-You can install the released version of tidyndr from
+You can install the released version of {tidyndr} from
 [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
@@ -326,7 +327,7 @@ ndr_example %>%
 
 ## Code of Conduct
 
-Please note that the tidyndr project is released with a [Contributor
+Please note that the {tidyndr} project is released with a [Contributor
 Code of
 Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html).
 By contributing to this project, you agree to abide by its terms.

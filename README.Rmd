@@ -17,10 +17,9 @@ knitr::opts_chunk$set(
 <!-- <a href='https://github.com/stephenbalogun/tidyndr/tree/master/man/figures/logo.svg'><img src="man/figures/logo.svg" align="right" height="139"/></a> -->
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/stephenbalogun/tidyndr/workflows/R-CMD-check/badge.svg)](https://github.com/stephenbalogun/tidyndr/actions) [![Codecov test coverage](https://codecov.io/gh/stephenbalogun/tidyndr/branch/master/graph/badge.svg)](https://app.codecov.io/gh/stephenbalogun/tidyndr?branch=master/)
-[![CRAN status](https://www.r-pkg.org/badges/version/tidyndr)](https://CRAN.R-project.org/package=tidyndr)
- [![Total CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/tidyndr?color=blue)](https://cranlogs.r-pkg.org/#badges)
-  [![Monthly CRAN downloads](https://cranlogs.r-pkg.org/badges/tidyndr)](https://cranlogs.r-pkg.org/#badges)
+
+[![R-CMD-check](https://github.com/stephenbalogun/tidyndr/workflows/R-CMD-check/badge.svg)](https://github.com/stephenbalogun/tidyndr/actions) [![Codecov test coverage](https://codecov.io/gh/stephenbalogun/tidyndr/branch/master/graph/badge.svg)](https://app.codecov.io/gh/stephenbalogun/tidyndr?branch=master/) [![CRAN status](https://www.r-pkg.org/badges/version/tidyndr)](https://CRAN.R-project.org/package=tidyndr) [![Total CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/tidyndr?color=blue)](https://cranlogs.r-pkg.org/#badges) [![Monthly CRAN downloads](https://cranlogs.r-pkg.org/badges/tidyndr)](https://cranlogs.r-pkg.org/#badges)
+
 <!-- badges: end -->
 
 The goal of {tidyndr} is to provide a specialized, simple and easy to use functions that wrap around existing functions in `R` for manipulation of the [NDR](https://ndr.phis3project.org.ng/) patient line-list file allowing the user to focus on the tasks to be completed rather than the code/formula details.
@@ -37,12 +36,10 @@ The functions presented are similar to the [PEPFAR MER indicators](https://datim
 
 ## Installation
 
-You can install the released version of tidyndr from [CRAN](https://CRAN.R-project.org) with:
+You can install the released version of {tidyndr} from [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
-
 install.packages("tidyndr")
-
 ```
 
 Or the development version from [GitHub](https://github.com/) with:
@@ -183,4 +180,4 @@ ndr_example %>%
 
 ## Code of Conduct
 
-Please note that the tidyndr project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
+Please note that the {tidyndr} project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
