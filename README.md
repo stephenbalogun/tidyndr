@@ -24,7 +24,7 @@ line-list file allowing the user to focus on the tasks to be completed
 rather than the code/formula details.
 
 The functions presented are similar to the [PEPFAR MER
-indicators](https://datim.zendesk.com/hc/en-us/articles/360000084446-MER-Indicator-Reference-Guides)
+indicators](https://datim.zendesk.com/hc/article_attachments/10003735798420)
 and are currently grouped into four categories:
 
 -   The `read_ndr` function for reading the patient-level line-list

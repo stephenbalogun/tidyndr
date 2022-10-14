@@ -17,8 +17,7 @@ tx_ml_outcomes
 }
 \description{
 \code{tx_ml_outcomes} generates the line-list of clients based on the
-outcome of interest ("dead" or "transfer out"). It should be used after
-\code{tx_ml()}.
+outcome of interest ("dead" or "transfer out").
 }
 \examples{
 tx_ml_outcomes(tx_ml(new_data = ndr_example),

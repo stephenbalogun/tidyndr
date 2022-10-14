@@ -1,5 +1,3 @@
-# tidyndr 0.2.1
-
 # tidyndr 0.1.0
 
 -   Added a `NEWS.md` file to track changes to the package.
@@ -73,3 +71,20 @@
 -   Most functions that generate line lists now have an additional argument - `remove_duplicates` to determine if the outcome should be de-duplicated
 
 -   Updated viral load indicators to accommodate varying length of months in the calculations
+
+# tidyndr 0.2.2
+
+I made a couple of minor modifications and bug fixes to existing functions.
+
+-   Updated `tx_regimen()` to reflect new pediatrics optimal regimen for children < 3 years
+
+-   increased validation of `cot_cascade()` to recognize referenced date that is not within the specified quarter
+
+-   updated deduplication in `cot_cascade()` to capture all indicators
+
+
+-   arranged outputs in ascending order
+
+-   expanded `art_duration` argument to `disaggregate()` to include 6-12months and 1+ years
+
+-   upgraded the `tx_rtt()` to utilize single data source, when an older one is not supplied
