@@ -1,6 +1,6 @@
 Package: tidyndr
 Title: Analysis of the Nigeria National Data Repository (NDR)
-Version: 0.2.1.900
+Version: 0.2.2
 Authors@R: 
     c(person(given = "Stephen",
            family = "Balogun",
@@ -27,7 +27,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
 Depends: R (>= 3.6)
 Imports: 
     dplyr (>= 1.0.3),

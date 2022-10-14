@@ -6,8 +6,8 @@
 #' @export recent_eligible
 #'
 #' @examples
-#' ## Line-list all HIV positive clients who are eligible for recency testing
-#' hts_pos <- hts_tst_pos(recency_example)
+#' ## Line-list all HIV positive clients who are eligible for recency testing in FY21 Q2
+#' hts_pos <- hts_tst_pos(recency_example, from = "2021-01-01", to = "2021-03-01")
 #'
 #' recent_eligible(hts_pos, state = "Arewa") # eligible clients in 'Arewa' state
 #'
@@ -79,7 +79,7 @@ validate_recent <- function(data, from, to, states, facilities) {
 
 
   if (!is.null(from) && as.Date(from) > Sys.Date()) {
-    rlang::warn("The date arguments should not be in the future!!")
+    rlang::warn("The period referenced extends into the future!")
   }
 
   if (!is.null(from) && !is.null(to) && as.Date(from) > as.Date(to)) {

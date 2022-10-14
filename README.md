@@ -61,8 +61,6 @@ build_vignette = TRUE)
 
 ``` r
 library(tidyndr)
-#> Attaching package: 'tidyndr' 
-#> A package for analysis of the front-end patient-level data from the Nigeria National Data Repository.
 ```
 
 ### read_ndr
@@ -85,11 +83,6 @@ formats the variable names using the
 path <- "https://raw.githubusercontent.com/stephenbalogun/example_files/main/ndr_example.csv"
 
 ndr_example <- read_ndr(path, time_stamp = "2021-02-20")
-#> 
-#> Three new variables created: 
-#> [1] `date_lost` 
-#> [2] `appointment_date 
-#> [2] `current_status
 ```
 
 ### Treatment Indicators
@@ -109,44 +102,79 @@ The functions included in this group are:
 
 ``` r
 ## Subset "TX_NEW"
-tx_new(ndr_example, from = "2021-07-01", to = "2021-09-30")
-#> Warning: One or more parsing issues, see `problems()` for details
-#> # A tibble: 0 × 52
-#> # … with 52 variables: ip <fct>, state <fct>, lga <fct>, facility <fct>,
-#> #   datim_code <fct>, sex <fct>, patient_identifier <chr>,
-#> #   hospital_number <chr>, date_of_birth <date>, age_at_art_initiation <dbl>,
-#> #   current_age <dbl>, art_start_date <date>, art_start_date_source <fct>,
+tx_new(ndr_example, from = "2021-01-01", to = "2021-03-31")
+#> # A tibble: 1,556 × 52
+#>    ip      state  lga   facil…¹ datim…² sex   patie…³ hospi…⁴ date_of_…⁵ age_a…⁶
+#>    <fct>   <fct>  <fct> <fct>   <fct>   <fct> <chr>   <chr>   <date>       <dbl>
+#>  1 IP_name State… LGA0… Facili… datim_… M     State … 0003    1990-02-07      31
+#>  2 IP_name State… LGA0… Facili… datim_… M     State … 0003    1986-04-06      39
+#>  3 IP_name State… LGA0… Facili… datim_… F     State … 0003    1988-05-05      27
+#>  4 IP_name State… LGA0… Facili… datim_… F     State … 0003    1992-01-01      NA
+#>  5 IP_name State… LGA0… Facili… datim_… F     State … 0008    1996-01-01      38
+#>  6 IP_name State… LGA0… Facili… datim_… M     State … 0007    2002-01-01      37
+#>  7 IP_name State… LGA0… Facili… datim_… M     State … 0002    1980-01-11      31
+#>  8 IP_name State… LGA0… Facili… datim_… F     State … 00035   1983-01-01      30
+#>  9 IP_name State… LGA0… Facili… datim_… F     State … 00042   1995-09-14      41
+#> 10 IP_name State… LGA0… Facili… datim_… M     State … 0001    1987-01-01      32
+#> # … with 1,546 more rows, 42 more variables: current_age <dbl>,
+#> #   art_start_date <date>, art_start_date_source <fct>,
 #> #   last_drug_pickup_date <date>, last_drug_pickup_date_q1 <date>,
 #> #   last_drug_pickup_date_q2 <date>, last_drug_pickup_date_q3 <date>,
-#> #   last_drug_pickup_date_q4 <date>, last_regimen <fct>, …
+#> #   last_drug_pickup_date_q4 <date>, last_regimen <fct>,
+#> #   last_clinic_visit_date <date>, days_of_arv_refill <dbl>,
+#> #   pregnancy_status <fct>, current_viral_load <dbl>, …
 
 
 ## Generate line-list of clients with medication refill in October 2021
 ndr_example %>%
-  tx_appointment(from = "2021-10-01",
-                 to = "2021-10-31"
+  tx_appointment(from = "2021-01-01",
+                 to = "2021-01-31"
                  )
-#> # A tibble: 0 × 52
-#> # … with 52 variables: ip <fct>, state <fct>, lga <fct>, facility <fct>,
-#> #   datim_code <fct>, sex <fct>, patient_identifier <chr>,
-#> #   hospital_number <chr>, date_of_birth <date>, age_at_art_initiation <dbl>,
-#> #   current_age <dbl>, art_start_date <date>, art_start_date_source <fct>,
+#> # A tibble: 3,512 × 52
+#>    ip      state  lga   facil…¹ datim…² sex   patie…³ hospi…⁴ date_of_…⁵ age_a…⁶
+#>    <fct>   <fct>  <fct> <fct>   <fct>   <fct> <chr>   <chr>   <date>       <dbl>
+#>  1 IP_name State… LGA0… Facili… datim_… F     State … 0002    1980-03-27      40
+#>  2 IP_name State… LGA0… Facili… datim_… M     State … 0003    1986-04-06      39
+#>  3 IP_name State… LGA0… Facili… datim_… F     State … 0002    1971-02-04      27
+#>  4 IP_name State… LGA0… Facili… datim_… F     State … 0001    1973-02-02      35
+#>  5 IP_name State… LGA0… Facili… datim_… M     State … 0004    1965-05-13      23
+#>  6 IP_name State… LGA0… Facili… datim_… M     State … 0007    2002-01-01      37
+#>  7 IP_name State… LGA0… Facili… datim_… F     State … 0009    1992-10-24      34
+#>  8 IP_name State… LGA0… Facili… datim_… M     State … 0006    1980-05-02      70
+#>  9 IP_name State… LGA0… Facili… datim_… F     State … 0005    1990-01-01      39
+#> 10 IP_name State… LGA0… Facili… datim_… F     State … 0003    1981-08-08      24
+#> # … with 3,502 more rows, 42 more variables: current_age <dbl>,
+#> #   art_start_date <date>, art_start_date_source <fct>,
 #> #   last_drug_pickup_date <date>, last_drug_pickup_date_q1 <date>,
 #> #   last_drug_pickup_date_q2 <date>, last_drug_pickup_date_q3 <date>,
-#> #   last_drug_pickup_date_q4 <date>, last_regimen <fct>, …
+#> #   last_drug_pickup_date_q4 <date>, last_regimen <fct>,
+#> #   last_clinic_visit_date <date>, days_of_arv_refill <dbl>,
+#> #   pregnancy_status <fct>, current_viral_load <dbl>, …
 
 ## Generate list of clients who were active at the beginning of October 2021 but became inactive at the end of December 2021.
   tx_ml(new_data = ndr_example,
-        from = "2021-10-01",
-        to = "2021-12-31")
-#> # A tibble: 0 × 52
-#> # … with 52 variables: ip <fct>, state <fct>, lga <fct>, facility <fct>,
-#> #   datim_code <fct>, sex <fct>, patient_identifier <chr>,
-#> #   hospital_number <chr>, date_of_birth <date>, age_at_art_initiation <dbl>,
-#> #   current_age <dbl>, art_start_date <date>, art_start_date_source <fct>,
+        from = "2021-01-01",
+        to = "2021-03-31")
+#> # A tibble: 10,307 × 52
+#>    ip      state  lga   facil…¹ datim…² sex   patie…³ hospi…⁴ date_of_…⁵ age_a…⁶
+#>    <fct>   <fct>  <fct> <fct>   <fct>   <fct> <chr>   <chr>   <date>       <dbl>
+#>  1 IP_name State… LGA0… Facili… datim_… F     State … 0002    1980-03-27      40
+#>  2 IP_name State… LGA0… Facili… datim_… F     State … 0002    1984-07-14      35
+#>  3 IP_name State… LGA0… Facili… datim_… F     State … 0002    1980-01-01      37
+#>  4 IP_name State… LGA0… Facili… datim_… M     State … 0003    1986-04-06      39
+#>  5 IP_name State… LGA0… Facili… datim_… F     State … 0004    1972-01-01      NA
+#>  6 IP_name State… LGA0… Facili… datim_… F     State … 0001    1980-01-01      NA
+#>  7 IP_name State… LGA0… Facili… datim_… F     State … 0002    1971-02-04      27
+#>  8 IP_name State… LGA0… Facili… datim_… F     State … 0001    1973-02-02      35
+#>  9 IP_name State… LGA0… Facili… datim_… M     State … 0004    1965-05-13      23
+#> 10 IP_name State… LGA0… Facili… datim_… M     State … 0008    1988-01-01      26
+#> # … with 10,297 more rows, 42 more variables: current_age <dbl>,
+#> #   art_start_date <date>, art_start_date_source <fct>,
 #> #   last_drug_pickup_date <date>, last_drug_pickup_date_q1 <date>,
 #> #   last_drug_pickup_date_q2 <date>, last_drug_pickup_date_q3 <date>,
-#> #   last_drug_pickup_date_q4 <date>, last_regimen <fct>, …
+#> #   last_drug_pickup_date_q4 <date>, last_regimen <fct>,
+#> #   last_clinic_visit_date <date>, days_of_arv_refill <dbl>,
+#> #   pregnancy_status <fct>, current_viral_load <dbl>, …
 ```
 
 ### Viral Suppression Indicators
@@ -167,50 +195,50 @@ who are due for a viral load test out of all those who are eligible.
 ndr_example %>%
   tx_vl_eligible(ref = "2021-12-31")
 #> # A tibble: 27,020 × 52
-#>    ip     state lga   facility datim_code sex   patient_identif… hospital_number
-#>    <fct>  <fct> <fct> <fct>    <fct>      <fct> <chr>            <chr>          
-#>  1 IP_na… Stat… LGA0… Facilit… datim_cod… M     State 3001       0001           
-#>  2 IP_na… Stat… LGA0… Facilit… datim_cod… F     State 1002       0001           
-#>  3 IP_na… Stat… LGA0… Facilit… datim_cod… F     State 3003       0001           
-#>  4 IP_na… Stat… LGA0… Facilit… datim_cod… M     State 1003       0002           
-#>  5 IP_na… Stat… LGA0… Facilit… datim_cod… F     State 2004       0002           
-#>  6 IP_na… Stat… LGA0… Facilit… datim_cod… F     State 3005       0001           
-#>  7 IP_na… Stat… LGA0… Facilit… datim_cod… F     State 2005       0001           
-#>  8 IP_na… Stat… LGA0… Facilit… datim_cod… M     State 1004       0003           
-#>  9 IP_na… Stat… LGA0… Facilit… datim_cod… F     State 3007       0002           
-#> 10 IP_na… Stat… LGA0… Facilit… datim_cod… F     State 1005       0004           
-#> # … with 27,010 more rows, and 44 more variables: date_of_birth <date>,
-#> #   age_at_art_initiation <dbl>, current_age <dbl>, art_start_date <date>,
-#> #   art_start_date_source <fct>, last_drug_pickup_date <date>,
-#> #   last_drug_pickup_date_q1 <date>, last_drug_pickup_date_q2 <date>,
-#> #   last_drug_pickup_date_q3 <date>, last_drug_pickup_date_q4 <date>,
-#> #   last_regimen <fct>, last_clinic_visit_date <date>,
-#> #   days_of_arv_refill <dbl>, pregnancy_status <fct>, …
+#>    ip      state  lga   facil…¹ datim…² sex   patie…³ hospi…⁴ date_of_…⁵ age_a…⁶
+#>    <fct>   <fct>  <fct> <fct>   <fct>   <fct> <chr>   <chr>   <date>       <dbl>
+#>  1 IP_name State… LGA0… Facili… datim_… M     State … 0001    1988-06-05      25
+#>  2 IP_name State… LGA0… Facili… datim_… F     State … 0001    1975-05-15      22
+#>  3 IP_name State… LGA0… Facili… datim_… F     State … 0001    1985-03-23      46
+#>  4 IP_name State… LGA0… Facili… datim_… M     State … 0002    1957-05-11      18
+#>  5 IP_name State… LGA0… Facili… datim_… F     State … 0002    1982-12-22      30
+#>  6 IP_name State… LGA0… Facili… datim_… F     State … 0001    1985-06-10      NA
+#>  7 IP_name State… LGA0… Facili… datim_… F     State … 0001    1960-05-19      25
+#>  8 IP_name State… LGA0… Facili… datim_… M     State … 0003    1990-02-07      31
+#>  9 IP_name State… LGA0… Facili… datim_… F     State … 0002    1982-01-01      22
+#> 10 IP_name State… LGA0… Facili… datim_… F     State … 0004    1983-06-01      NA
+#> # … with 27,010 more rows, 42 more variables: current_age <dbl>,
+#> #   art_start_date <date>, art_start_date_source <fct>,
+#> #   last_drug_pickup_date <date>, last_drug_pickup_date_q1 <date>,
+#> #   last_drug_pickup_date_q2 <date>, last_drug_pickup_date_q3 <date>,
+#> #   last_drug_pickup_date_q4 <date>, last_regimen <fct>,
+#> #   last_clinic_visit_date <date>, days_of_arv_refill <dbl>,
+#> #   pregnancy_status <fct>, current_viral_load <dbl>, …
 
 ## Generate list of clients that will be expected to have a viral load test done by March 2022
 ndr_example %>%
   tx_vl_eligible("2022-03-31",
                  sample = TRUE)
 #> # A tibble: 27,020 × 52
-#>    ip     state lga   facility datim_code sex   patient_identif… hospital_number
-#>    <fct>  <fct> <fct> <fct>    <fct>      <fct> <chr>            <chr>          
-#>  1 IP_na… Stat… LGA0… Facilit… datim_cod… M     State 3001       0001           
-#>  2 IP_na… Stat… LGA0… Facilit… datim_cod… F     State 1002       0001           
-#>  3 IP_na… Stat… LGA0… Facilit… datim_cod… F     State 3003       0001           
-#>  4 IP_na… Stat… LGA0… Facilit… datim_cod… M     State 1003       0002           
-#>  5 IP_na… Stat… LGA0… Facilit… datim_cod… F     State 2004       0002           
-#>  6 IP_na… Stat… LGA0… Facilit… datim_cod… F     State 3005       0001           
-#>  7 IP_na… Stat… LGA0… Facilit… datim_cod… F     State 2005       0001           
-#>  8 IP_na… Stat… LGA0… Facilit… datim_cod… M     State 1004       0003           
-#>  9 IP_na… Stat… LGA0… Facilit… datim_cod… F     State 3007       0002           
-#> 10 IP_na… Stat… LGA0… Facilit… datim_cod… F     State 1005       0004           
-#> # … with 27,010 more rows, and 44 more variables: date_of_birth <date>,
-#> #   age_at_art_initiation <dbl>, current_age <dbl>, art_start_date <date>,
-#> #   art_start_date_source <fct>, last_drug_pickup_date <date>,
-#> #   last_drug_pickup_date_q1 <date>, last_drug_pickup_date_q2 <date>,
-#> #   last_drug_pickup_date_q3 <date>, last_drug_pickup_date_q4 <date>,
-#> #   last_regimen <fct>, last_clinic_visit_date <date>,
-#> #   days_of_arv_refill <dbl>, pregnancy_status <fct>, …
+#>    ip      state  lga   facil…¹ datim…² sex   patie…³ hospi…⁴ date_of_…⁵ age_a…⁶
+#>    <fct>   <fct>  <fct> <fct>   <fct>   <fct> <chr>   <chr>   <date>       <dbl>
+#>  1 IP_name State… LGA0… Facili… datim_… M     State … 0001    1988-06-05      25
+#>  2 IP_name State… LGA0… Facili… datim_… F     State … 0001    1975-05-15      22
+#>  3 IP_name State… LGA0… Facili… datim_… F     State … 0001    1985-03-23      46
+#>  4 IP_name State… LGA0… Facili… datim_… M     State … 0002    1957-05-11      18
+#>  5 IP_name State… LGA0… Facili… datim_… F     State … 0002    1982-12-22      30
+#>  6 IP_name State… LGA0… Facili… datim_… F     State … 0001    1985-06-10      NA
+#>  7 IP_name State… LGA0… Facili… datim_… F     State … 0001    1960-05-19      25
+#>  8 IP_name State… LGA0… Facili… datim_… M     State … 0003    1990-02-07      31
+#>  9 IP_name State… LGA0… Facili… datim_… F     State … 0002    1982-01-01      22
+#> 10 IP_name State… LGA0… Facili… datim_… F     State … 0004    1983-06-01      NA
+#> # … with 27,010 more rows, 42 more variables: current_age <dbl>,
+#> #   art_start_date <date>, art_start_date_source <fct>,
+#> #   last_drug_pickup_date <date>, last_drug_pickup_date_q1 <date>,
+#> #   last_drug_pickup_date_q2 <date>, last_drug_pickup_date_q3 <date>,
+#> #   last_drug_pickup_date_q4 <date>, last_regimen <fct>,
+#> #   last_clinic_visit_date <date>, days_of_arv_refill <dbl>,
+#> #   pregnancy_status <fct>, current_viral_load <dbl>, …
 
 ### Calculate the Viral Load Coverage as of December 2021
 no_of_vl_results <- tx_pvls_den(ndr_example,
@@ -236,18 +264,30 @@ than one state or facility, combine the values with the `c()` e.g.
 ## subset clients that have medication appointment in between January and March of 2021 in 
 ## and are also due for viral load
 ndr_example %>%
-  tx_appointment(from = "2022-01-01",
-                 to = "2022-03-31",
+  tx_appointment(from = "2021-01-01",
+                 to = "2021-03-31",
                  ) %>%
   tx_vl_eligible(sample = TRUE)
-#> # A tibble: 0 × 52
-#> # … with 52 variables: ip <fct>, state <fct>, lga <fct>, facility <fct>,
-#> #   datim_code <fct>, sex <fct>, patient_identifier <chr>,
-#> #   hospital_number <chr>, date_of_birth <date>, age_at_art_initiation <dbl>,
-#> #   current_age <dbl>, art_start_date <date>, art_start_date_source <fct>,
+#> # A tibble: 7,038 × 52
+#>    ip      state  lga   facil…¹ datim…² sex   patie…³ hospi…⁴ date_of_…⁵ age_a…⁶
+#>    <fct>   <fct>  <fct> <fct>   <fct>   <fct> <chr>   <chr>   <date>       <dbl>
+#>  1 IP_name State… LGA0… Facili… datim_… F     State … 0001    1985-06-10      NA
+#>  2 IP_name State… LGA0… Facili… datim_… F     State … 0001    1960-05-19      25
+#>  3 IP_name State… LGA0… Facili… datim_… M     State … 0003    1986-04-06      39
+#>  4 IP_name State… LGA0… Facili… datim_… F     State … 0004    1972-01-01      NA
+#>  5 IP_name State… LGA0… Facili… datim_… F     State … 0001    1980-01-01      NA
+#>  6 IP_name State… LGA0… Facili… datim_… F     State … 0005    1990-05-25      32
+#>  7 IP_name State… LGA0… Facili… datim_… F     State … 0002    1971-02-04      27
+#>  8 IP_name State… LGA0… Facili… datim_… M     State … 0005    1976-01-26      26
+#>  9 IP_name State… LGA0… Facili… datim_… M     State … 0007    2002-01-01      37
+#> 10 IP_name State… LGA0… Facili… datim_… F     State … 0002    1997-06-01      21
+#> # … with 7,028 more rows, 42 more variables: current_age <dbl>,
+#> #   art_start_date <date>, art_start_date_source <fct>,
 #> #   last_drug_pickup_date <date>, last_drug_pickup_date_q1 <date>,
 #> #   last_drug_pickup_date_q2 <date>, last_drug_pickup_date_q3 <date>,
-#> #   last_drug_pickup_date_q4 <date>, last_regimen <fct>, …
+#> #   last_drug_pickup_date_q4 <date>, last_regimen <fct>,
+#> #   last_clinic_visit_date <date>, days_of_arv_refill <dbl>,
+#> #   pregnancy_status <fct>, current_viral_load <dbl>, …
 ```
 
 ### Summarising your Indicators
@@ -261,13 +301,13 @@ give to each of your summary column.
 
 ``` r
 ## generates line-list of TX_NEW between July and December 2021
-new <- tx_new(ndr_example, from = "2021-07-01", to = "202112-31")
+new <- tx_new(ndr_example, from = "2021-01-01", to = "2021-03-31")
 
 ## generates line-list of currently active clients
 curr <- tx_curr(ndr_example)
 
 ## generates line-list of clients who were active at the beginning of the October but inactive at end of December 2021
-ml <- tx_ml(new_data = ndr_example, from = "2021-10-01", to = "2021-12-31") 
+ml <- tx_ml(new_data = ndr_example, from = "2021-01-01", to = "2021-03-31") 
 
 summarise_ndr(new, curr, ml,
               level = "state",
@@ -275,10 +315,10 @@ summarise_ndr(new, curr, ml,
 #> # A tibble: 4 × 5
 #>   ip      state   tx_new tx_curr tx_ml
 #>   <chr>   <chr>    <int>   <int> <int>
-#> 1 Total   -            0   27020     0
-#> 2 IP_name State 1      0    5645     0
-#> 3 IP_name State 2      0    7929     0
-#> 4 IP_name State 3      0   13446     0
+#> 1 IP_name State 1    272    5647  2595
+#> 2 IP_name State 2    300    7931  4152
+#> 3 IP_name State 3    984   13446  3560
+#> 4 Total   -         1556   27024 10307
 ```
 
 The `disaggregate()` allows you to summarise an indicator of interest
@@ -291,38 +331,37 @@ is supplied to the `level` parameter.
 
 ``` r
 ## generates line-list of TX_NEW between July and September 2021
-new_clients <- tx_new(ndr_example, from = "2021-07-01", to = "2021-09-30")
+new_clients <- tx_new(ndr_example, from = "2021-01-01", to = "2021-03-30")
 
 disaggregate(new_clients,
              by = "current_age", pivot_wide = FALSE)
-#> # A tibble: 65 × 4
+#> # A tibble: 49 × 4
 #>    ip      state   current_age number
 #>    <chr>   <chr>   <chr>        <int>
 #>  1 IP_name State 1 <1               0
-#>  2 IP_name State 1 1-4              0
+#>  2 IP_name State 1 1-4              2
 #>  3 IP_name State 1 5-9              0
 #>  4 IP_name State 1 10-14            0
-#>  5 IP_name State 1 15-19            0
-#>  6 IP_name State 1 20-24            0
-#>  7 IP_name State 1 25-29            0
-#>  8 IP_name State 1 30-34            0
-#>  9 IP_name State 1 35-39            0
-#> 10 IP_name State 1 40-44            0
-#> # … with 55 more rows
+#>  5 IP_name State 1 15-19           11
+#>  6 IP_name State 1 20-24           37
+#>  7 IP_name State 1 25-29           83
+#>  8 IP_name State 1 30-34           63
+#>  9 IP_name State 1 35-39           36
+#> 10 IP_name State 1 40-44           24
+#> # … with 39 more rows
 
 ## disaggregate 'TX_CURR' by sex
 
 ndr_example %>%
   tx_curr() %>%
   disaggregate(by = "sex")
-#> # A tibble: 5 × 5
-#>   ip      state      Male Female unknown
-#>   <chr>   <chr>     <int>  <int>   <int>
-#> 1 IP_name "State 1"  1661   3984       0
-#> 2 IP_name "State 2"  2335   5594       0
-#> 3 IP_name "State 3"  5894   7552       0
-#> 4 IP_name ""            0      0       0
-#> 5 Total   "-"        9890  17130       0
+#> # A tibble: 4 × 5
+#>   ip      state    Male Female unknown
+#>   <chr>   <chr>   <int>  <int>   <int>
+#> 1 IP_name State 1  1662   3985       0
+#> 2 IP_name State 2  2335   5596       0
+#> 3 IP_name State 3  5894   7552       0
+#> 4 Total   -        9891  17133       0
 ```
 
 ## Code of Conduct

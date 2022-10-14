@@ -2,7 +2,8 @@ test_that("cot_cascade works fine", {
   expect_identical(
     cot_cascade(
       ndr_example,
-      quarter = 1
+      quarter = 1,
+      ref = "2021-12-31"
     ),
     {
       tx_curr_prev <- dplyr::filter(ndr_example, current_status_q4_28_days == "Active")
@@ -25,7 +26,8 @@ test_that("cot_cascade works fine", {
         dplyr::mutate(
           tx_ml_iit = tx_ml - tx_ml_dead - tx_ml_to,
           iit_rate = janitor::round_half_up(tx_ml_iit / (tx_curr_prev + tx_new) * 100, digits = 3)
-        )
+        ) %>%
+        dplyr::arrange(state)
     }
   )
 })

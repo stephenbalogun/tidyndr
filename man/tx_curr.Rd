@@ -9,7 +9,9 @@ tx_curr(
   states = NULL,
   facilities = NULL,
   status = "default",
-  remove_duplicates = FALSE
+  remove_duplicates = FALSE,
+  quarter = NULL,
+  ref = NULL
 )
 }
 \arguments{
@@ -29,6 +31,10 @@ The options are to either to use the NDR current_status_28_days column
 or the derived current_status column ("calculated").}
 
 \item{remove_duplicates}{Boolean argument. It specifies if duplicate patient entries in the facilities should be removed or kept}
+
+\item{quarter}{the quarter of the fiscal year (based on the PEPFAR calendar) for which the TX_CURR should be calculated.}
+
+\item{ref}{the referenced date for the analysis. If this is not set (i.e. \code{NULL}) it will be assumed to be the last day of the quarter.}
 }
 \value{
 TX_CURR

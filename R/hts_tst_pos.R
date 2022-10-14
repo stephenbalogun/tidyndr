@@ -66,7 +66,7 @@ validate_pos <- function(data, from, to, states, facilities) {
   }
 
   if (from > Sys.Date() || to > Sys.Date()) {
-    rlang::warn("The date arguments should not be in the future!!")
+    rlang::warn("The period referenced extends into the future!")
   }
 
   if (from > to) {

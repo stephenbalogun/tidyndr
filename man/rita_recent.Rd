@@ -31,8 +31,8 @@ Line-list of clients who are RTRI recent and have a viral load result greater or
 Generate List of Clients who are RITA Recent
 }
 \examples{
-## Line-list all HIV positive clients confirmed to be RITA recent
-hts_pos <- hts_tst_pos(recency_example)
+## Line-list all HIV positive clients confirmed to be RITA recent in FY21 Q2
+hts_pos <- hts_tst_pos(recency_example, from = "2021-01-01", to = "2021-03-01")
 
 rita_recent(hts_pos)
 

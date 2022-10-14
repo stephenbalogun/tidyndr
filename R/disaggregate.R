@@ -107,11 +107,12 @@ disagg_ndr.art_duration <- function(df, level = "state", pivot_wide = TRUE, ...)
   art_duration <- dplyr::case_when(
     df$art_duration < 90 ~ "<3 months",
     dplyr::between(df$art_duration, 90, 179) ~ "3-5 months",
-    df$art_duration >= 180 ~ "6 months+",
+    dplyr::between(df$art_duration, 180, 365) ~ "6-12 months",
+    df$art_duration >= 366 ~ "1+ year",
     is.na(df$art_duration) ~ "missing"
   )
 
-  art_duration <- factor(art_duration, levels = c("missing", "<3 months", "3-5 months", "6 months+"), ordered = TRUE)
+  art_duration <- factor(art_duration, levels = c("missing", "<3 months", "3-5 months", "6-12 months", "1+ year"), ordered = TRUE)
 
   get_disagg(df, by = "art_duration", by_value = art_duration, pivot_wide = pivot_wide, level = level)
 }
@@ -186,7 +187,7 @@ get_disagg <- function(df, by, by_value, level = "state", pivot_wide = TRUE, ...
   by_c <- rlang::sym(by)
   dt <- switch(level,
     "ip" = dplyr::count(df, ip, !!by_c, .drop = FALSE, name = "number"),
-    "country" = dplyr::count(df, ip, !!by_c, .drop = FALSE, name = "number"),
+    "country" = dplyr::count(df, ip, !!by_c, .drop = FALSE, name = "number") ,
     "state" = dplyr::count(df, ip, state, !!by_c, .drop = FALSE, name = "number"),
     "lga" = dplyr::count(df, ip, state, lga, !!by_c, .drop = FALSE, name = "number"),
     "facility" = dplyr::count(df, ip, state, lga, facility, !!by_c, .drop = FALSE, name = "number")

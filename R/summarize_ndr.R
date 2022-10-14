@@ -72,7 +72,9 @@ get_summary_ndr <- function(data, level, names) {
   }
 
   if (length(data) == 1) {
-    return(my_summary(data[[1]], l = level, n = names[[1]]))
+    return(
+      tibble::as_tibble(my_summary(data[[1]], l = level, n = names[[1]]))
+    )
   }
 
 
@@ -88,16 +90,16 @@ get_summary_ndr <- function(data, level, names) {
 
 
   dt <- switch(level,
-    "state" = purrr::reduce(df, dplyr::full_join, by = c("ip", "state")),
-    "facility" = purrr::reduce(df, dplyr::full_join, by = c("ip", "state", "lga", "facility")),
-    "country" = purrr::reduce(df, dplyr::full_join, by = "ip"),
-    "ip" = purrr::reduce(df, dplyr::full_join, by = "ip"),
-    "lga" = purrr::reduce(df, dplyr::full_join, by = c("ip", "state", "lga"))
+    "state" = purrr::reduce(df, dplyr::full_join, by = c("ip", "state")) %>% dplyr::arrange(ip, state),
+    "facility" = purrr::reduce(df, dplyr::full_join, by = c("ip", "state", "lga", "facility")) %>% dplyr::arrange(ip, state, lga, facility),
+    "country" = purrr::reduce(df, dplyr::full_join, by = "ip") %>% dplyr::arrange(ip),
+    "ip" = purrr::reduce(df, dplyr::full_join, by = "ip") %>% dplyr::arrange(ip),
+    "lga" = purrr::reduce(df, dplyr::full_join, by = c("ip", "state", "lga")) %>% dplyr::arrange(ip, state, lga)
   )
 
   dt[is.na(dt)] <- 0 ## replace NAs with Zero
 
-  tibble::as_tibble(dt)
+  return(tibble::as_tibble(dt))
 }
 
 

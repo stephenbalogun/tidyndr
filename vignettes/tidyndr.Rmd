@@ -391,3 +391,25 @@ disaggregate(inactives,
              pivot_wide = FALSE)
 
 ```
+
+
+### `cot_cascade` {#cot-cascade}
+
+This function layers on the summary functions to provide the treatment interruption data for a specific period while providing signficant flexibility for the user to customize the final data. It has 10 parameters, most of which are supplied by default and the user will only modify where the default does not suit purpose. The example below provide some context.
+
+
+```{r, cot-cascade, eval = FALSE}
+## see a summary state-level treatment interruption performance for Q2 of FY21
+cot_cascade(ndr_example, quarter = 2, ref = "2021-03-31")
+
+
+## age and sex disaggregation of IIT cascade at end of FY21 Q1
+
+cot_cascade(ndr_example, quarter = 2, ref = "2021-03-31", .disagg = "age_sex")
+```
+
+
+### `vl_cascade` {#vl-cascade}
+
+A companion of the [`cot_cascade`](#cot-cascade) for the viral load cascade peformance at a glance.
+

@@ -9,9 +9,9 @@
 #' ### Line-list of clients offered recency testing
 #' hts_recent_clients <- hts_recent(recency_example, from = "2021-07-01", to = "2021-10-31")
 #'
-#' hts_pos <- hts_tst_pos(recency_example) # identifies all hts_positive clients
+#' hts_pos <- hts_tst_pos(recency_example,  from = "2021-07-01", to = "2021-10-31")
 #' # line-list positive clients offered recency testing in 'Okun' state
-#' hts_recent(hts_pos, state = "Okun")
+#' hts_recent(hts_pos, states = "Okun")
 #'
 hts_recent <- function(data,
                        from = NULL,
@@ -77,7 +77,7 @@ validate_recent <- function(data, from, to, states, facilities) {
 
 
   if (!is.null(from) && as.Date(from) > Sys.Date()) {
-    rlang::warn("The date arguments should not be in the future!!")
+    rlang::warn("The period referenced extends into the future!")
   }
 
   if (!is.null(from) && !is.null(to) && as.Date(from) > as.Date(to)) {

@@ -6,12 +6,12 @@
 #' @export rita_sample
 #'
 #' @examples
-#' ## Get HTS_POS clients who had recency testing and viral load sample collected
-#' sample_collected <- rita_sample(recency_example)
+#' ## Get HTS_POS clients who had recency testing and viral load sample collected from 2021
+#' sample_collected <- rita_sample(recency_example, from = "2021-01-01")
 #'
-#' ## Samples collected in 'Ayetoro', and 'Arewa' states
+#' ## Samples collected in 'Ayetoro', and 'Arewa' states in FY21 Q3
 #'
-#' rita_sample(recency_example, states = c("Arewa", "Ayetoro"))
+#' rita_sample(recency_example, states = c("Arewa", "Ayetoro"), from = "2021-04-01", to = "2021-06-30")
 #'
 rita_sample <- function(data,
                         from = NULL,

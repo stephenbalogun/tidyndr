@@ -72,7 +72,9 @@ get_summary_recency <- function(data, level, names) {
   }
 
   if (length(data) == 1) {
-    return(my_summary2(data[[1]], l = level, n = names[[1]]))
+    return(
+      tibble::as_tibble(my_summary2(data[[1]], l = level, n = names[[1]]))
+    )
   }
 
 
@@ -88,13 +90,13 @@ get_summary_recency <- function(data, level, names) {
 
 
   dt <- switch(level,
-    "facility_state" = purrr::reduce(df, dplyr::full_join, by = c("ip", "facility_state")),
-    "facility" = purrr::reduce(df, dplyr::full_join, by = c("ip", "facility_state", "facility_lga", "facility")),
-    "country" = purrr::reduce(df, dplyr::full_join, by = "ip"),
+    "facility_state" = purrr::reduce(df, dplyr::full_join, by = c("ip", "facility_state")) %>% dplyr::arrange(ip, facility_state),
+    "facility" = purrr::reduce(df, dplyr::full_join, by = c("ip", "facility_state", "facility_lga", "facility")) %>% dplyr::arrange(ip, facility_state, facility_lga, facility),
+    "country" = purrr::reduce(df, dplyr::full_join, by = "ip") %>% dplyr::arrange(ip),
     "ip" = purrr::reduce(df, dplyr::full_join, by = "ip"),
-    "lga" = purrr::reduce(df, dplyr::full_join, by = c("ip", "facility_state", "facility_lga")),
-    "client_state" = purrr::reduce(df, dplyr::full_join, by = c("ip", "client_state")),
-    "client_lga" = purrr::reduce(df, dplyr::full_join, by = c("ip", "client_state", "client_lga"))
+    "facility_lga" = purrr::reduce(df, dplyr::full_join, by = c("ip", "facility_state", "facility_lga")) %>% dplyr::arrange(ip, facility_state, facility_lga),
+    "client_state" = purrr::reduce(df, dplyr::full_join, by = c("ip", "client_state")) %>% dplyr::arrange(ip, client_state),
+    "client_lga" = purrr::reduce(df, dplyr::full_join, by = c("ip", "client_state", "client_lga")) %>% dplyr::arrange(ip, client_state, client_lga)
   )
 
   dt[is.na(dt)] <- 0 ## replace NAs with Zero

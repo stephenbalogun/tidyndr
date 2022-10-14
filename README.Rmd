@@ -8,6 +8,8 @@ output: github_document
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
+  warning = FALSE,
+  message = FALSE,
   comment = "#>",
   fig.path = "man/figures/README-",
   out.width = "100%"
@@ -89,19 +91,19 @@ The functions included in this group are:
 
 ```{r tx_indicators}
 ## Subset "TX_NEW"
-tx_new(ndr_example, from = "2021-07-01", to = "2021-09-30")
+tx_new(ndr_example, from = "2021-01-01", to = "2021-03-31")
 
 
 ## Generate line-list of clients with medication refill in October 2021
 ndr_example %>%
-  tx_appointment(from = "2021-10-01",
-                 to = "2021-10-31"
+  tx_appointment(from = "2021-01-01",
+                 to = "2021-01-31"
                  )
 
 ## Generate list of clients who were active at the beginning of October 2021 but became inactive at the end of December 2021.
   tx_ml(new_data = ndr_example,
-        from = "2021-10-01",
-        to = "2021-12-31")
+        from = "2021-01-01",
+        to = "2021-03-31")
 ```
 
 ### Viral Suppression Indicators
@@ -137,8 +139,8 @@ For all the 'Treatment' and 'Viral Suppression' indicators (except `tx_ml_outcom
 ## subset clients that have medication appointment in between January and March of 2021 in 
 ## and are also due for viral load
 ndr_example %>%
-  tx_appointment(from = "2022-01-01",
-                 to = "2022-03-31",
+  tx_appointment(from = "2021-01-01",
+                 to = "2021-03-31",
                  ) %>%
   tx_vl_eligible(sample = TRUE)
 ```
@@ -149,13 +151,13 @@ You might want to generate a summary table of all the indicators you have pulled
 
 ```{r, summarise_ndr}
 ## generates line-list of TX_NEW between July and December 2021
-new <- tx_new(ndr_example, from = "2021-07-01", to = "202112-31")
+new <- tx_new(ndr_example, from = "2021-01-01", to = "2021-03-31")
 
 ## generates line-list of currently active clients
 curr <- tx_curr(ndr_example)
 
 ## generates line-list of clients who were active at the beginning of the October but inactive at end of December 2021
-ml <- tx_ml(new_data = ndr_example, from = "2021-10-01", to = "2021-12-31") 
+ml <- tx_ml(new_data = ndr_example, from = "2021-01-01", to = "2021-03-31") 
 
 summarise_ndr(new, curr, ml,
               level = "state",
@@ -166,7 +168,7 @@ The `disaggregate()` allows you to summarise an indicator of interest into finer
 
 ```{r, disagg}
 ## generates line-list of TX_NEW between July and September 2021
-new_clients <- tx_new(ndr_example, from = "2021-07-01", to = "2021-09-30")
+new_clients <- tx_new(ndr_example, from = "2021-01-01", to = "2021-03-30")
 
 disaggregate(new_clients,
              by = "current_age", pivot_wide = FALSE)

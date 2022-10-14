@@ -6,7 +6,8 @@
 \usage{
 tx_rtt(
   new_data,
-  old_data,
+  old_data = NULL,
+  quarter = NULL,
   states = NULL,
   facilities = NULL,
   status = "default",
@@ -19,6 +20,8 @@ status will be checked.}
 
 \item{old_data}{The initial dataframe containing the list of clients who
 have been previously inactive.}
+
+\item{quarter}{the quarter of the fiscal year (based on the PEPFAR calendar) for which the TX_CURR should be calculated.}
 
 \item{states}{The name(s) of the State(s) of interest. The default utilizes all
 the states in the dataframe. If specifying more than one state, combine the

@@ -71,7 +71,7 @@ validate_cot_cascade <- function(data,
   }
 
   if (!is.null(quarter) && quarter > 4) {
-    rlang::abort("Kindly supply a whole number between 1 and 4 corresponding to the quarter of the fiscal year")
+    rlang::abort("Kindly supply a whole number between 1 and 4 corresponding to the quarter of the PEPFAR fiscal year")
   }
 
   if (quarter == 1 && !is.null(ref) && !dplyr::between(lubridate::month(lubridate::ymd(ref)), 10, 12)) {
@@ -131,14 +131,29 @@ validate_cot_cascade <- function(data,
 get_cot_cascade <- function(data, quarter, ref, states, facilities, status, remove_duplicates, .level, .names, .disagg) {
   switch(quarter,
     `1` = {
-      start <- paste(
-        dplyr::if_else(lubridate::month(Sys.Date()) < 10, lubridate::year(Sys.Date()) - 1, lubridate::year(Sys.Date())),
-        "10",
-        "01",
-        sep = "-"
-      )
+      stop <- ref %||% if (lubridate::month(Sys.Date()) >= 10) {
+        (lubridate::`%m+%`(lubridate::make_date(lubridate::year(Sys.Date()), 10, 01), lubridate::period(3, "months")) - 1)
+      } else {
+        (lubridate::`%m+%`(lubridate::make_date(lubridate::year(Sys.Date()) - 1, 10, 01), lubridate::period(3, "months")) - 1)
+      }
 
-      stop <- ref %||% (lubridate::`%m+%`(lubridate::ymd(start), lubridate::period(3, "months")) - 1)
+
+      start <- if (lubridate::year(stop) < lubridate::year(Sys.Date())) {
+        paste(
+          lubridate::year(stop),
+          "10",
+          "01",
+          sep = "-"
+        )
+      } else {
+        paste(
+          lubridate::year(Sys.Date()) - 1,
+          "10",
+          "01",
+          sep = "-"
+        )
+      }
+
 
       if (remove_duplicates) {
         tx_curr_prev <- dplyr::distinct(
@@ -174,14 +189,28 @@ get_cot_cascade <- function(data, quarter, ref, states, facilities, status, remo
       tx_ml_to <- tx_ml_outcomes(tx_ml, outcome = "transferred out")
     },
     `2` = {
-      start <- paste(
-        lubridate::year(Sys.Date()),
-        "01",
-        "01",
-        sep = "-"
-      )
-
       stop <- ref %||% (lubridate::`%m+%`(lubridate::ymd(start), lubridate::period(3, "months")) - 1)
+
+      stop <- ref %||% (lubridate::`%m+%`(lubridate::make_date(lubridate::year(Sys.Date()), 01, 01), lubridate::period(3, "months")) - 1)
+
+
+
+      start <- if (lubridate::year(stop) < lubridate::year(Sys.Date())) {
+        paste(
+          lubridate::year(stop),
+          "01",
+          "01",
+          sep = "-"
+        )
+      } else {
+        paste(
+          lubridate::year(Sys.Date()),
+          "01",
+          "01",
+          sep = "-"
+        )
+      }
+
 
       if (remove_duplicates) {
         tx_curr_prev <- dplyr::distinct(
@@ -218,14 +247,24 @@ get_cot_cascade <- function(data, quarter, ref, states, facilities, status, remo
       tx_ml_to <- tx_ml_outcomes(tx_ml, outcome = "transferred out")
     },
     `3` = {
-      start <- paste(
-        lubridate::year(Sys.Date()),
-        "04",
-        "01",
-        sep = "-"
-      )
+      stop <- ref %||% (lubridate::`%m+%`(lubridate::make_date(lubridate::year(Sys.Date()), 04, 01), lubridate::period(3, "months")) - 1)
 
-      stop <- ref %||% (lubridate::`%m+%`(lubridate::ymd(start), lubridate::period(3, "months")) - 1)
+
+      start <- if (lubridate::year(stop) < lubridate::year(Sys.Date())) {
+        paste(
+          lubridate::year(stop),
+          "04",
+          "01",
+          sep = "-"
+        )
+      } else {
+        paste(
+          lubridate::year(Sys.Date()),
+          "04",
+          "01",
+          sep = "-"
+        )
+      }
 
       if (remove_duplicates) {
         tx_curr_prev <- dplyr::distinct(
@@ -261,14 +300,28 @@ get_cot_cascade <- function(data, quarter, ref, states, facilities, status, remo
       tx_ml_to <- tx_ml_outcomes(tx_ml, outcome = "transferred out")
     },
     `4` = {
-      start <- paste(
-        lubridate::year(Sys.Date()),
-        "07",
-        "01",
-        sep = "-"
-      )
+      stop <- ref %||% if (lubridate::month(Sys.Date()) >= 7) {
+        (lubridate::`%m+%`(lubridate::make_date(lubridate::year(Sys.Date()), 07, 01), lubridate::period(3, "months")) - 1)
+      } else {
+        (lubridate::`%m+%`(lubridate::make_date(lubridate::year(Sys.Date()) - 1, 07, 01), lubridate::period(3, "months")) - 1)
+      }
 
-      stop <- ref %||% (lubridate::`%m+%`(lubridate::ymd(start), lubridate::period(3, "months")) - 1)
+      start <- if (lubridate::year(stop) < lubridate::year(Sys.Date())) {
+        paste(
+          lubridate::year(stop),
+          "07",
+          "01",
+          sep = "-"
+        )
+      } else {
+        paste(
+          lubridate::year(Sys.Date()),
+          "07",
+          "01",
+          sep = "-"
+        )
+      }
+
 
       if (remove_duplicates) {
         tx_curr_prev <- dplyr::distinct(
@@ -319,7 +372,8 @@ get_cot_cascade <- function(data, quarter, ref, states, facilities, status, remo
       dplyr::mutate(
         tx_ml_iit = tx_ml - tx_ml_dead - tx_ml_to,
         iit_rate = janitor::round_half_up(tx_ml_iit / (tx_curr_prev + tx_new) * 100, digits = 3)
-      )
+      ) %>%
+      dplyr::arrange(state)
   } else {
     tx_curr_prev %>%
       disaggregate(by = .disagg, level = .level, pivot_wide = FALSE) %>%
@@ -347,7 +401,8 @@ get_cot_cascade <- function(data, quarter, ref, states, facilities, status, remo
       dplyr::mutate(
         tx_ml_iit = tx_ml - tx_ml_dead - tx_ml_to,
         iit_rate = janitor::round_half_up(tx_ml_iit / (tx_curr_prev + tx_new) * 100, digits = 3)
-      )
+      ) %>%
+      dplyr::arrange(state)
   }
 }
 
