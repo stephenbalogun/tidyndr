@@ -5,7 +5,7 @@
 #'
 #' @param data An ndr dataframe imported using the `read_ndr()
 #' @param outcome The particular outcome of interest based on options available
-#' on the NDR ("transfer out", "dead" or "discontinued/stopped" [where available]).
+#' on the NDR ("transfer out", "dead" or "discontinued/stopped").
 #'
 #' @return tx_ml_outcomes
 #' @export

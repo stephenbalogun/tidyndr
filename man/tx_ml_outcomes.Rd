@@ -10,7 +10,7 @@ tx_ml_outcomes(data, outcome)
 \item{data}{An ndr dataframe imported using the `read_ndr()}
 
 \item{outcome}{The particular outcome of interest based on options available
-on the NDR ("transfer out", "dead" or "discontinued/stopped" \link{where available}).}
+on the NDR ("transfer out", "dead" or "discontinued/stopped").}
 }
 \value{
 tx_ml_outcomes

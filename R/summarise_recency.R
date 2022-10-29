@@ -99,7 +99,14 @@ get_summary_recency <- function(data, level, names) {
     "client_lga" = purrr::reduce(df, dplyr::full_join, by = c("ip", "client_state", "client_lga")) %>% dplyr::arrange(ip, client_state, client_lga)
   )
 
-  dt[is.na(dt)] <- 0 ## replace NAs with Zero
+  dt <- dplyr::mutate(
+    dt,
+      dplyr::across(
+        tidyselect::where(is.numeric),~tidyr::replace_na(., 0)
+      )
+    )
+
+  # dt[is.na(dt)] <- 0 ## replace NAs with Zero
 
   tibble::as_tibble(dt)
 }

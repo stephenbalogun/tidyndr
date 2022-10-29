@@ -20,7 +20,7 @@ set.seed(1014)
 >
 > \- Lord Kelvin
 
-The [Nigeria National Data Repository (NDR)](https://ndr.phis3project.org.ng/) houses the de-identified patient-level information for the HIV program in Nigeria. Perhaps the most versatile feature of the repository is that it allows users with login access to download this patient-level information, analyze, and make informed decisions to improve the response of their program towards achieving the [UNAIDS](https://www.unaids.org/) **three 95s** targets.You can download "treatment", "recent infection" and "HTS" line lists.
+The [Nigeria National Data Repository (NDR)](https://ndr.phis3project.org.ng/) houses the de-identified patient-level information for the HIV program in Nigeria. Perhaps the most versatile feature of the repository is that it allows users with login access to download this patient-level information, analyze, and make informed decisions to improve the response of their program towards achieving the epidemic control of HIV.You can download "treatment", "recent infection" and "HTS" line lists.
 
 Analysis of the de-identified patient-level information is traditionally conducted in Microsoft Excel. While this provides a great platform, it has some downsides which include:
 
@@ -105,7 +105,7 @@ ex_recency <- read_ndr(file_path2, type = "recency")
 
 ## Treatment functions
 
-These group of indicators are based on the [PEPFAR MER](https://datim.zendesk.com/hc/en-us/articles/360000084446-MER-Indicator-Reference-Guides) treatment indicators and their supporting indicators. They include:
+These group of indicators include:
 
 1.  [`tx_new()`](#tx_new)
 2.  [`tx_curr()`](#tx_curr)

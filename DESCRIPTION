@@ -22,7 +22,7 @@ Authors@R:
             person(given = "Geraldine",
            family = "Abone",
            role = "ctb"))
-Description: The goal is to simplify routine analysis of the Nigeria National  Data Repository (NDR) <https://ndr.phis3project.org.ng> using the PEPFAR Monitoring, Evaluation, and Reporting (MER) indicators (see <https://datim.zendesk.com/hc/en-us/articles/360000084446-MER-Indicator-Reference-Guides>). It is designed to import in to R patient-level line-list downloaded as 'csv' file from the front-end of the NDR.
+Description: The goal is to simplify routine analysis of the Nigeria National  Data Repository (NDR) <https://ndr.phis3project.org.ng> using the PEPFAR Monitoring, Evaluation, and Reporting (MER) indicators (see <https://datim.zendesk.com/hc/en-us>). It is designed to import in to R patient-level line-list downloaded as 'csv' file from the front-end of the NDR.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
