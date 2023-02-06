@@ -44,9 +44,10 @@ read <- function(path, ...) {
 
 read.treatment <- function(path, time_stamp, cols = NULL, quiet = FALSE, ...) {
   df <- tryCatch(error = function(cnd) {
-    vroom::vroom(path, col_types = old_cols(), ...)
+    vroom::vroom(path, col_types = old_cols(), na = c("","NA", "NULL", "null"), ...)
   }, vroom::vroom(path,
     col_types = cols %||% current_cols(),
+    na = c("","NA", "NULL", "null"),
     ...
   ))
   df <- dplyr::mutate(janitor::clean_names(df),
@@ -68,11 +69,10 @@ read.treatment <- function(path, time_stamp, cols = NULL, quiet = FALSE, ...) {
 
 read.hts <- function(path, cols = NULL, ...) {
   df <- tryCatch(error = function(cnd) {
-    vroom::vroom(path)
-  }, vroom::vroom(path, col_types = cols %||% hts_cols(), na = c(
-    "NULL",
-    ""
-  ), ...))
+    vroom::vroom(path, na = c("","NA", "NULL", "null"))
+  }, vroom::vroom(path, col_types = cols %||% hts_cols(),
+                  na = c("","NA", "NULL", "null"),
+                  ...))
   return(janitor::clean_names(df))
 }
 
@@ -80,15 +80,12 @@ read.hts <- function(path, cols = NULL, ...) {
 
 read.recency <- function(path, cols = NULL, show_col = FALSE, ...) {
   df <- tryCatch(error = function(cnd) {
-    vroom::vroom(path)
+    vroom::vroom(path, na = c("","NA", "NULL", "null"))
   }, vroom::vroom(path,
     col_types = cols %||% recency_cols(),
+    na = c("","NA", "NULL", "null"),
     ...
   )) %>%
-    purrr::modify_if(is.factor, ~ dplyr::na_if(
-      .,
-      "NULL"
-    )) %>%
     purrr::modify_if(is.factor, forcats::fct_drop)
   return(janitor::clean_names(df))
 }
